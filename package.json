@@ -1,0 +1,16 @@
+{
+  "name": "@oobleck/systheme",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Systheme. MVOS 디자인 시스템. 예전 이름 @mvos/design-system.",
+  "exports": {
+    ".": "./src/index.ts",
+    "./styles": "./src/styles.css"
+  },
+  "types": "./src/index.ts",
+  "peerDependencies": {
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0"
+  }
+}
