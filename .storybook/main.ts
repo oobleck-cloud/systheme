@@ -15,7 +15,10 @@ const config: StorybookConfig = {
   // 별도 Storybook 대신 여기로 합친다: Chromatic 프로젝트·베이스라인·CI 잡이 하나로 유지되고,
   // collections 뷰가 DS 컴포넌트의 *합성*이라 같은 베이스라인 안에 있어야 회귀가 한눈에 보인다.
   // Tailwind 스캔 범위는 `.storybook/preview.css` 의 `@source` 가 함께 넓힌다(둘은 세트).
-  stories: ['../src/**/*.stories.@(ts|tsx)', '../../collection/packages/collection-views/src/**/*.stories.@(ts|tsx)'],
+  stories: [
+    '../src/**/*.stories.@(ts|tsx)',
+    '../../collection/packages/collection-views/src/**/*.stories.@(ts|tsx)',
+  ],
   addons: [
     '@storybook/addon-essentials',
     '@storybook/addon-a11y',

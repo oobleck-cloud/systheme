@@ -157,7 +157,9 @@
   --ds-color-text-muted: var(--ds-color-gray-400);
   --ds-color-text-disabled: var(--ds-color-gray-400);
   --ds-color-text-inverse: var(--ds-color-white);
-  --ds-color-text-brand: var(--ds-color-blue-600); /* acc-fill 은 라이트 canvas 위 4.5 에 못 미친다 */
+  --ds-color-text-brand: var(
+    --ds-color-blue-600
+  ); /* acc-fill 은 라이트 canvas 위 4.5 에 못 미친다 */
 
   /* --- Background ---
    * Elevation 사다리(중립): canvas(recessed 페이지) < surface(well) < default(raised 카드)
