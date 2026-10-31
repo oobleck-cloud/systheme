@@ -1,0 +1,18 @@
+/*
+ * Tinted surface scope — M3 의 표면은 무채가 아니라 source hue 를 물려받은
+ * neutral 팔레트(HCT chroma≈4)다. 모바일 현장 셸이 루트에 data-surface="tinted" 를
+ * 달면 subtree 의 표면 사다리가 brand hue(264) 저채도 틴트로 바뀐다.
+ * 밝기=고도 규칙은 그대로다 — hue 만 입힌다. 현장은 라이트 고정이라 라이트 값만 정의하고,
+ * `.dark` 아래에서는 적용하지 않는다(다크 표면 램프가 이미 같은 hue 를 물고 있다).
+ */
+/* :root[…]로 특이도(0,2,0) 확보 — :root 토큰 선언과의 소스 순서 싸움을 끝낸다.
+ * 중첩 스코프(프레임 등)도 지원하도록 단독 속성 선택자를 병기한다. */
+:root:not(.dark)[data-surface='tinted'],
+:root:not(.dark) [data-surface='tinted'] {
+  --ds-color-bg-canvas: oklch(98% 0.005 264);
+  --ds-color-bg-surface: oklch(95% 0.006 264);
+  --ds-color-bg-container-low: oklch(96.5% 0.005 264);
+  --ds-color-bg-container: oklch(95% 0.006 264);
+  --ds-color-bg-container-high: oklch(93.5% 0.007 264);
+  --ds-color-border-subtle: oklch(88% 0.008 264);
+}

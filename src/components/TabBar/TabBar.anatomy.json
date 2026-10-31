@@ -1,0 +1,74 @@
+{
+  "id": "tab-bar",
+  "primitiveGroup": "tab-navigation",
+  "composedOf": [
+    "tab-list",
+    "tab-trigger"
+  ],
+  "state": {
+    "tabs": "{ id: string; label: string; disabled?: boolean; isSelected: boolean }[]",
+    "selectedTabId": "string",
+    "tabListLabel": "string"
+  },
+  "events": [
+    "onTabChange"
+  ],
+  "anatomy": {
+    "id": "root",
+    "intent": "ornament",
+    "children": [
+      {
+        "id": "items",
+        "intent": "ornament",
+        "traversal": {
+          "axis": "inline"
+        },
+        "iterates": "tabs",
+        "as": "tab",
+        "child": {
+          "id": "trigger",
+          "intent": "select-option",
+          "writes": "selectedTabId",
+          "emits": "onTabChange",
+          "binding": "tab",
+          "children": [
+            {
+              "id": "label",
+              "intent": "value-display",
+              "binding": "tab.label"
+            },
+            {
+              "id": "selection-indicator",
+              "intent": "state-indicator",
+              "binding": "tab.isSelected"
+            }
+          ]
+        }
+      }
+    ]
+  },
+  "usage": {
+    "when": [
+      "같은 대상의 여러 면을 한 화면에서 전환할 때(상세 화면의 개요·이력·설정)"
+    ],
+    "avoid": [
+      "서로 다른 대상 사이 이동에 쓰지 않는다 → Sidebar",
+      "선택 값을 고르는 데 쓰지 않는다 → SegmentedControl",
+      "모바일 현장 셸에는 두지 않는다 → FAB"
+    ],
+    "limits": {
+      "items": "6개 이하. 넘치면 화면을 나눈다"
+    },
+    "states": {
+      "disabled": "권한 없는 탭은 숨긴다",
+      "overflow": "고정 폭 대신 가로 스크롤"
+    },
+    "placement": [
+      "화면 제목 아래. 탭이 바뀌어도 제목은 그대로"
+    ],
+    "examples": [
+      "components-l2-tabbar--items-api-default",
+      "components-l2-tabbar--composition-tab-bar-children"
+    ]
+  }
+}

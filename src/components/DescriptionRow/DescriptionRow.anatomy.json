@@ -1,0 +1,60 @@
+{
+  "id": "description-row",
+  "state": {
+    "label": "string",
+    "value": "string"
+  },
+  "events": [
+    "onCopy"
+  ],
+  "usage": {
+    "when": [
+      "라벨-값 한 쌍을 읽기 전용으로 보여줄 때(상세 화면의 속성 행)",
+      "값을 복사시킬 때 — onCopy 를 주면 기본 복사 IconButton(ghost·sm)이 붙는다"
+    ],
+    "avoid": [
+      "편집 가능한 값에는 쓰지 않는다 → FormField + Input",
+      "같은 형태의 행이 5개 이상이고 열 비교가 필요하면 쓰지 않는다 → Table",
+      "값 칸에 버튼을 여러 개 넣지 않는다 — copy 슬롯 하나만, 나머지는 행 밖 액션 바",
+      "비밀값(토큰·키)을 value 에 그대로 넣지 않는다 → MaskedSecretDisplay"
+    ],
+    "limits": {
+      "label": "라벨 12자 이내 명사. fluid 는 sm 이상에서 라벨 폭 12rem, fixed 는 6~10rem — 넘치면 줄바꿈된다"
+    },
+    "states": {
+      "empty": "빈 값을 숨기지 않는다. value 에 '—' 를 넣는다",
+      "overflow": "값은 min-w-0 줄바꿈(말줄임 아님). 숫자는 tabular-nums"
+    },
+    "placement": [
+      "세로로 쌓아 속성 목록을 만든다. 라벨 왼쪽 · 값 가운데 · 복사 오른쪽",
+      "fluid(기본)는 모바일에서 라벨 위·값 아래 1열, fixed 는 항상 3열"
+    ],
+    "examples": [
+      "components-l1-descriptionrow--default",
+      "components-l1-descriptionrow--custom-copy-slot"
+    ]
+  },
+  "anatomy": {
+    "id": "root",
+    "intent": "field-rhythm",
+    "binding": "@description-row",
+    "children": [
+      {
+        "id": "label",
+        "intent": "value-display",
+        "binding": "label"
+      },
+      {
+        "id": "value",
+        "intent": "value-display",
+        "binding": "value"
+      },
+      {
+        "id": "copy",
+        "intent": "press-action",
+        "emits": "onCopy",
+        "slot": true
+      }
+    ]
+  }
+}

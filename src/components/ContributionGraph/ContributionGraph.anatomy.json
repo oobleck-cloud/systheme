@@ -1,0 +1,149 @@
+{
+  "id": "contribution-graph",
+  "state": {
+    "data": "GraphCell[]",
+    "xLabels": "string[]",
+    "yLabels": "string[]",
+    "density": "'compact' | 'comfortable'",
+    "stickyTone": "'page' | 'card'",
+    "primary": "ContributionGraphPrimary",
+    "colorScale": "Partial<level 0-5 override>",
+    "hoveredCell": "GraphCell | null"
+  },
+  "events": [
+    "onCellClick"
+  ],
+  "anatomy": {
+    "id": "root",
+    "intent": "ornament",
+    "children": [
+      {
+        "id": "x-axis",
+        "intent": "plot-axis",
+        "traversal": {
+          "axis": "both"
+        },
+        "iterates": "xLabels",
+        "as": "label",
+        "child": {
+          "id": "x-label",
+          "intent": "value-display",
+          "binding": "label"
+        }
+      },
+      {
+        "id": "y-axis",
+        "intent": "plot-axis",
+        "traversal": {
+          "axis": "both"
+        },
+        "iterates": "yLabels",
+        "as": "rowLabel",
+        "child": {
+          "id": "y-label",
+          "intent": "value-display",
+          "binding": "rowLabel"
+        }
+      },
+      {
+        "id": "grid",
+        "intent": "ornament",
+        "traversal": {
+          "axis": "both"
+        },
+        "iterates": "yLabels",
+        "as": "rowLabel",
+        "child": {
+          "id": "row",
+          "intent": "ornament",
+          "traversal": {
+            "axis": "both"
+          },
+          "iterates": "xLabels",
+          "as": "colLabel",
+          "child": {
+            "id": "cell",
+            "intent": "chart-series",
+            "emits": "onCellClick",
+            "children": [
+              {
+                "id": "cell-trigger",
+                "intent": "press-action",
+                "emits": "onCellClick"
+              },
+              {
+                "id": "cell-surface",
+                "intent": "ornament"
+              },
+              {
+                "id": "cell-value",
+                "intent": "value-display"
+              },
+              {
+                "id": "cell-tooltip",
+                "intent": "overlay-surface",
+                "binding": "hoveredCell",
+                "child": {
+                  "id": "cell-tooltip-content",
+                  "intent": "value-display"
+                }
+              }
+            ]
+          }
+        }
+      },
+      {
+        "id": "footer",
+        "intent": "ornament",
+        "children": [
+          {
+            "id": "summary",
+            "intent": "value-display"
+          },
+          {
+            "id": "legend",
+            "intent": "ornament",
+            "children": [
+              {
+                "id": "legend-less",
+                "intent": "value-display"
+              },
+              {
+                "id": "legend-scale",
+                "intent": "ornament",
+                "child": {
+                  "id": "legend-swatch",
+                  "intent": "ornament"
+                }
+              },
+              {
+                "id": "legend-more",
+                "intent": "value-display"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "usage": {
+    "when": [
+      "긴 기간(수개월~1년)의 일자별 활동 밀도를 한눈에 볼 때"
+    ],
+    "avoid": [
+      "3개월 이하면 → CalendarHeatmap",
+      "정확한 값 비교에 쓰지 않는다 → BarChart",
+      "한 화면에 두 개 이상 두지 않는다"
+    ],
+    "limits": {
+      "perRegion": 1
+    },
+    "states": {
+      "empty": "0 도 빈 칸 색으로 그린다 — 칸을 지우지 않는다"
+    },
+    "examples": [
+      "components-charts-contributiongraph--default",
+      "components-charts-contributiongraph--dense-month"
+    ]
+  }
+}

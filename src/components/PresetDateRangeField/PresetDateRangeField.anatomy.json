@@ -1,0 +1,100 @@
+{
+  "id": "preset-date-range-field",
+  "state": {
+    "value": "DateRangeFieldValue",
+    "presetChoices": "DateRangePresetModel[]"
+  },
+  "events": [
+    "onChange"
+  ],
+  "anatomy": {
+    "id": "root",
+    "intent": "ornament",
+    "children": [
+      {
+        "id": "presets",
+        "intent": "ornament",
+        "traversal": {
+          "axis": "block"
+        },
+        "iterates": "presetChoices",
+        "as": "p",
+        "child": {
+          "id": "preset",
+          "intent": "select-option",
+          "writes": "value.presetKey",
+          "emits": "onChange",
+          "children": [
+            {
+              "id": "label",
+              "intent": "value-display",
+              "binding": "p.label"
+            }
+          ]
+        }
+      },
+      {
+        "id": "open-custom",
+        "intent": "disclosure",
+        "writes": "value.customOpen",
+        "emits": "onChange"
+      },
+      {
+        "id": "custom-panel",
+        "intent": "overlay-surface",
+        "binding": "value.customOpen",
+        "children": [
+          {
+            "id": "range-slot",
+            "intent": "ornament",
+            "slot": true
+          },
+          {
+            "id": "start",
+            "intent": "value-input",
+            "writes": "value.start",
+            "emits": "onChange"
+          },
+          {
+            "id": "end",
+            "intent": "value-input",
+            "writes": "value.end",
+            "emits": "onChange"
+          },
+          {
+            "id": "apply-custom",
+            "intent": "press-action",
+            "emits": "onChange"
+          }
+        ]
+      }
+    ]
+  },
+  "usage": {
+    "when": [
+      "기간 필터 — 프리셋(오늘·7일·30일) 칩으로 고르고, 없으면 '날짜 직접 입력' 으로 시작·종료일을 넣을 때",
+      "값은 {presetKey, customOpen, start, end} 하나로 다룬다. 직접 입력은 '적용' 을 눌러야 확정"
+    ],
+    "avoid": [
+      "단일 날짜 입력에 쓰지 않는다 → DatePicker",
+      "월 단위 탐색에 쓰지 않는다 → MonthGrid",
+      "필터 툴바에 가로로 늘어놓지 않는다 → 필터 Popover 패널 안에 한 행으로"
+    ],
+    "limits": {
+      "items": "프리셋 칩은 flex-wrap — 한 줄에 못 들어가면 다음 줄",
+      "label": "프리셋 라벨 2~6자"
+    },
+    "states": {
+      "disabled": "onChange 없으면 '날짜 직접 입력'·'적용' 비활성. 프리셋 칩은 눌리지만 반영되지 않는다",
+      "empty": "presetKey '' 이면 눌린 칩 없음. start·end 빈 문자열",
+      "error": "없다. 시작>종료 검증은 소비자가 '적용' 전에 한다 → FormField helper"
+    },
+    "placement": [
+      "프리셋 위, 직접 입력 토글 아래, 펼치면 border-t 아래 시작·종료·적용"
+    ],
+    "examples": [
+      "components-l2-presetdaterangefield--default",
+      "components-l2-presetdaterangefield--custom-open"
+    ]
+  }
+}

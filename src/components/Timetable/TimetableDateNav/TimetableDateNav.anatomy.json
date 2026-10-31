@@ -1,0 +1,68 @@
+{
+  "id": "timetable-date-nav",
+  "state": {
+    "cursorDate": "Date | ISO string",
+    "dates": "{ id: string, active: boolean }[]",
+    "includeDeactiveDates": "boolean",
+    "datePickerOpen": "boolean"
+  },
+  "events": [
+    "onDateChange",
+    "onDatePickerOpenChange"
+  ],
+  "anatomy": {
+    "id": "root",
+    "intent": "ornament",
+    "children": [
+      {
+        "id": "prev-day",
+        "intent": "stepper",
+        "writes": "cursorDate",
+        "emits": "onDateChange",
+        "children": [
+          {
+            "id": "prev-day-icon",
+            "intent": "icon",
+            "binding": "@chevron-left"
+          }
+        ]
+      },
+      {
+        "id": "date-picker-trigger",
+        "intent": "disclosure",
+        "writes": "datePickerOpen",
+        "emits": "onDatePickerOpenChange",
+        "children": [
+          {
+            "id": "date-label",
+            "intent": "value-display",
+            "binding": "cursorDate"
+          },
+          {
+            "id": "date-picker-chevron",
+            "intent": "state-indicator",
+            "binding": "datePickerOpen"
+          }
+        ]
+      },
+      {
+        "id": "next-day",
+        "intent": "stepper",
+        "writes": "cursorDate",
+        "emits": "onDateChange",
+        "children": [
+          {
+            "id": "next-day-icon",
+            "intent": "icon",
+            "binding": "@chevron-right"
+          }
+        ]
+      },
+      {
+        "id": "date-nav-trailing",
+        "intent": "ornament",
+        "slot": true
+      }
+    ]
+  }
+}

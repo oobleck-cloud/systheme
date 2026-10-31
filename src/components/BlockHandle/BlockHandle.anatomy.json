@@ -1,0 +1,33 @@
+{
+  "id": "block-handle",
+  "state": {
+    "kind": "'add' | 'grip'"
+  },
+  "events": [
+    "onClick"
+  ],
+  "anatomy": {
+    "id": "root",
+    "intent": "press-action",
+    "emits": "onClick"
+  },
+  "usage": {
+    "when": [
+      "편집 가능한 블록의 왼쪽에서 추가(add)·이동(grip) 손잡이를 줄 때"
+    ],
+    "avoid": [
+      "일반 버튼 자리에 쓰지 않는다 → IconButton",
+      "hover 없이 상시 노출하지 않는다 — 본문 읽기를 방해한다"
+    ],
+    "states": {
+      "disabled": "이동 불가 블록에서는 grip 을 렌더하지 않는다"
+    },
+    "placement": [
+      "블록 왼쪽 바깥 여백. hover·포커스에서만 나타난다"
+    ],
+    "examples": [
+      "components-display-blockhandle--add",
+      "components-display-blockhandle--grip"
+    ]
+  }
+}

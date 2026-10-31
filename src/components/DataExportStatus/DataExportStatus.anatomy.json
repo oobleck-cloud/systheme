@@ -1,0 +1,69 @@
+{
+  "id": "data-export-status",
+  "state": {
+    "visible": "boolean",
+    "phase": "'idle' | 'queued' | 'running' | 'succeeded' | 'failed'",
+    "progress": "number",
+    "errorMessage": "string"
+  },
+  "events": [
+    "onDownload",
+    "onDismiss",
+    "onRetry"
+  ],
+  "anatomy": {
+    "id": "root",
+    "intent": "ornament",
+    "children": [
+      {
+        "id": "severity",
+        "intent": "severity-indicator",
+        "binding": "phase"
+      },
+      {
+        "id": "progress",
+        "intent": "state-indicator",
+        "binding": "progress"
+      },
+      {
+        "id": "error",
+        "intent": "status-message",
+        "binding": "errorMessage"
+      },
+      {
+        "id": "download",
+        "intent": "press-action",
+        "emits": "onDownload"
+      },
+      {
+        "id": "retry",
+        "intent": "press-action",
+        "emits": "onRetry"
+      },
+      {
+        "id": "dismiss",
+        "intent": "dismiss",
+        "writes": "visible",
+        "emits": "onDismiss"
+      }
+    ]
+  },
+  "usage": {
+    "when": [
+      "내보내기·배치 작업의 단계(대기·진행·완료·실패)와 다운로드 링크를 보일 때"
+    ],
+    "avoid": [
+      "즉시 끝나는 동작에 쓰지 않는다 → Toast",
+      "진행률만 필요하면 → Progress"
+    ],
+    "states": {
+      "loading": "running 단계에서 Progress 와 남은 시간",
+      "error": "failed 단계에 이유 + 다시 시도 버튼",
+      "empty": "idle 이면 렌더하지 않는다"
+    },
+    "examples": [
+      "components-l1-dataexportstatus--phase-running",
+      "components-l1-dataexportstatus--phase-failed"
+    ]
+  }
+}

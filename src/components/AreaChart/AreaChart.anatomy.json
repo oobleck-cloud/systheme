@@ -1,0 +1,97 @@
+{
+  "id": "area-chart",
+  "state": {
+    "data": "AreaDataPoint[]",
+    "keys": "string[]",
+    "variant": "'standard' | 'stacked'",
+    "seriesTokens": "string[]",
+    "bars": "Array<{ key, name?, token? }>"
+  },
+  "events": [
+    "onAreaClick"
+  ],
+  "anatomy": {
+    "id": "root",
+    "intent": "ornament",
+    "children": [
+      {
+        "id": "x-axis",
+        "intent": "plot-axis",
+        "iterates": "xTicks",
+        "as": "tick",
+        "child": {
+          "id": "tick-label",
+          "intent": "value-display"
+        }
+      },
+      {
+        "id": "y-axis",
+        "intent": "plot-axis",
+        "iterates": "yTicks",
+        "as": "tick",
+        "child": {
+          "id": "tick-label",
+          "intent": "value-display"
+        }
+      },
+      {
+        "id": "series",
+        "intent": "ornament",
+        "iterates": "keys",
+        "as": "key",
+        "child": {
+          "id": "segment",
+          "intent": "chart-series",
+          "binding": "key"
+        }
+      },
+      {
+        "id": "bars",
+        "intent": "chart-series",
+        "iterates": "bars",
+        "as": "bar",
+        "child": {
+          "id": "bar",
+          "intent": "chart-series",
+          "binding": "bar.key"
+        }
+      },
+      {
+        "id": "y-axis-right",
+        "intent": "plot-axis",
+        "iterates": "yRightTicks",
+        "as": "tick",
+        "child": {
+          "id": "tick-label",
+          "intent": "value-display"
+        }
+      }
+    ]
+  },
+  "usage": {
+    "when": [
+      "시간에 따른 누적 크기의 변화를 보일 때(가입자 누계·구간별 합)",
+      "여러 계열의 합이 의미를 가질 때 stacked",
+      "깔때기처럼 위계가 있는 계열(참여 ⊇ 노출 ⊇ 계약)은 seriesTokens 로 결과에 가까울수록 진한 순차색(--ds-chart-seq-*)",
+      "크기가 한 자릿수 다른 계열을 함께 볼 때 bars 로 오른쪽 축 막대(standard 전용)"
+    ],
+    "avoid": [
+      "값의 정확한 비교에는 쓰지 않는다 → LineChart(추세) 또는 BarChart(비교)",
+      "범주형 데이터에 쓰지 않는다 → BarChart",
+      "계열 5개 이상 겹치면 읽히지 않는다",
+      "오른쪽 축 막대를 두 계열 이상 쓰지 않는다 — 축이 셋이 되면 읽히지 않는다"
+    ],
+    "limits": {
+      "items": "계열 4개 이하"
+    },
+    "states": {
+      "empty": "ChartFrame 의 빈 상태 문구를 쓴다"
+    },
+    "examples": [
+      "components-charts-areachart--default",
+      "components-charts-areachart--multiple-stacked",
+      "components-charts-areachart--empty",
+      "components-charts-areachart--with-right-axis-bars"
+    ]
+  }
+}

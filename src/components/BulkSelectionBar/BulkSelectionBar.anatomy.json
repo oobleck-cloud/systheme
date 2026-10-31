@@ -1,0 +1,58 @@
+{
+  "id": "bulk-selection-bar",
+  "state": {
+    "selectedCount": "number"
+  },
+  "events": [
+    "onClearSelection",
+    "onPrimaryAction"
+  ],
+  "anatomy": {
+    "id": "root",
+    "intent": "ornament",
+    "children": [
+      {
+        "id": "count",
+        "intent": "value-display",
+        "binding": "selectedCount"
+      },
+      {
+        "id": "actions",
+        "intent": "ornament",
+        "slot": true
+      },
+      {
+        "id": "primary",
+        "intent": "press-action",
+        "emits": "onPrimaryAction"
+      },
+      {
+        "id": "clear",
+        "intent": "press-action",
+        "emits": "onClearSelection"
+      }
+    ]
+  },
+  "usage": {
+    "when": [
+      "목록에서 여러 행을 고른 뒤 일괄 동작을 줄 때"
+    ],
+    "avoid": [
+      "선택이 없을 때 띄우지 않는다 — 0건이면 사라진다",
+      "행 하나의 동작에 쓰지 않는다 → 행 끝 Menu"
+    ],
+    "limits": {
+      "perRegion": 1
+    },
+    "states": {
+      "empty": "선택 0건이면 렌더하지 않는다"
+    },
+    "placement": [
+      "목록 하단 고정. AI Dock 여백(--mvos-ai-dock-clearance)을 소비한다 — 가려지면 체크박스가 쓸모없어진다"
+    ],
+    "examples": [
+      "components-l1-bulkselectionbar--default",
+      "components-l1-bulkselectionbar--zero-selection"
+    ]
+  }
+}

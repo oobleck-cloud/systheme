@@ -1,0 +1,60 @@
+{
+  "id": "link",
+  "state": {
+    "href": "string"
+  },
+  "events": [
+    "onClick"
+  ],
+  "anatomy": {
+    "id": "root",
+    "intent": "routing-link",
+    "binding": "href",
+    "emits": "onClick",
+    "children": [
+      {
+        "id": "leading-icon",
+        "intent": "icon",
+        "slot": true
+      },
+      {
+        "id": "label",
+        "intent": "ornament",
+        "slot": true
+      },
+      {
+        "id": "trailing-icon",
+        "intent": "icon",
+        "slot": true
+      }
+    ]
+  },
+  "usage": {
+    "when": [
+      "사용자가 다른 화면·외부 문서로 이동만 할 때(값을 바꾸지 않는다) — default",
+      "본문 문장 안 인라인 이동, 행 끝 메타 링크 — subtle·muted 로 위계를 낮춘다",
+      "http(s) 주소는 external 을 주지 않아도 새 탭(noopener) 으로 열린다"
+    ],
+    "avoid": [
+      "상태를 바꾸거나 제출하는 동작에 쓰지 않는다 → Button",
+      "화면의 주 액션을 Link 로 만들지 않는다 → Button primary",
+      "이동할 수 없는 항목을 Link 모양으로 두지 않는다 → 일반 텍스트",
+      "앵커 텍스트를 '여기'·'링크' 로 쓰지 않는다 → 목적지 이름"
+    ],
+    "limits": {
+      "label": "목적지 이름 한 줄, 넘치면 말줄임(truncate). 부모에 min-w-0 이 있어야 잘린다"
+    },
+    "states": {
+      "disabled": "없다. 이동 불가면 Link 를 그리지 않고 텍스트로 둔다",
+      "overflow": "한 줄 truncate. 아이콘(leading·trailing)은 줄지 않는다"
+    },
+    "placement": [
+      "행 끝 메타는 muted, 본문 안은 default",
+      "외부 링크 표시는 trailing 슬롯 아이콘"
+    ],
+    "examples": [
+      "components-l1-link--default",
+      "components-l1-link--external-link-contract"
+    ]
+  }
+}

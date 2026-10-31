@@ -1,0 +1,79 @@
+{
+  "id": "map-embed-slot",
+  "state": {
+    "isMapReady": "boolean",
+    "errorMessage": "string",
+    "attributionText": "string"
+  },
+  "events": [
+    "onRecenterRequest",
+    "onRetryLoad"
+  ],
+  "anatomy": {
+    "id": "root",
+    "intent": "ornament",
+    "children": [
+      {
+        "id": "native-map",
+        "intent": "ornament",
+        "slot": true
+      },
+      {
+        "id": "loading",
+        "intent": "state-indicator",
+        "binding": "isMapReady"
+      },
+      {
+        "id": "recenter",
+        "intent": "press-action",
+        "emits": "onRecenterRequest"
+      },
+      {
+        "id": "error",
+        "intent": "status-message",
+        "binding": "errorMessage"
+      },
+      {
+        "id": "retry-load",
+        "intent": "press-action",
+        "emits": "onRetryLoad"
+      },
+      {
+        "id": "attribution",
+        "intent": "value-display",
+        "binding": "attributionText"
+      }
+    ]
+  },
+  "usage": {
+    "when": [
+      "Mapbox 가 아닌 지도 SDK(카카오·네이버·Google)를 children 으로 매립하고, 준비·로딩·오류 상태 배지와 재중심·재시도·저작권을 한 프레임에 묶을 때",
+      "DS 가 소유하는 것은 프레임·상태 배지·오류 문구·버튼 라벨·저작권 표기뿐이다. 지도 내용(타일·마커·경로)은 불투명 슬롯이며 SDK 가 그린다"
+    ],
+    "avoid": [
+      "마커·화살표·지역 폴리곤을 데이터로 그리는 지도에 쓰지 않는다 → MapboxMap",
+      "출발지→목적지 한 구간 경로 쉘에 쓰지 않는다 → RouteMap",
+      "프레임 밖에 지도 상태 배지를 또 두지 않는다 — 하단 컨트롤 바가 상태를 말한다",
+      "children 자리에 DS 컴포넌트로 지도를 흉내 내지 않는다 → SDK 마운트 div 만"
+    ],
+    "limits": {
+      "perRegion": 1,
+      "width": "w-full. 최소 높이 12rem(min-h-48) 아래로 줄이지 않는다",
+      "label": "errorMessage 한 줄(text-xs)"
+    },
+    "states": {
+      "loading": "isMapReady=false → 배지 Loading(warning). 슬롯 면은 bg-muted",
+      "error": "errorMessage → 배지 Error + 하단 바에 문구. Retry 는 onRetryLoad 가 있을 때만 활성",
+      "disabled": "Recenter·Retry 는 각 콜백을 주지 않으면 비활성",
+      "empty": "children 없으면 bg-muted 빈 면. 별도 빈 문구 없다 → 바깥 EmptyState"
+    },
+    "placement": [
+      "하단 컨트롤 바(배지·Recenter·오류·Retry·저작권) 순서는 컴포넌트가 정한다"
+    ],
+    "examples": [
+      "components-l3-mapembedslot--default",
+      "components-l3-mapembedslot--map-ready",
+      "components-l3-mapembedslot--with-error"
+    ]
+  }
+}

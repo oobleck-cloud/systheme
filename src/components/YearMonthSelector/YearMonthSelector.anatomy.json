@@ -1,0 +1,157 @@
+{
+  "id": "year-month-selector",
+  "primitiveGroup": "value-picker",
+  "state": {
+    "value": "Date",
+    "open": "boolean",
+    "sheet": "boolean",
+    "density": "'compact' | 'default' | 'loose'"
+  },
+  "events": [
+    "onChange"
+  ],
+  "anatomy": {
+    "id": "root",
+    "intent": "ornament",
+    "children": [
+      {
+        "id": "prev-month",
+        "intent": "stepper",
+        "writes": "value"
+      },
+      {
+        "id": "trigger",
+        "intent": "disclosure",
+        "writes": "open",
+        "children": [
+          {
+            "id": "label",
+            "intent": "value-display",
+            "binding": "value"
+          }
+        ]
+      },
+      {
+        "id": "next-month",
+        "intent": "stepper",
+        "writes": "value"
+      },
+      {
+        "id": "sheet-root",
+        "intent": "ornament",
+        "binding": "sheet",
+        "children": [
+          {
+            "id": "sheet-scrim",
+            "intent": "overlay-surface"
+          },
+          {
+            "id": "sheet-panel",
+            "intent": "overlay-surface",
+            "children": [
+              {
+                "id": "columns",
+                "intent": "ornament",
+                "children": [
+                  {
+                    "id": "year-column",
+                    "traversal": {
+                      "axis": "block"
+                    },
+                    "iterates": "years",
+                    "as": "year",
+                    "child": {
+                      "id": "year-option",
+                      "intent": "select-option",
+                      "writes": "value.year",
+                      "binding": "year"
+                    }
+                  },
+                  {
+                    "id": "month-column",
+                    "traversal": {
+                      "axis": "block"
+                    },
+                    "iterates": "months",
+                    "as": "month",
+                    "child": {
+                      "id": "month-option",
+                      "intent": "select-option",
+                      "writes": "value.month",
+                      "binding": "month"
+                    }
+                  }
+                ]
+              },
+              {
+                "id": "confirm",
+                "intent": "submit",
+                "emits": "onChange"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "panel",
+        "intent": "overlay-surface",
+        "binding": "open",
+        "children": [
+          {
+            "id": "columns",
+            "intent": "ornament",
+            "children": [
+              {
+                "id": "year-column",
+                "traversal": {
+                  "axis": "block"
+                },
+                "iterates": "years",
+                "as": "year",
+                "child": {
+                  "id": "year-option",
+                  "intent": "select-option",
+                  "writes": "value.year",
+                  "binding": "year"
+                }
+              },
+              {
+                "id": "month-column",
+                "traversal": {
+                  "axis": "block"
+                },
+                "iterates": "months",
+                "as": "month",
+                "child": {
+                  "id": "month-option",
+                  "intent": "select-option",
+                  "writes": "value.month",
+                  "binding": "month"
+                }
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "usage": {
+    "when": [
+      "연·월만 고를 때(월별 집계·정산 기간)"
+    ],
+    "avoid": [
+      "일자까지 필요하면 → DatePicker",
+      "생년월일에는 → BirthDateScrollPicker"
+    ],
+    "states": {
+      "disabled": "값은 보이고 패널을 열지 않는다"
+    },
+    "placement": [
+      "모바일에서는 BottomSheet, 데스크톱에서는 앵커 패널. 이전·다음 스테퍼를 함께 둔다"
+    ],
+    "examples": [
+      "components-l3-yearmonthselector--default",
+      "components-l3-yearmonthselector--prev-next-steppers"
+    ]
+  }
+}

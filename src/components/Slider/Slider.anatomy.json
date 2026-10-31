@@ -1,0 +1,58 @@
+{
+  "id": "slider",
+  "state": {
+    "value": "number",
+    "min": "number",
+    "max": "number",
+    "step": "number"
+  },
+  "events": [
+    "onChange"
+  ],
+  "anatomy": {
+    "id": "root",
+    "intent": "value-input",
+    "writes": "value",
+    "emits": "onChange",
+    "children": [
+      {
+        "id": "track",
+        "intent": "ornament",
+        "children": [
+          {
+            "id": "fill",
+            "intent": "state-indicator",
+            "binding": "value"
+          }
+        ]
+      },
+      {
+        "id": "thumb",
+        "intent": "state-indicator",
+        "binding": "value"
+      }
+    ]
+  },
+  "usage": {
+    "when": [
+      "연속 값을 대략 조절할 때(비율·거리 반경·확대)"
+    ],
+    "avoid": [
+      "정확한 숫자를 받으면 → NumberInput",
+      "선택지가 몇 개면 → SegmentedControl"
+    ],
+    "limits": {
+      "items": "step 은 눈으로 구분 가능한 크기로. 100단계 이상 무의미"
+    },
+    "states": {
+      "disabled": "손잡이 위치는 유지하고 조작만 막는다"
+    },
+    "placement": [
+      "현재 값을 옆에 숫자로 함께 보인다 — 슬라이더만으로는 값을 못 읽는다"
+    ],
+    "examples": [
+      "components-l1-slider--default",
+      "components-l1-slider--disabled"
+    ]
+  }
+}

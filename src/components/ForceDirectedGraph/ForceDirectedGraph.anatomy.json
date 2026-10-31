@@ -1,0 +1,59 @@
+{
+  "id": "force-directed-graph",
+  "state": {
+    "nodes": "GraphNode[]",
+    "edges": "GraphEdge[]",
+    "nodeRadius": "number",
+    "tickCount": "number"
+  },
+  "events": [
+    "onNodeClick"
+  ],
+  "usage": {
+    "when": [
+      "사용자가 노드 사이의 연결 구조(누가 누구와 이어지는가)를 볼 때 — GraphNode[] + GraphEdge[]",
+      "group 으로 노드 색(시리즈 색 1~6)을 나누고 value 로 크기를 달리할 때"
+    ],
+    "avoid": [
+      "흐름의 양(A→B 로 얼마나)에는 쓰지 않는다 → SankeyChart",
+      "위계(부모-자식)에는 쓰지 않는다 → TreemapChart / SunburstChart",
+      "x·y 값을 가진 점 분포에는 쓰지 않는다 → ScatterPlot",
+      "정적 리포트에 넣지 않는다 — 시뮬레이션 배치가 렌더마다 달라진다"
+    ],
+    "limits": {
+      "items": "노드 100 · 엣지 300 이내(LargeGraph 규모). 넘으면 group 단위로 접는다",
+      "label": "노드 라벨은 툴팁(label ?? id)으로만. 캔버스 상시 라벨 없음",
+      "width": "w-full, 높이 기본 480"
+    },
+    "states": {
+      "empty": "nodes 가 비면 ChartFrame 빈 상태('표시할 데이터가 없습니다')"
+    },
+    "placement": [
+      "title/description 은 ChartFrame 이 그린다. 바깥에 Heading 을 또 두지 않는다",
+      "onNodeClick 이 있으면 노드가 press 대상 — 상세는 SideSheet 로"
+    ],
+    "examples": [
+      "components-charts-forcedirectedgraph--default",
+      "components-charts-forcedirectedgraph--large-graph",
+      "components-charts-forcedirectedgraph--empty"
+    ]
+  },
+  "anatomy": {
+    "id": "root",
+    "intent": "ornament",
+    "children": [
+      {
+        "id": "series",
+        "intent": "ornament",
+        "iterates": "nodes",
+        "as": "node",
+        "child": {
+          "id": "segment",
+          "intent": "chart-series",
+          "binding": "node",
+          "emits": "onNodeClick"
+        }
+      }
+    ]
+  }
+}

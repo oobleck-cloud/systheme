@@ -1,0 +1,6 @@
+/*
+ * Tossface — Toss emoji webfont (SIL OFL).
+ * https://github.com/toss/tossface
+ * Fonts resolve relative to this stylesheet on the CDN.
+ */
+@import url('https://cdn.jsdelivr.net/gh/toss/tossface@v1.6.1/dist/tossface.css');

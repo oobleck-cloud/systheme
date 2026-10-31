@@ -1,0 +1,106 @@
+{
+  "id": "saved-view-rail",
+  "state": {
+    "views": "SavedViewModel[]",
+    "selectedViewId": "string",
+    "editorOpen": "boolean",
+    "draftName": "string"
+  },
+  "events": [
+    "onSelectView",
+    "onSaveView",
+    "onDeleteView",
+    "onDuplicateView"
+  ],
+  "anatomy": {
+    "id": "root",
+    "intent": "ornament",
+    "children": [
+      {
+        "id": "view-list",
+        "intent": "ornament",
+        "traversal": {
+          "axis": "block"
+        },
+        "iterates": "views",
+        "as": "v",
+        "child": {
+          "id": "view-row",
+          "intent": "select-option",
+          "writes": "selectedViewId",
+          "emits": "onSelectView",
+          "children": [
+            {
+              "id": "name",
+              "intent": "value-display",
+              "binding": "v.name"
+            }
+          ]
+        }
+      },
+      {
+        "id": "open-editor",
+        "intent": "disclosure",
+        "writes": "editorOpen"
+      },
+      {
+        "id": "editor",
+        "intent": "overlay-surface",
+        "binding": "editorOpen",
+        "children": [
+          {
+            "id": "name-input",
+            "intent": "value-input",
+            "writes": "draftName"
+          },
+          {
+            "id": "save",
+            "intent": "submit",
+            "emits": "onSaveView"
+          },
+          {
+            "id": "delete",
+            "intent": "press-action",
+            "emits": "onDeleteView"
+          },
+          {
+            "id": "duplicate",
+            "intent": "press-action",
+            "emits": "onDuplicateView"
+          },
+          {
+            "id": "close-editor",
+            "intent": "dismiss",
+            "writes": "editorOpen"
+          }
+        ]
+      }
+    ]
+  },
+  "usage": {
+    "when": [
+      "저장된 뷰(필터·정렬 조합) 목록에서 하나를 고르고, 선택 뷰의 이름 편집·복제·삭제를 Modal('저장된 뷰') 안에서 할 때",
+      "화살표·Home·End 로 뷰 행 이동(roving tabindex)"
+    ],
+    "avoid": [
+      "화면 간 이동에 쓰지 않는다 → Sidebar / TabBar",
+      "뷰를 저장하지 않는 필터면 → 필터 Popover 패널",
+      "삭제·복제를 목록 행에 바로 붙이지 않는다 — 편집 Modal 안에서만"
+    ],
+    "limits": {
+      "perRegion": 1,
+      "label": "뷰 이름 한 줄"
+    },
+    "states": {
+      "disabled": "onDeleteView 없으면 '삭제', onDuplicateView 없으면 '복제' 비활성",
+      "empty": "views 빈 배열 → 행 없음, 선택 ''. 빈 문구 없다 → EmptyState 바깥에"
+    },
+    "placement": [
+      "뷰 목록 위, '이름 편집' 버튼 아래. 편집은 Modal 로 뜬다"
+    ],
+    "examples": [
+      "components-l2-savedviewrail--default",
+      "components-l2-savedviewrail--editor-open-flow"
+    ]
+  }
+}

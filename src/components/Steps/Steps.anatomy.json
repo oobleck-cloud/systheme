@@ -1,0 +1,96 @@
+{
+  "id": "steps",
+  "state": {
+    "currentStep": "number",
+    "steps": "{ id: string; label: string; description?: string }[]"
+  },
+  "events": [
+    "onStepChange"
+  ],
+  "anatomy": {
+    "id": "root",
+    "intent": "ornament",
+    "traversal": {
+      "axis": "inline"
+    },
+    "iterates": "steps",
+    "as": "step",
+    "child": {
+      "id": "step-item",
+      "intent": "ornament",
+      "children": [
+        {
+          "id": "step-trigger",
+          "intent": "select-option",
+          "writes": "currentStep",
+          "emits": "onStepChange",
+          "binding": "step.id",
+          "children": [
+            {
+              "id": "indicator",
+              "intent": "state-indicator",
+              "binding": "currentStep",
+              "children": [
+                {
+                  "id": "number",
+                  "intent": "value-display",
+                  "binding": "step.index"
+                },
+                {
+                  "id": "check-icon",
+                  "intent": "icon",
+                  "binding": "@check"
+                }
+              ]
+            },
+            {
+              "id": "step-content",
+              "intent": "ornament",
+              "children": [
+                {
+                  "id": "label",
+                  "intent": "value-display",
+                  "binding": "step.label"
+                },
+                {
+                  "id": "description",
+                  "intent": "value-display",
+                  "binding": "step.description"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "connector",
+          "intent": "ornament"
+        }
+      ]
+    }
+  },
+  "usage": {
+    "when": [
+      "순서가 정해진 단계 중 현재 위치를 보일 때(위저드·온보딩) — default",
+      "콘텐츠 위에 얹는 얇은 위치 표시(학습: 영상 시청 › 문제 풀기 › 이수 완료) — appearance=text"
+    ],
+    "avoid": [
+      "단계 표시를 손으로 그리지 않는다(글자 ›, 원 + 선)",
+      "실제 행동과 무관하게 currentStep 을 올리지 않는다 — 가짜 상태"
+    ],
+    "limits": {
+      "items": "3~6단계. 7개 이상이면 그룹으로 묶는다",
+      "label": "2~5자 명사"
+    },
+    "states": {
+      "disabled": "onStepChange 없으면 클릭 불가(표시 전용)",
+      "overflow": "text 는 flex-wrap, default 는 가로 스크롤 없이 세로(orientation=vertical)"
+    },
+    "placement": [
+      "text 는 콘텐츠 바로 위 왼쪽, 오른쪽에 진척 수치 슬롯"
+    ],
+    "examples": [
+      "components-l1-steps--text-appearance",
+      "screens/lms-lesson"
+    ]
+  }
+}

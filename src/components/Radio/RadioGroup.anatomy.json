@@ -1,0 +1,45 @@
+{
+  "id": "radio-group",
+  "state": {
+    "value": "string | null",
+    "options": "{ value: string; label: string; description?: string; disabled?: boolean }[]"
+  },
+  "events": ["onChange"],
+  "anatomy": {
+    "id": "root",
+    "intent": "ornament",
+    "traversal": { "axis": "block" },
+    "iterates": "options",
+    "as": "option",
+    "child": {
+      "id": "item",
+      "intent": "ornament",
+      "children": [
+        {
+          "id": "control",
+          "intent": "select-option",
+          "writes": "value",
+          "emits": "onChange",
+          "binding": "option.value",
+          "children": [
+            {
+              "id": "indicator",
+              "intent": "state-indicator",
+              "binding": "value"
+            }
+          ]
+        },
+        {
+          "id": "label",
+          "intent": "value-display",
+          "binding": "option.label"
+        },
+        {
+          "id": "description",
+          "intent": "status-message",
+          "binding": "option.description"
+        }
+      ]
+    }
+  }
+}

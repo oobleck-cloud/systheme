@@ -1,0 +1,23 @@
+{
+  "id": "stack",
+  "state": {},
+  "events": [],
+  "anatomy": {
+    "id": "root",
+    "intent": "ornament",
+    "slot": true
+  },
+  "usage": {
+    "when": [
+      "요소를 한 방향으로 일정 간격으로 쌓을 때"
+    ],
+    "avoid": [
+      "2차원 배치에는 → Grid",
+      "간격을 임의값으로 주지 않는다 — gap 스케일에서 고른다"
+    ],
+    "examples": [
+      "components-layout-stack--vertical",
+      "components-layout-stack--space-between"
+    ]
+  }
+}

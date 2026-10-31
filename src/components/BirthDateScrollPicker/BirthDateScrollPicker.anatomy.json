@@ -1,0 +1,180 @@
+{
+  "id": "birth-date-scroll-picker",
+  "primitiveGroup": "value-picker",
+  "state": {
+    "value": "string",
+    "open": "boolean",
+    "sheet": "boolean",
+    "density": "'compact' | 'default' | 'loose'"
+  },
+  "events": [
+    "onChange"
+  ],
+  "anatomy": {
+    "id": "root",
+    "intent": "ornament",
+    "children": [
+      {
+        "id": "trigger",
+        "intent": "disclosure",
+        "writes": "open",
+        "children": [
+          {
+            "id": "value",
+            "intent": "value-display",
+            "binding": "value"
+          },
+          {
+            "id": "calendar-icon",
+            "intent": "icon",
+            "binding": "@calendar"
+          }
+        ]
+      },
+      {
+        "id": "sheet-root",
+        "intent": "ornament",
+        "binding": "sheet",
+        "children": [
+          {
+            "id": "sheet-scrim",
+            "intent": "overlay-surface"
+          },
+          {
+            "id": "sheet-panel",
+            "intent": "overlay-surface",
+            "children": [
+              {
+                "id": "columns",
+                "intent": "ornament",
+                "children": [
+                  {
+                    "id": "year-column",
+                    "traversal": {
+                      "axis": "block"
+                    },
+                    "iterates": "years",
+                    "as": "year",
+                    "child": {
+                      "id": "year-option",
+                      "intent": "select-option",
+                      "writes": "value.year",
+                      "binding": "year"
+                    }
+                  },
+                  {
+                    "id": "month-column",
+                    "traversal": {
+                      "axis": "block"
+                    },
+                    "iterates": "months",
+                    "as": "month",
+                    "child": {
+                      "id": "month-option",
+                      "intent": "select-option",
+                      "writes": "value.month",
+                      "binding": "month"
+                    }
+                  },
+                  {
+                    "id": "day-column",
+                    "traversal": {
+                      "axis": "block"
+                    },
+                    "iterates": "days",
+                    "as": "day",
+                    "child": {
+                      "id": "day-option",
+                      "intent": "select-option",
+                      "writes": "value.day",
+                      "binding": "day"
+                    }
+                  }
+                ]
+              },
+              {
+                "id": "confirm",
+                "intent": "submit",
+                "emits": "onChange"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "panel",
+        "intent": "overlay-surface",
+        "binding": "open",
+        "children": [
+          {
+            "id": "columns",
+            "intent": "ornament",
+            "children": [
+              {
+                "id": "year-column",
+                "traversal": {
+                  "axis": "block"
+                },
+                "iterates": "years",
+                "as": "year",
+                "child": {
+                  "id": "year-option",
+                  "intent": "select-option",
+                  "writes": "value.year",
+                  "binding": "year"
+                }
+              },
+              {
+                "id": "month-column",
+                "traversal": {
+                  "axis": "block"
+                },
+                "iterates": "months",
+                "as": "month",
+                "child": {
+                  "id": "month-option",
+                  "intent": "select-option",
+                  "writes": "value.month",
+                  "binding": "month"
+                }
+              },
+              {
+                "id": "day-column",
+                "traversal": {
+                  "axis": "block"
+                },
+                "iterates": "days",
+                "as": "day",
+                "child": {
+                  "id": "day-option",
+                  "intent": "select-option",
+                  "writes": "value.day",
+                  "binding": "day"
+                }
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "usage": {
+    "when": [
+      "생년월일처럼 범위가 넓고 세 자리(년·월·일)를 한 번에 고를 때"
+    ],
+    "avoid": [
+      "임의의 날짜 선택에 쓰지 않는다 → DatePicker",
+      "연·월만 필요하면 → YearMonthSelector"
+    ],
+    "states": {
+      "disabled": "값은 보이고 휠 패널을 열지 않는다"
+    },
+    "placement": [
+      "모바일에서는 BottomSheet 안, 데스크톱에서는 앵커 패널"
+    ],
+    "examples": [
+      "components-l3-birthdatescrollpicker--default",
+      "components-l3-birthdatescrollpicker--mobile-sheet"
+    ]
+  }
+}

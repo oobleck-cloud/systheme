@@ -1,0 +1,58 @@
+{
+  "id": "avatar",
+  "state": {
+    "src": "string | undefined",
+    "name": "string | undefined",
+    "fallback": "React.ReactNode",
+    "imageError": "boolean"
+  },
+  "events": [],
+  "anatomy": {
+    "id": "root",
+    "intent": "ornament",
+    "children": [
+      {
+        "id": "image",
+        "intent": "icon",
+        "binding": "src"
+      },
+      {
+        "id": "initials",
+        "intent": "value-display",
+        "binding": "name"
+      },
+      {
+        "id": "custom-fallback",
+        "intent": "icon",
+        "slot": true
+      },
+      {
+        "id": "default-fallback-icon",
+        "intent": "icon",
+        "binding": "@person-icon"
+      }
+    ]
+  },
+  "usage": {
+    "when": [
+      "사람·계정을 이미지나 이니셜로 식별할 때"
+    ],
+    "avoid": [
+      "아이콘 타일에 쓰지 않는다 → IconBox",
+      "사람이 아닌 대상(파일·주문)에 쓰지 않는다 → IconBox/TextBox"
+    ],
+    "limits": {
+      "label": "이니셜 2자"
+    },
+    "states": {
+      "error": "이미지가 깨지면 이니셜 → 아이콘 순으로 폴백. 빈 원을 남기지 않는다"
+    },
+    "placement": [
+      "이름 왼쪽. 이름 없이 아바타만 둘 때는 aria-label 필수"
+    ],
+    "examples": [
+      "components-l1-avatar--default",
+      "components-l1-avatar--fallback-chain"
+    ]
+  }
+}

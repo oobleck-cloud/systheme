@@ -1,0 +1,50 @@
+{
+  "id": "badge",
+  "state": {
+    "variant": "'default' | 'primary' | 'success' | 'warning' | 'error' | 'info' | 'outline' | 'outline-primary' | 'outline-success' | 'outline-warning' | 'outline-error' | 'outline-info'",
+    "dot": "boolean",
+    "dotColor": "'success' | 'warning' | 'error' | 'info'"
+  },
+  "events": [],
+  "anatomy": {
+    "id": "root",
+    "intent": "ornament",
+    "children": [
+      {
+        "id": "dot",
+        "intent": "severity-indicator",
+        "binding": "variant"
+      },
+      {
+        "id": "label",
+        "intent": "ornament",
+        "slot": true
+      }
+    ]
+  },
+  "usage": {
+    "when": [
+      "상태를 한 단어로 표시할 때(이수 완료·진행 중·노쇼) — 조치 필요도에 맞는 시맨틱 색",
+      "목록 행·헤더 옆에 붙는 읽기 전용 표식"
+    ],
+    "avoid": [
+      "누를 수 있는 것에 쓰지 않는다 → Button/Tag(removable)",
+      "분류(카테고리) 색에 쓰지 않는다 → Tag color",
+      "한 행에 Badge 와 Tag 를 나란히 두지 않는다 — 조형이 두 개면 위계가 없다"
+    ],
+    "limits": {
+      "perRegion": 1,
+      "label": "2~6자 명사. 문장 금지. 넘치면 문구를 바꾼다"
+    },
+    "states": {
+      "overflow": "줄바꿈 금지(whitespace-nowrap). 자동 폭"
+    },
+    "placement": [
+      "제목 오른쪽 또는 행 끝. 제목보다 먼저 오지 않는다"
+    ],
+    "examples": [
+      "components-l1-badge--variants",
+      "screens/lms-course-detail"
+    ]
+  }
+}

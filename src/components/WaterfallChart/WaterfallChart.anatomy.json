@@ -1,0 +1,66 @@
+{
+  "id": "waterfall-chart",
+  "state": {
+    "data": "WaterfallItem[]"
+  },
+  "events": [
+    "onBarClick"
+  ],
+  "anatomy": {
+    "id": "root",
+    "intent": "ornament",
+    "children": [
+      {
+        "id": "x-axis",
+        "intent": "plot-axis",
+        "iterates": "categories",
+        "as": "cat",
+        "child": {
+          "id": "tick-label",
+          "intent": "value-display"
+        }
+      },
+      {
+        "id": "y-axis",
+        "intent": "plot-axis",
+        "iterates": "yTicks",
+        "as": "tick",
+        "child": {
+          "id": "tick-label",
+          "intent": "value-display"
+        }
+      },
+      {
+        "id": "series",
+        "intent": "ornament",
+        "iterates": "data",
+        "as": "item",
+        "child": {
+          "id": "segment",
+          "intent": "chart-series",
+          "binding": "item",
+          "emits": "onBarClick"
+        }
+      }
+    ]
+  },
+  "usage": {
+    "when": [
+      "시작값에서 증감이 쌓여 최종값에 이르는 과정을 보일 때(정산·차감 내역)"
+    ],
+    "avoid": [
+      "단순 비교에 쓰지 않는다 → BarChart",
+      "시간 추세에 쓰지 않는다 → LineChart"
+    ],
+    "limits": {
+      "items": "단계 10개 이하"
+    },
+    "states": {
+      "empty": "ChartFrame 의 빈 상태 문구를 쓴다"
+    },
+    "examples": [
+      "components-charts-waterfallchart--default",
+      "components-charts-waterfallchart--empty"
+    ]
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "id": "dropdown",
+  "state": { "open": "boolean" },
+  "events": ["onOpenChange"],
+  "anatomy": {
+    "id": "root",
+    "intent": "ornament",
+    "children": [
+      {
+        "id": "trigger",
+        "intent": "disclosure",
+        "writes": "open",
+        "emits": "onOpenChange",
+        "children": [
+          { "id": "label", "intent": "ornament", "slot": true },
+          { "id": "chevron", "intent": "state-indicator", "binding": "open" }
+        ]
+      },
+      {
+        "id": "panel",
+        "intent": "overlay-surface",
+        "binding": "open",
+        "slot": true
+      }
+    ]
+  }
+}

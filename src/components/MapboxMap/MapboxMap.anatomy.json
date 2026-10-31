@@ -1,0 +1,158 @@
+{
+  "id": "mapbox-map",
+  "primitiveGroup": "map-visualization",
+  "state": {
+    "markers": "MapMarker[]",
+    "arrows": "MapArrow[]",
+    "regions": "GeoJSON.FeatureCollection[]",
+    "overlays": "MapOverlay[]",
+    "activeMarkerId": "string | null",
+    "animateActiveMarker": "boolean",
+    "camera": "MapCamera",
+    "isLoaded": "boolean",
+    "theme": "'light' | 'dark'"
+  },
+  "events": [
+    "onMarkerClick",
+    "onActiveMarkerChange",
+    "onRegionClick",
+    "onStopDragStart",
+    "onStopDrop",
+    "onStopDragCancel"
+  ],
+  "anatomy": {
+    "id": "root",
+    "intent": "ornament",
+    "children": [
+      {
+        "id": "viewport",
+        "intent": "ornament",
+        "binding": "isLoaded",
+        "children": [
+          {
+            "id": "regions",
+            "intent": "ornament",
+            "iterates": "regions",
+            "as": "region",
+            "child": {
+              "id": "region-feature",
+              "intent": "press-action",
+              "binding": "region",
+              "emits": "onRegionClick"
+            }
+          },
+          {
+            "id": "arrows",
+            "intent": "ornament",
+            "iterates": "arrows",
+            "as": "arrow",
+            "child": {
+              "id": "arrow-line",
+              "intent": "chart-series",
+              "binding": "arrow",
+              "children": [
+                {
+                  "id": "stop-handle",
+                  "intent": "press-action",
+                  "binding": "arrow.stops",
+                  "emits": [
+                    "onStopDragStart",
+                    "onStopDrop",
+                    "onStopDragCancel"
+                  ]
+                }
+              ]
+            }
+          },
+          {
+            "id": "markers",
+            "intent": "ornament",
+            "iterates": "markers",
+            "as": "marker",
+            "child": {
+              "id": "marker-sprite",
+              "intent": "select-option",
+              "binding": "marker",
+              "writes": "activeMarkerId",
+              "emits": [
+                "onMarkerClick",
+                "onActiveMarkerChange"
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "id": "marker-popup",
+        "intent": "overlay-surface",
+        "binding": "activeMarkerId",
+        "children": [
+          {
+            "id": "popup-content",
+            "intent": "ornament",
+            "slot": true
+          }
+        ]
+      },
+      {
+        "id": "active-marker-overlay",
+        "intent": "overlay-surface",
+        "binding": "activeMarkerId",
+        "children": [
+          {
+            "id": "active-marker-render",
+            "intent": "ornament",
+            "slot": true
+          }
+        ]
+      },
+      {
+        "id": "overlays",
+        "intent": "ornament",
+        "iterates": "overlays",
+        "as": "overlay",
+        "child": {
+          "id": "overlay-item",
+          "intent": "ornament",
+          "binding": "overlay",
+          "slot": true
+        }
+      }
+    ]
+  },
+  "usage": {
+    "when": [
+      "markers·arrows·loops·regions 데이터를 주입해 인터랙티브 지도를 그릴 때(상담 지도·플래너 동선)",
+      "선택 마커(activeMarkerId)·카메라(center/zoom/autoFit/fitKey)를 화면이 제어해야 할 때",
+      "마커가 많아 cluster 가 필요할 때. 좌표에 고정되는 DOM 카드는 overlays",
+      "DS 가 소유하는 것은 컨테이너·카메라·마커 스프라이트·상태(activeMarkerId·isLoaded·theme)·라벨이다. 타일과 팝업 내용은 불투명 슬롯 — 팝업 안 링크·버튼은 소비자가 popup: ReactNode 로 조립한다"
+    ],
+    "avoid": [
+      "Mapbox 가 아닌 SDK 를 붙이지 않는다 → MapEmbedSlot / RouteMap",
+      "출발→도착 한 구간만이면 쓰지 않는다 → RouteMap",
+      "overlays 를 마커 대용으로 수백 개 얹지 않는다 → markers + cluster (overlays 는 수십 개 규모)",
+      "onStopDrop 드래그만으로 배정 경로를 만들지 않는다 — 키보드 대체가 없으므로 목록·메뉴 경로를 함께 둔다",
+      "MapProvider(accessToken) 밖에서 렌더하지 않는다"
+    ],
+    "limits": {
+      "perRegion": 1,
+      "items": "overlays 수십 개까지. 그 이상은 markers(+cluster)",
+      "width": "높이 기본 400, 폭은 부모 w-full"
+    },
+    "states": {
+      "loading": "isLoaded 전에는 컨테이너 면만. 스피너는 그리지 않는다",
+      "empty": "markers 빈 배열이면 camera 의 center·zoom 으로 빈 지도. 빈 문구 없다 → 바깥 EmptyState",
+      "disabled": "없다. 상호작용을 막으려면 onMarkerClick·onRegionClick·onStopDrop 을 주지 않는다"
+    },
+    "placement": [
+      "지도 위 떠 있는 정보 카드는 overlays 로 좌표에 고정하거나 지도 밖 패널로 뺀다",
+      "선택 마커 강조는 activeMarkerId + animateActiveMarker. 커스텀은 renderActiveMarker"
+    ],
+    "examples": [
+      "components-l2-mapboxmap--multiple-markers",
+      "components-l2-mapboxmap--clustered-markers",
+      "components-l2-mapboxmap--route-line",
+      "components-l2-mapboxmap--empty-map"
+    ]
+  }
+}

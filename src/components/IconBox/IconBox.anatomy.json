@@ -1,0 +1,43 @@
+{
+  "id": "icon-box",
+  "state": {},
+  "events": [],
+  "usage": {
+    "when": [
+      "아이콘·이니셜 하나를 담는 고정 크기 타일(상태 아이콘·항목 심볼)",
+      "색은 자리로 통제 — 시맨틱 variant(success/warning/error/info)는 조치 필요도 순"
+    ],
+    "avoid": [
+      "누를 수 있는 것에 쓰지 않는다 → IconButton",
+      "사람·조직 이미지에 쓰지 않는다 → Avatar",
+      "글자 라벨을 넣지 않는다 → Badge",
+      "이모지 타일을 나열하지 않는다(slop) → 아이콘"
+    ],
+    "limits": {
+      "perRegion": 1,
+      "label": "아이콘 1개 또는 이니셜 2자(getInitials)"
+    },
+    "states": {
+      "overflow": "overflow-hidden 으로 잘린다. 크기는 size(xs~xl)로 올린다"
+    },
+    "placement": [
+      "행·카드 맨 왼쪽, 제목 앞",
+      "사각 타일 = 상태, 원형 = 액션(모바일 규율). 기본 circle"
+    ],
+    "examples": [
+      "components-l1-iconbox--variants",
+      "components-l1-iconbox--shapes-and-variants"
+    ]
+  },
+  "anatomy": {
+    "id": "root",
+    "intent": "ornament",
+    "children": [
+      {
+        "id": "icon",
+        "intent": "icon",
+        "slot": true
+      }
+    ]
+  }
+}

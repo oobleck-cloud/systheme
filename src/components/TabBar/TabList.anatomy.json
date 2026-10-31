@@ -1,0 +1,19 @@
+{
+  "id": "tab-list",
+  "primitiveGroup": "tab-navigation",
+  "state": {
+    "tabListLabel": "string"
+  },
+  "events": [],
+  "anatomy": {
+    "id": "root",
+    "intent": "ornament",
+    "children": [
+      {
+        "id": "items",
+        "intent": "ornament",
+        "slot": true
+      }
+    ]
+  }
+}

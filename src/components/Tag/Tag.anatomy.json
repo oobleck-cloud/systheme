@@ -1,0 +1,60 @@
+{
+  "id": "tag",
+  "state": {
+    "color": "'gray' | 'red' | 'orange' | 'green' | 'teal' | 'blue' | 'purple'"
+  },
+  "events": [
+    "onRemove"
+  ],
+  "anatomy": {
+    "id": "root",
+    "intent": "ornament",
+    "children": [
+      {
+        "id": "dot",
+        "intent": "ornament",
+        "binding": "color"
+      },
+      {
+        "id": "label",
+        "intent": "ornament",
+        "slot": true
+      },
+      {
+        "id": "remove-button",
+        "intent": "press-action",
+        "emits": "onRemove",
+        "children": [
+          {
+            "id": "remove-icon",
+            "intent": "icon",
+            "binding": "@close"
+          }
+        ]
+      }
+    ]
+  },
+  "usage": {
+    "when": [
+      "값·카테고리를 분류 색으로 구분할 때(태그 팔레트)",
+      "제거 가능한 선택값(EditableTagField·MultiSelect 칩)"
+    ],
+    "avoid": [
+      "상태(실패·완료)를 말하지 않는다 → Badge. 빨간 태그 ≠ 실패",
+      "링크 대용으로 쓰지 않는다"
+    ],
+    "limits": {
+      "label": "1~2 단어. 넘치면 말줄임이 아니라 줄바꿈 대신 툴팁"
+    },
+    "states": {
+      "overflow": "칩 목록이 넘치면 +N 으로 접는다",
+      "disabled": "제거 불가 시 remove 버튼을 숨긴다(흐리게 하지 않는다)"
+    },
+    "placement": [
+      "칩 사이 간격 gap-1.5, 줄바꿈 허용"
+    ],
+    "examples": [
+      "components-l1-tag--variants"
+    ]
+  }
+}

@@ -1,0 +1,99 @@
+{
+  "id": "import-wizard-frame",
+  "state": {
+    "currentStep": "number",
+    "fileLabel": "string",
+    "errorMessage": "string"
+  },
+  "events": [
+    "onStepBack",
+    "onStepNext",
+    "onCancel",
+    "onComplete",
+    "onPickFile"
+  ],
+  "usage": {
+    "when": [
+      "파일 기반 임포트를 단계(기본 3단계)로 진행할 때 — 이전/다음 · 파일 선택 · 취소/완료 · 오류 한 줄",
+      "step-body 슬롯에 각 단계 화면(FileInput · 매핑 표 · 확인)을 넣는다"
+    ],
+    "avoid": [
+      "파일 하나 올리기만 할 때는 쓰지 않는다 → FileInput",
+      "단계 진행 표시만 필요하면 쓰지 않는다 → Steps",
+      "임포트가 아닌 일반 다단계 폼에는 쓰지 않는다 → Steps + Modal / SideSheet",
+      "단계별 검증 오류를 errorMessage 한 줄에 몰지 않는다 → 각 단계 FormField error. errorMessage 는 전체 실패만"
+    ],
+    "limits": {
+      "items": "totalSteps 3~5",
+      "label": "errorMessage 한 줄 40자. fileLabel 은 파일명 한 줄"
+    },
+    "states": {
+      "disabled": "이전은 1단계, 다음은 마지막 단계에서 disabled. 취소·완료는 핸들러 없으면 disabled",
+      "error": "errorMessage 가 있으면 하단 error-text 한 줄. 자리는 항상 유지(레이아웃 점프 없음)",
+      "empty": "fileLabel 없으면 빈 줄 유지"
+    },
+    "placement": [
+      "이전/다음 → 본문 → 파일 요약 → 파일 선택 · 취소 · 완료 → 오류. 순서 고정",
+      "Modal 또는 SideSheet 본문 안. primary 는 완료 하나"
+    ],
+    "examples": [
+      "components-l2-importwizardframe--default",
+      "components-l2-importwizardframe--with-error",
+      "components-l2-importwizardframe--later-step"
+    ]
+  },
+  "anatomy": {
+    "id": "root",
+    "intent": "ornament",
+    "children": [
+      {
+        "id": "step-nav",
+        "intent": "ornament",
+        "children": [
+          {
+            "id": "back",
+            "intent": "wizard-step",
+            "writes": "currentStep",
+            "emits": "onStepBack"
+          },
+          {
+            "id": "next",
+            "intent": "wizard-step",
+            "writes": "currentStep",
+            "emits": "onStepNext"
+          }
+        ]
+      },
+      {
+        "id": "step-body",
+        "intent": "ornament",
+        "slot": true
+      },
+      {
+        "id": "file-summary",
+        "intent": "value-display",
+        "binding": "fileLabel"
+      },
+      {
+        "id": "pick-file",
+        "intent": "press-action",
+        "emits": "onPickFile"
+      },
+      {
+        "id": "cancel",
+        "intent": "press-action",
+        "emits": "onCancel"
+      },
+      {
+        "id": "complete",
+        "intent": "submit",
+        "emits": "onComplete"
+      },
+      {
+        "id": "error",
+        "intent": "status-message",
+        "binding": "errorMessage"
+      }
+    ]
+  }
+}

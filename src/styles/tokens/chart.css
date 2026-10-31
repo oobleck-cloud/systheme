@@ -1,0 +1,83 @@
+/*
+ * Chart-specific design tokens.
+ * Series colors map to the 6-hue palette: blue / green / orange / red / purple / teal
+ * D3 attrs must NEVER receive hex values directly — always read these vars at runtime
+ * via utils/chart/readToken.ts.
+ */
+:root {
+  /* ── Categorical series palette (6 colors) ──────────────────── */
+  --ds-chart-series-1: var(--ds-color-blue-500);
+  --ds-chart-series-2: var(--ds-color-green-500);
+  --ds-chart-series-3: var(--ds-color-orange-500);
+  --ds-chart-series-4: var(--ds-color-red-500);
+  --ds-chart-series-5: var(--ds-color-purple-500);
+  --ds-chart-series-6: var(--ds-color-teal-500);
+
+  /* Softer fill variants for area/bar with opacity feel */
+  --ds-chart-series-1-subtle: var(--ds-color-blue-100);
+  --ds-chart-series-2-subtle: var(--ds-color-green-100);
+  --ds-chart-series-3-subtle: var(--ds-color-orange-100);
+  --ds-chart-series-4-subtle: var(--ds-color-red-100);
+  --ds-chart-series-5-subtle: var(--ds-color-purple-100);
+  --ds-chart-series-6-subtle: var(--ds-color-teal-100);
+
+  /* ── Sequential scale (single-hue, blue) ────────────────────── */
+  --ds-chart-seq-low: var(--ds-color-blue-50);
+  --ds-chart-seq-mid: var(--ds-color-blue-300);
+  --ds-chart-seq-high: var(--ds-color-blue-700);
+
+  /* ── Diverging scale (red → neutral → green) ────────────────── */
+  --ds-chart-div-low: var(--ds-color-red-500);
+  --ds-chart-div-mid: var(--ds-color-gray-200);
+  --ds-chart-div-high: var(--ds-color-green-500);
+
+  /* ── Structural chrome ──────────────────────────────────────── */
+  --ds-chart-grid: var(--ds-color-border-subtle);
+  --ds-chart-grid-strong: var(--ds-color-border-default);
+  --ds-chart-axis: var(--ds-color-border-default);
+  --ds-chart-axis-label: var(--ds-color-text-muted);
+  --ds-chart-axis-title: var(--ds-color-text-subtle);
+  --ds-chart-crosshair: var(--ds-color-border-strong);
+
+  /* ── Tooltip ────────────────────────────────────────────────── */
+  --ds-chart-tooltip-bg: var(--ds-color-bg-inverse);
+  --ds-chart-tooltip-fg: var(--ds-color-text-inverse);
+  --ds-chart-tooltip-border: var(--ds-color-border-default);
+
+  /* ── Legend ─────────────────────────────────────────────────── */
+  --ds-chart-legend-fg: var(--ds-color-text-subtle);
+  --ds-chart-legend-inactive: var(--ds-color-text-muted);
+
+  /* ── Status overlays (used in Gauge/Waterfall) ──────────────── */
+  --ds-chart-status-positive: var(--ds-color-success-primary);
+  --ds-chart-status-negative: var(--ds-color-error-primary);
+  --ds-chart-status-neutral: var(--ds-color-gray-400);
+  --ds-chart-status-warning: var(--ds-color-warning-primary);
+}
+
+/* 다크: 500 계열은 어두운 바탕에서 가라앉으므로 한 단 밝은 400 으로, subtle 채움은 900 알파로. */
+.dark {
+  --ds-chart-series-1: var(--ds-color-blue-400);
+  --ds-chart-series-2: var(--ds-color-green-400);
+  --ds-chart-series-3: var(--ds-color-orange-400);
+  --ds-chart-series-4: var(--ds-color-red-400);
+  --ds-chart-series-5: var(--ds-color-purple-400);
+  --ds-chart-series-6: var(--ds-color-teal-400);
+
+  --ds-chart-series-1-subtle: oklch(from var(--ds-color-blue-900) l c h / 0.6);
+  --ds-chart-series-2-subtle: oklch(from var(--ds-color-green-900) l c h / 0.6);
+  --ds-chart-series-3-subtle: oklch(from var(--ds-color-orange-900) l c h / 0.6);
+  --ds-chart-series-4-subtle: oklch(from var(--ds-color-red-900) l c h / 0.6);
+  --ds-chart-series-5-subtle: oklch(from var(--ds-color-purple-900) l c h / 0.6);
+  --ds-chart-series-6-subtle: oklch(from var(--ds-color-teal-900) l c h / 0.6);
+
+  --ds-chart-seq-low: var(--ds-color-blue-900);
+  --ds-chart-seq-mid: var(--ds-color-blue-500);
+  --ds-chart-seq-high: var(--ds-color-blue-200);
+
+  --ds-chart-div-low: var(--ds-color-red-400);
+  --ds-chart-div-mid: var(--ds-color-night-4);
+  --ds-chart-div-high: var(--ds-color-green-400);
+
+  --ds-chart-status-neutral: var(--ds-color-night-6);
+}

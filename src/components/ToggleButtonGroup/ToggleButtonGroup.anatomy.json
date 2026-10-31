@@ -1,0 +1,47 @@
+{
+  "id": "toggle-button-group",
+  "state": {
+    "value": "string",
+    "appearance": "'icon' | 'label'"
+  },
+  "events": [
+    "onValueChange"
+  ],
+  "anatomy": {
+    "id": "root",
+    "intent": "ornament",
+    "binding": "value",
+    "traversal": {
+      "axis": "inline"
+    },
+    "iterates": "options",
+    "as": "option",
+    "child": {
+      "id": "item",
+      "intent": "select-option",
+      "writes": "value",
+      "emits": "onValueChange",
+      "binding": "option.value"
+    }
+  },
+  "usage": {
+    "when": [
+      "보기 방식·정렬처럼 즉시 반영되는 선택을 버튼 묶음으로 줄 때"
+    ],
+    "avoid": [
+      "화면 전환에 쓰지 않는다 → TabBar",
+      "선택지가 많으면 → Select",
+      "제출이 필요한 폼에는 → Radio"
+    ],
+    "limits": {
+      "items": "5개 이하"
+    },
+    "states": {
+      "disabled": "선택 상태는 유지하고 조작만 막는다"
+    },
+    "examples": [
+      "components-l2-togglebuttongroup--label",
+      "components-l2-togglebuttongroup--icon"
+    ]
+  }
+}

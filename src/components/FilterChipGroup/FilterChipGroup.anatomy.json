@@ -1,0 +1,62 @@
+{
+  "id": "filter-chip-group",
+  "state": {
+    "options": "FilterChipOption[]",
+    "value": "string[]"
+  },
+  "events": [
+    "onChange"
+  ],
+  "usage": {
+    "when": [
+      "사용자가 목록을 여러 조건으로 좁힐 때 — 다중 선택 토글 칩(aria-pressed)",
+      "조건이 2~6개이고 한 줄에 드러나도 되는 가벼운 필터"
+    ],
+    "avoid": [
+      "하나만 고르는 조건에는 쓰지 않는다 → SegmentedControl / ToggleButtonGroup",
+      "운영 콘솔 목록의 주 필터에는 쓰지 않는다 → 필터 아이콘 버튼 뒤 Popover 패널(AdvancedFilterPanel)",
+      "값 분류 표시에는 쓰지 않는다 → Tag",
+      "제거 가능한 선택 결과 표시에는 쓰지 않는다 → Tag(removable)"
+    ],
+    "limits": {
+      "perRegion": 1,
+      "items": "칩 8개 이내. 넘으면 wrap 되므로 Popover 필터로 옮긴다",
+      "label": "칩 라벨 2~6자 명사"
+    },
+    "states": {
+      "disabled": "value 만 주고 onChange 가 없으면 칩 전체 disabled(읽기 전용)",
+      "empty": "선택 없음 = 필터 없음. options 가 비면 렌더하지 않는다",
+      "overflow": "가로 wrap. 스크롤 금지"
+    },
+    "placement": [
+      "목록 상단, 검색 필드 아래 한 줄",
+      "키보드 ←/→/Home/End 이동, 탭 스톱은 하나(roving)"
+    ],
+    "examples": [
+      "components-l2-filterchipgroup--default",
+      "components-l2-filterchipgroup--all-selected"
+    ]
+  },
+  "anatomy": {
+    "id": "root",
+    "intent": "ornament",
+    "traversal": {
+      "axis": "inline"
+    },
+    "iterates": "options",
+    "as": "chip",
+    "child": {
+      "id": "chip",
+      "intent": "toggle",
+      "writes": "value",
+      "emits": "onChange",
+      "children": [
+        {
+          "id": "label",
+          "intent": "value-display",
+          "binding": "chip.label"
+        }
+      ]
+    }
+  }
+}

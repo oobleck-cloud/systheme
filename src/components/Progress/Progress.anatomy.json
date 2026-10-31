@@ -1,0 +1,58 @@
+{
+  "id": "progress",
+  "state": {
+    "value": "number | null",
+    "max": "number",
+    "variant": "'default' | 'success' | 'warning' | 'error'",
+    "shape": "'bar' | 'wave'"
+  },
+  "events": [],
+  "anatomy": {
+    "id": "root",
+    "intent": "ornament",
+    "children": [
+      {
+        "id": "track",
+        "intent": "ornament"
+      },
+      {
+        "id": "fill",
+        "intent": "state-indicator",
+        "binding": "value"
+      },
+      {
+        "id": "label",
+        "intent": "value-display",
+        "binding": "value"
+      },
+      {
+        "id": "stop",
+        "intent": "ornament"
+      }
+    ]
+  },
+  "usage": {
+    "when": [
+      "끝이 정해진 작업·학습의 진척(0~100)",
+      "모바일 현장·학습에서는 shape=wave(M3E linear)"
+    ],
+    "avoid": [
+      "끝을 모르는 대기에 쓰지 않는다 → Spinner/Skeleton(indeterminate 는 bar 로 폴백)",
+      "수치 하나를 꾸미려고 쓰지 않는다 → 숫자 텍스트"
+    ],
+    "limits": {
+      "label": "label 은 명사구, showValue 는 % 만"
+    },
+    "states": {
+      "empty": "0% 도 트랙을 그린다(없는 것처럼 숨기지 않는다)",
+      "overflow": "100 초과는 100 으로 클램프"
+    },
+    "placement": [
+      "카드 안에서는 제목 아래, 목록 행에서는 오른쪽 고정 폭 없이 flex-1"
+    ],
+    "examples": [
+      "components-l1-progress--wave",
+      "screens/lms-courses-list"
+    ]
+  }
+}

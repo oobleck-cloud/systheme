@@ -1,0 +1,36 @@
+{
+  "id": "date-edit-panel",
+  "primitiveGroup": "value-picker",
+  "state": {
+    "value": "{ start: Date; end: Date | null; hasTime: boolean } | null",
+    "density": "'compact' | 'default' | 'loose'",
+    "enableRange": "boolean",
+    "enableTime": "boolean"
+  },
+  "events": ["onChange"],
+  "anatomy": {
+    "id": "root",
+    "intent": "ornament",
+    "children": [
+      { "id": "start-input", "intent": "value-input", "binding": "value", "writes": "value" },
+      { "id": "end-input", "intent": "value-input", "binding": "value", "writes": "value" },
+      { "id": "calendar", "intent": "ornament", "binding": "value" },
+      {
+        "id": "toggles",
+        "intent": "ornament",
+        "children": [
+          { "id": "range-toggle", "intent": "toggle", "writes": "value" },
+          { "id": "time-toggle", "intent": "toggle", "writes": "value" }
+        ]
+      },
+      {
+        "id": "footer",
+        "intent": "ornament",
+        "children": [
+          { "id": "today", "intent": "press-action", "writes": "value" },
+          { "id": "clear", "intent": "press-action", "writes": "value" }
+        ]
+      }
+    ]
+  }
+}

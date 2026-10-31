@@ -1,0 +1,56 @@
+{
+  "id": "timeline-item",
+  "state": {
+    "timestamp": "React.ReactNode",
+    "density": "'compact' | 'default' | 'loose'",
+    "isLast": "boolean"
+  },
+  "events": [],
+  "anatomy": {
+    "id": "root",
+    "intent": "ornament",
+    "children": [
+      {
+        "id": "track",
+        "intent": "ornament",
+        "children": [
+          {
+            "id": "marker-host",
+            "intent": "ornament",
+            "slot": true
+          },
+          {
+            "id": "spine",
+            "intent": "state-indicator",
+            "binding": "isLast"
+          }
+        ]
+      },
+      {
+        "id": "timestamp",
+        "intent": "value-display",
+        "binding": "timestamp"
+      },
+      {
+        "id": "content",
+        "intent": "ornament",
+        "slot": true
+      }
+    ]
+  },
+  "usage": {
+    "when": [
+      "Timeline 안의 항목 한 줄, 또는 본문에 인라인으로 한 사건을 표시할 때"
+    ],
+    "avoid": [
+      "단독 목록으로 쌓지 않는다 → Timeline 이 축을 그린다"
+    ],
+    "limits": {
+      "label": "제목 한 줄, 본문 2줄"
+    },
+    "examples": [
+      "components-l2-timelineitem-inline--inline",
+      "components-l2-timelineitem-inline--inline-in-timeline"
+    ]
+  }
+}

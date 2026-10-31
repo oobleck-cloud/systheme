@@ -1,0 +1,77 @@
+{
+  "id": "heatmap-chart",
+  "state": {
+    "data": "HeatCell[]",
+    "xLabels": "string[]",
+    "yLabels": "string[]",
+    "showValues": "boolean"
+  },
+  "events": [
+    "onCellClick"
+  ],
+  "usage": {
+    "when": [
+      "두 범주 축(요일×시간, 항목×항목)의 교차 값 밀도를 볼 때 — HeatCell[] + xLabels/yLabels",
+      "상관관계 매트릭스"
+    ],
+    "avoid": [
+      "날짜별 활동량(연간 달력)에는 쓰지 않는다 → CalendarHeatmap / ContributionGraph",
+      "한 축만 있는 값 비교에는 쓰지 않는다 → BarChart",
+      "정확한 숫자를 읽어야 하는 표에는 쓰지 않는다 → Table(조건부 서식)"
+    ],
+    "limits": {
+      "items": "x 24 × y 12 이내. showValues 는 셀이 24×16px 보다 클 때만 그려진다",
+      "label": "y 축 라벨은 좌측 64px 안 — 6자 이내. x 축은 하단 48px",
+      "width": "w-full, 높이 기본 360"
+    },
+    "states": {
+      "empty": "data 가 비면 ChartFrame 빈 상태('표시할 데이터가 없습니다')"
+    },
+    "placement": [
+      "title/description 은 ChartFrame. 값은 툴팁, 셀 클릭은 onCellClick"
+    ],
+    "examples": [
+      "components-charts-heatmapchart--default",
+      "components-charts-heatmapchart--show-values",
+      "components-charts-heatmapchart--correlation-matrix"
+    ]
+  },
+  "anatomy": {
+    "id": "root",
+    "intent": "ornament",
+    "children": [
+      {
+        "id": "x-axis",
+        "intent": "plot-axis",
+        "iterates": "xLabels",
+        "as": "label",
+        "child": {
+          "id": "tick-label",
+          "intent": "value-display"
+        }
+      },
+      {
+        "id": "y-axis",
+        "intent": "plot-axis",
+        "iterates": "yLabels",
+        "as": "label",
+        "child": {
+          "id": "tick-label",
+          "intent": "value-display"
+        }
+      },
+      {
+        "id": "series",
+        "intent": "ornament",
+        "iterates": "data",
+        "as": "cell",
+        "child": {
+          "id": "segment",
+          "intent": "chart-series",
+          "binding": "cell",
+          "emits": "onCellClick"
+        }
+      }
+    ]
+  }
+}

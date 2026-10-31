@@ -1,0 +1,28 @@
+{
+  "id": "blockquote",
+  "state": { "tone": "'accent' | 'neutral'", "citation": "ReactNode" },
+  "anatomy": {
+    "id": "root",
+    "intent": "value-display",
+    "binding": "tone",
+    "children": [
+      { "id": "quote", "intent": "value-display", "slot": true },
+      { "id": "citation", "intent": "ornament", "binding": "citation", "slot": true }
+    ]
+  },
+  "usage": {
+    "when": [
+      "문제의 제시문 — 고객 발화·상황 자료를 문항 본문과 갈라 보일 때",
+      "문서·메시지에서 끌어온 남의 말을 인용할 때(citation 에 출처)"
+    ],
+    "avoid": [
+      "안내·경고 메시지에 쓰지 않는다 → Alert",
+      "코드·식별자에 쓰지 않는다 → Code",
+      "인용문에 상태색(success/error)을 입히지 않는다 — 조치 필요도가 아니다. neutral 은 강조가 겹칠 때만"
+    ],
+    "limits": { "label": "본문 6줄까지. 넘치면 요약하고 원문은 링크", "perRegion": 1 },
+    "states": { "overflow": "줄바꿈 보존(pre-line). 말줄임하지 않는다" },
+    "placement": ["문항 제목 아래, 선택지 위. 좌우 여백은 문항과 같다"],
+    "examples": ["components-l1-blockquote--default", "components-l1-blockquote--multi-line"]
+  }
+}

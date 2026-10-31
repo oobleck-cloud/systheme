@@ -1,0 +1,60 @@
+{
+  "id": "button",
+  "state": {
+    "density": "'compact' | 'default' | 'loose'"
+  },
+  "events": [
+    "onClick"
+  ],
+  "anatomy": {
+    "id": "root",
+    "intent": "press-action",
+    "emits": "onClick",
+    "children": [
+      {
+        "id": "icon",
+        "intent": "icon",
+        "slot": true
+      },
+      {
+        "id": "label",
+        "intent": "ornament",
+        "slot": true
+      }
+    ]
+  },
+  "usage": {
+    "when": [
+      "사용자가 지금 작업을 끝내거나 다음으로 넘길 때 — primary",
+      "보조 동작·취소·닫기 — secondary·outline·ghost",
+      "되돌리기 어려운 동작(삭제·비활성화·발송) — destructive",
+      "모바일 현장의 선택·연관 강조 — tonal(container 쌍)"
+    ],
+    "avoid": [
+      "단순 이동에 primary 를 쓰지 않는다 → Link 또는 ghost",
+      "취소·닫기에 destructive 를 쓰지 않는다 → outline/ghost",
+      "캡슐(round=full)은 학습·모바일 CTA 에만. 운영 콘솔 버튼은 rounded-md",
+      "DS 밖에서 버튼 모양 span/div 를 만들지 않는다"
+    ],
+    "limits": {
+      "perRegion": {
+        "primary": 1,
+        "destructive": 1
+      },
+      "label": "동사 하나, 2~6자. 문장·이유 금지(이유는 옆 캡션). 넘치면 줄이지 말고 문구를 바꾼다"
+    },
+    "states": {
+      "loading": "라벨 유지 + 스피너, 폭 고정. 중복 클릭 방지",
+      "disabled": "제출 조건 미충족일 때만. 왜 비활성인지 옆 캡션으로 말한다",
+      "overflow": "한 줄 유지(whitespace-nowrap). 아이콘 버튼은 IconButton"
+    },
+    "placement": [
+      "액션 바에서 primary 는 맨 오른쪽, 취소는 그 왼쪽",
+      "헤더 밴드 우측 액션은 최대 2개(primary 1 + outline 1)"
+    ],
+    "examples": [
+      "screens/planner-detail",
+      "components-l1-button--variants"
+    ]
+  }
+}

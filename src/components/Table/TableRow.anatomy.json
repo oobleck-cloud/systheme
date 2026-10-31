@@ -1,0 +1,34 @@
+{
+  "id": "table-row",
+  "state": {
+    "row": "RowModel",
+    "rowId": "string",
+    "selected": "boolean"
+  },
+  "events": ["onActivate"],
+  "anatomy": {
+    "id": "root",
+    "intent": "ornament",
+    "children": [
+      {
+        "id": "row-select",
+        "intent": "toggle",
+        "writes": "selected",
+        "binding": "row",
+        "slot": true
+      },
+      {
+        "id": "row-activate",
+        "intent": "press-action",
+        "emits": "onActivate",
+        "binding": "rowId",
+        "slot": true
+      },
+      {
+        "id": "cells",
+        "intent": "ornament",
+        "slot": true
+      }
+    ]
+  }
+}

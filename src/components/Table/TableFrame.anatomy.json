@@ -1,0 +1,21 @@
+{
+  "id": "table-frame",
+  "state": {
+    "chrome": "'panel' | 'flush'",
+    "striped": "boolean",
+    "layout": "'auto' | 'fixed'"
+  },
+  "events": [],
+  "anatomy": {
+    "id": "root",
+    "intent": "ornament",
+    "binding": "chrome",
+    "children": [
+      {
+        "id": "content",
+        "intent": "ornament",
+        "slot": true
+      }
+    ]
+  }
+}

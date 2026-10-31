@@ -1,0 +1,12 @@
+{
+  "id": "table-caption",
+  "state": {
+    "text": "string"
+  },
+  "events": [],
+  "anatomy": {
+    "id": "root",
+    "intent": "value-display",
+    "binding": "text"
+  }
+}

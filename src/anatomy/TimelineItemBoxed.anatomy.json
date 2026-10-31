@@ -1,0 +1,30 @@
+{
+  "id": "timeline-item-boxed",
+  "state": {
+    "timestamp": "string",
+    "density": "'compact' | 'default' | 'loose'"
+  },
+  "events": [],
+  "anatomy": {
+    "id": "root",
+    "intent": "ornament",
+    "children": [
+      {
+        "id": "track",
+        "intent": "ornament",
+        "children": [
+          { "id": "marker", "intent": "icon", "slot": true },
+          { "id": "spine", "intent": "ornament" }
+        ]
+      },
+      {
+        "id": "body",
+        "intent": "ornament",
+        "children": [
+          { "id": "timestamp", "intent": "value-display", "binding": "timestamp" },
+          { "id": "content", "intent": "ornament", "slot": true }
+        ]
+      }
+    ]
+  }
+}

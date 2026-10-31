@@ -1,0 +1,55 @@
+{
+  "id": "funnel-chart",
+  "state": {
+    "data": "CategoryValue[]",
+    "showConversionRate": "boolean"
+  },
+  "events": [
+    "onStageClick"
+  ],
+  "usage": {
+    "when": [
+      "단계가 순서대로 줄어드는 전환(유입→상담→계약)을 볼 때 — CategoryValue[] 를 위에서 아래로, 단계 사이 전환율 자동 표기"
+    ],
+    "avoid": [
+      "순서 없는 카테고리 비교에는 쓰지 않는다 → BarChart",
+      "구성비(전체 중 몫)에는 쓰지 않는다 → PieChart",
+      "단계별 증감(더하고 빼기)에는 쓰지 않는다 → WaterfallChart",
+      "값이 중간에 커지는 데이터에 쓰지 않는다 — 퍼널이 뒤집혀 읽힌다"
+    ],
+    "limits": {
+      "items": "단계 3~6개. 2개면 DescriptionRow 두 줄, 7개 이상은 단계를 합친다",
+      "label": "단계 이름은 좌우 margin 80px 안 — 6자 이내",
+      "width": "w-full, 높이 기본 360"
+    },
+    "states": {
+      "empty": "data 가 비면 ChartFrame 빈 상태('표시할 데이터가 없습니다')"
+    },
+    "placement": [
+      "title/description 은 ChartFrame. 전환율이 답이면 showConversionRate 유지, 절대값만 보이려면 끈다"
+    ],
+    "examples": [
+      "components-charts-funnelchart--default",
+      "components-charts-funnelchart--three-stage",
+      "components-charts-funnelchart--empty"
+    ]
+  },
+  "anatomy": {
+    "id": "root",
+    "intent": "ornament",
+    "children": [
+      {
+        "id": "series",
+        "intent": "ornament",
+        "iterates": "data",
+        "as": "item",
+        "child": {
+          "id": "segment",
+          "intent": "chart-series",
+          "binding": "item",
+          "emits": "onStageClick"
+        }
+      }
+    ]
+  }
+}

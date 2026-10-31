@@ -1,0 +1,52 @@
+{
+  "id": "kbd",
+  "state": {
+    "keys": "string[]"
+  },
+  "events": [],
+  "usage": {
+    "when": [
+      "단축키를 문서·툴팁·메뉴 항목 끝에 표기할 때 — keys 배열 또는 'Ctrl+K' 문자열"
+    ],
+    "avoid": [
+      "실제 누르는 버튼에 쓰지 않는다 → Button / IconButton",
+      "단축키 목록 화면에는 쓰지 않는다 → KeyboardShortcutsOverlay",
+      "코드·값 표시에는 쓰지 않는다 → Code"
+    ],
+    "limits": {
+      "items": "키 3개까지(⌘ ⇧ P)",
+      "label": "키 이름은 심볼(⌘ ⇧) 또는 1~5자"
+    },
+    "states": {
+      "overflow": "inline-flex, 줄바꿈 없음"
+    },
+    "placement": [
+      "메뉴 항목·툴팁 오른쪽 끝. 문장 안에서는 앞뒤 공백"
+    ],
+    "examples": [
+      "components-l1-kbd--default",
+      "components-l1-kbd--from-string"
+    ]
+  },
+  "anatomy": {
+    "id": "root",
+    "intent": "ornament",
+    "iterates": "keys",
+    "as": "key",
+    "child": {
+      "id": "key-group",
+      "intent": "ornament",
+      "children": [
+        {
+          "id": "key",
+          "intent": "value-display",
+          "binding": "key"
+        },
+        {
+          "id": "separator",
+          "intent": "ornament"
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,90 @@
+{
+  "id": "menu",
+  "state": {
+    "open": "boolean",
+    "items": "({ id: string; label: string; description?: ReactNode; icon?: ReactNode; severity?: 'danger'; disabled?: boolean } | { type: 'separator' })[]"
+  },
+  "events": [
+    "onOpenChange",
+    "onSelect"
+  ],
+  "anatomy": {
+    "id": "root",
+    "intent": "ornament",
+    "children": [
+      {
+        "id": "trigger",
+        "intent": "disclosure",
+        "writes": "open",
+        "emits": "onOpenChange",
+        "slot": true
+      },
+      {
+        "id": "panel",
+        "intent": "overlay-surface",
+        "binding": "open",
+        "children": [
+          {
+            "id": "list",
+            "intent": "ornament",
+            "traversal": {
+              "axis": "block"
+            },
+            "iterates": "items",
+            "as": "item",
+            "child": {
+              "id": "menu-item",
+              "intent": "press-action",
+              "emits": "onSelect",
+              "children": [
+                {
+                  "id": "icon",
+                  "intent": "icon",
+                  "slot": true
+                },
+                {
+                  "id": "label",
+                  "intent": "value-display",
+                  "binding": "item.label"
+                },
+                {
+                  "id": "description",
+                  "intent": "value-display",
+                  "binding": "item.description"
+                }
+              ]
+            },
+            "children": [
+              {
+                "id": "separator",
+                "intent": "ornament"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "usage": {
+    "when": [
+      "한 대상에 대한 동작 목록(편집·복제·삭제)을 트리거 뒤에 숨길 때"
+    ],
+    "avoid": [
+      "값을 고르는 데 쓰지 않는다 → Select",
+      "항목이 1개면 버튼으로 노출한다",
+      "파괴적 항목은 separator 로 떼고 severity=danger"
+    ],
+    "limits": {
+      "items": "8개 이하. 이상이면 그룹·서브메뉴 대신 CommandPalette"
+    },
+    "states": {
+      "disabled": "항목은 남기고 흐리게, 이유는 description"
+    },
+    "placement": [
+      "트리거 아래 왼쪽 정렬. 행 끝의 ⋯ 버튼"
+    ],
+    "examples": [
+      "components-l2-menu--with-icons"
+    ]
+  }
+}

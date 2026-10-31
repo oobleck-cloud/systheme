@@ -1,0 +1,41 @@
+:root {
+  /*
+   * Tossface first: @font-face uses unicode-range, so Latin skips to the next family.
+   * If Tossface comes after ui-sans-serif, macOS often still paints Apple Color Emoji.
+   */
+  --ds-font-sans:
+    'Tossface', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
+    'Segoe UI Symbol', 'Noto Color Emoji', emoji;
+  --ds-font-mono: ui-monospace, monospace;
+  /* Emoji-heavy regions (picker grid): Tossface → generic emoji → system fallbacks */
+  --ds-font-emoji:
+    'Tossface', emoji, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji',
+    sans-serif;
+
+  /* Font size */
+  --ds-font-size-xs: 0.75rem; /* 12px */
+  --ds-font-size-sm: 0.875rem; /* 14px */
+  --ds-font-size-md: 1rem; /* 16px */
+  --ds-font-size-lg: 1.125rem; /* 18px */
+  --ds-font-size-xl: 1.25rem; /* 20px */
+  --ds-font-size-2xl: 1.5rem; /* 24px */
+  --ds-font-size-3xl: 1.875rem; /* 30px */
+  --ds-font-size-4xl: 2.25rem; /* 36px */
+
+  /* Font weight */
+  --ds-font-weight-regular: 400;
+  --ds-font-weight-medium: 500;
+  --ds-font-weight-semibold: 600;
+  --ds-font-weight-bold: 700;
+
+  /* Line height */
+  --ds-line-height-tight: 1.25;
+  --ds-line-height-snug: 1.375;
+  --ds-line-height-normal: 1.5;
+  --ds-line-height-relaxed: 1.625;
+
+  /* Letter spacing */
+  --ds-tracking-tight: -0.025em;
+  --ds-tracking-normal: 0em;
+  --ds-tracking-wide: 0.025em;
+}

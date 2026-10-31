@@ -1,0 +1,157 @@
+{
+  "id": "pivot-table",
+  "state": {
+    "rows": "PivotRow[]",
+    "columns": "PivotColumn[]",
+    "selectedCell": "{ rowId: string, columnId: string } | null"
+  },
+  "events": [
+    "onSelectedCellChange",
+    "onCellActivate"
+  ],
+  "anatomy": {
+    "id": "root",
+    "intent": "ornament",
+    "children": [
+      {
+        "id": "controller-region",
+        "intent": "ornament",
+        "slot": true
+      },
+      {
+        "id": "scroll-surface",
+        "intent": "ornament",
+        "children": [
+          {
+            "id": "header-row",
+            "intent": "ornament",
+            "children": [
+              {
+                "id": "corner-cell",
+                "intent": "ornament",
+                "slot": true
+              },
+              {
+                "id": "column-headers",
+                "intent": "ornament",
+                "traversal": {
+                  "axis": "both"
+                },
+                "iterates": "columns",
+                "as": "column",
+                "child": {
+                  "id": "column-header-cell",
+                  "intent": "ornament",
+                  "binding": "column",
+                  "children": [
+                    {
+                      "id": "column-label",
+                      "intent": "value-display",
+                      "binding": "column.label"
+                    },
+                    {
+                      "id": "column-adornments",
+                      "intent": "ornament",
+                      "slot": true
+                    }
+                  ]
+                }
+              }
+            ]
+          },
+          {
+            "id": "body-rows",
+            "intent": "ornament",
+            "traversal": {
+              "axis": "both"
+            },
+            "iterates": "rows",
+            "as": "row",
+            "child": {
+              "id": "matrix-row",
+              "intent": "ornament",
+              "binding": "row",
+              "children": [
+                {
+                  "id": "row-header-cell",
+                  "intent": "ornament",
+                  "binding": "row",
+                  "children": [
+                    {
+                      "id": "row-label",
+                      "intent": "value-display",
+                      "binding": "row.label"
+                    },
+                    {
+                      "id": "row-adornments",
+                      "intent": "ornament",
+                      "slot": true
+                    }
+                  ]
+                },
+                {
+                  "id": "data-cells",
+                  "intent": "ornament",
+                  "traversal": {
+                    "axis": "both"
+                  },
+                  "iterates": "columns",
+                  "as": "column",
+                  "child": {
+                    "id": "matrix-cell",
+                    "intent": "select-option",
+                    "writes": "selectedCell",
+                    "emits": "onCellActivate",
+                    "binding": "cellAt(row, column)",
+                    "children": [
+                      {
+                        "id": "cell-content",
+                        "intent": "ornament",
+                        "slot": true
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "id": "footer-region",
+        "intent": "ornament",
+        "slot": true
+      }
+    ]
+  },
+  "usage": {
+    "when": [
+      "행 × 열 두 축의 교차 셀을 비교할 때(플래너 × 날짜, 지역 × 서비스). 행 헤더는 왼쪽, 열 헤더는 위에 고정된다",
+      "셀 하나를 선택(selectedCell)·활성화(onCellActivate) 해서 상세를 열 때"
+    ],
+    "avoid": [
+      "열이 고정 속성(이름·상태·금액)인 목록에 쓰지 않는다 → Table",
+      "셀이 on/off 면 → MatrixToggleGrid",
+      "날짜 격자면 → MonthGrid",
+      "셀 안에 카드를 만들지 않는다 — 숫자·칩·짧은 텍스트까지"
+    ],
+    "limits": {
+      "items": "열 minWidth 기본 6rem, 행 높이 기본 2.5rem. 행 헤더 min-w 8rem(default)",
+      "label": "헤더는 한 줄(whitespace-nowrap). 셀 콘텐츠는 renderCellContent 가 자른다"
+    },
+    "states": {
+      "empty": "rows·columns 가 비면 헤더만 남는다. 빈 문구 없다 → EmptyState 를 바깥에",
+      "loading": "없다 → 스크롤 표면 위에 Skeleton 을 바깥에서",
+      "overflow": "스크롤 표면 안에서 양축 스크롤, 헤더·행 헤더 sticky"
+    },
+    "placement": [
+      "controllerRegion 은 스크롤 위(필터·기간), footerRegion 은 아래(합계·범례)",
+      "패널 가장자리에 붙이면 chrome=flush, 카드처럼 두면 panel(기본)"
+    ],
+    "examples": [
+      "components-l3-pivottable--default",
+      "components-l3-pivottable--many-columns",
+      "components-l3-pivottable--chrome-flush"
+    ]
+  }
+}

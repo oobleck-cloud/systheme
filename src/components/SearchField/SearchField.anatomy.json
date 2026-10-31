@@ -1,0 +1,89 @@
+{
+  "id": "search",
+  "state": {
+    "query": "string",
+    "submitLayout": "'inline' | 'connected'"
+  },
+  "events": [
+    "onValueChange",
+    "onSearch",
+    "onClear",
+    "onSubmit"
+  ],
+  "anatomy": {
+    "id": "root",
+    "intent": "ornament",
+    "children": [
+      {
+        "id": "input-segment",
+        "intent": "ornament",
+        "children": [
+          {
+            "id": "leading",
+            "intent": "ornament",
+            "children": [
+              {
+                "id": "leading-icon",
+                "intent": "icon",
+                "slot": true
+              }
+            ]
+          },
+          {
+            "id": "input",
+            "intent": "search-input",
+            "writes": "query",
+            "emits": "onValueChange"
+          },
+          {
+            "id": "trailing",
+            "intent": "ornament",
+            "children": [
+              {
+                "id": "clear",
+                "intent": "press-action",
+                "emits": "onClear",
+                "slot": true
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "submit",
+        "intent": "submit",
+        "emits": "onSearch",
+        "slot": true
+      }
+    ]
+  },
+  "usage": {
+    "when": [
+      "목록·표 위의 자유 텍스트 검색 — Enter·submit 으로 조회(onSearch), 값 있으면 clear(showClear)",
+      "툴바에서 검색 버튼과 한 덩어리로 붙일 때 submitLayout=connected (주문 툴바 패턴)"
+    ],
+    "avoid": [
+      "입력 중 제안 목록이 필요하면 → SearchFieldAutocomplete",
+      "이름·주소 같은 일반 입력에 쓰지 않는다 → Input",
+      "필터 셀렉트를 검색창 옆에 가로로 늘어놓지 않는다 → 필터 Popover(진입점 하나, 검색만 밖에)"
+    ],
+    "limits": {
+      "perRegion": 1,
+      "label": "placeholder 한 줄. 검색 대상을 적는다('주문번호·고객명')"
+    },
+    "states": {
+      "disabled": "전체 흐리게(opacity-50), clear 숨김",
+      "error": "aria-invalid → error 보더·링",
+      "empty": "값이 비면 clear 버튼 없음"
+    },
+    "placement": [
+      "필터 진입점 중 검색만 툴바 밖에, 나머지는 아이콘 버튼 뒤 Popover",
+      "submit 은 오른쪽 — inline(구분선) 또는 connected(붙은 버튼)"
+    ],
+    "examples": [
+      "components-l1-searchfield--default",
+      "components-l1-searchfield--orders-toolbar-pattern",
+      "components-l1-searchfield--submit-layouts"
+    ]
+  }
+}

@@ -1,0 +1,68 @@
+{
+  "id": "input",
+  "state": {
+    "value": "string",
+    "validationMessage": "string | undefined"
+  },
+  "events": [
+    "onValueChange",
+    "onBlurValue",
+    "onValidityChange"
+  ],
+  "usage": {
+    "when": [
+      "한 줄 텍스트·숫자·검색어를 받을 때 — controlled(value + onValueChange)",
+      "prefix/suffix 로 단위·아이콘을 칸 안에 붙일 때",
+      "표 셀·제목 인라인 편집 — chrome=ghost(평소 투명, focus 시 얇은 링)"
+    ],
+    "avoid": [
+      "여러 줄 텍스트에는 쓰지 않는다 → Textarea",
+      "숫자 증감·단위 포맷에는 쓰지 않는다 → NumberInput",
+      "전화번호·생년월일에는 쓰지 않는다 → PhoneNumberInput / DateInput",
+      "목록 검색에는 쓰지 않는다 → SearchField",
+      "라벨을 placeholder 로 대신하지 않는다 → FormField label"
+    ],
+    "limits": {
+      "label": "placeholder 는 예시 값 한 줄. 지시문 금지",
+      "width": "w-full 고정. 폭은 FormField·그리드 열이 정한다. w-14 같은 고정 폭 금지"
+    },
+    "states": {
+      "disabled": "disabled-subtle 바탕 + disabled-text, cursor-not-allowed. 값은 남는다. readOnly 는 surface 바탕, 포커스 링 없음",
+      "error": "FormField error 가 있으면 자동 variant=error + aria-invalid. validate 를 주면 값 기준 즉시 보더 error. 메시지는 FormField 아래",
+      "overflow": "한 줄 가로 스크롤(브라우저 기본). 줄바꿈 없음"
+    },
+    "placement": [
+      "라벨 위, 헬퍼/오류 아래(FormField)",
+      "Enter 는 onEnterKey, Escape 는 onEscapeKey. 폼 제출은 form onSubmit 으로"
+    ],
+    "examples": [
+      "components-l1-input--variants",
+      "components-l1-input--with-prefix",
+      "components-l1-input--disabled",
+      "components-l1-input--read-only",
+      "components-l1-input--error-variant-sets-aria-invalid"
+    ]
+  },
+  "anatomy": {
+    "id": "root",
+    "intent": "ornament",
+    "children": [
+      {
+        "id": "prefix",
+        "intent": "icon",
+        "slot": true
+      },
+      {
+        "id": "input",
+        "intent": "value-input",
+        "writes": "value",
+        "emits": "onValueChange"
+      },
+      {
+        "id": "suffix",
+        "intent": "icon",
+        "slot": true
+      }
+    ]
+  }
+}

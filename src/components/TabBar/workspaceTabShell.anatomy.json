@@ -1,0 +1,15 @@
+{
+  "id": "workspace-tab-row-shell",
+  "primitiveGroup": "tab-navigation",
+  "state": {
+    "selected": "boolean",
+    "density": "'compact' | 'default' | 'loose'",
+    "fixedWidth": "number | undefined"
+  },
+  "events": [],
+  "anatomy": {
+    "id": "root",
+    "intent": "ornament",
+    "children": []
+  }
+}

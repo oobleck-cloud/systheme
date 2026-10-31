@@ -1,0 +1,44 @@
+{
+  "id": "switch",
+  "state": {
+    "checked": "boolean"
+  },
+  "events": [
+    "onCheckedChange"
+  ],
+  "anatomy": {
+    "id": "root",
+    "intent": "toggle",
+    "writes": "checked",
+    "emits": "onCheckedChange",
+    "children": [
+      {
+        "id": "thumb",
+        "intent": "ornament",
+        "binding": "@switch-thumb-position"
+      }
+    ]
+  },
+  "usage": {
+    "when": [
+      "즉시 반영되는 설정을 켜고 끌 때(저장 버튼 없음)"
+    ],
+    "avoid": [
+      "제출해야 반영되는 폼에는 → Checkbox",
+      "셋 이상 선택지에는 → SegmentedControl"
+    ],
+    "limits": {
+      "label": "상태가 아니라 대상 이름. '알림 받기'(O) / '켜짐'(X)"
+    },
+    "states": {
+      "disabled": "현재 상태는 보이고 조작만 막는다. 이유는 옆 캡션"
+    },
+    "placement": [
+      "라벨 오른쪽 끝에 정렬"
+    ],
+    "examples": [
+      "components-l1-switch--default",
+      "components-l1-switch--disabled"
+    ]
+  }
+}

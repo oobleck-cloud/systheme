@@ -1,0 +1,198 @@
+{
+  "id": "rich-list",
+  "state": {
+    "items": "RichListItem[]",
+    "selectedIds": "string[]",
+    "activeId": "string | null",
+    "density": "'compact' | 'default' | 'loose'",
+    "selectionMode": "'none' | 'single' | 'multiple'",
+    "loading": "boolean",
+    "chrome": "'floating' | 'embedded'",
+    "statusTag": "RichListStatusTag | undefined"
+  },
+  "events": [
+    "onItemActivate",
+    "onSelectionChange"
+  ],
+  "anatomy": {
+    "id": "root",
+    "intent": "overlay-surface",
+    "children": [
+      {
+        "id": "loading-scrim",
+        "intent": "overlay-surface",
+        "binding": "loading",
+        "children": [
+          {
+            "id": "loading-indicator",
+            "intent": "state-indicator",
+            "binding": "loading"
+          }
+        ]
+      },
+      {
+        "id": "scroll-region",
+        "intent": "ornament",
+        "children": [
+          {
+            "id": "items",
+            "intent": "ornament",
+            "traversal": {
+              "axis": "block"
+            },
+            "iterates": "items",
+            "as": "item",
+            "child": {
+              "id": "row",
+              "intent": "select-option",
+              "binding": "item",
+              "children": [
+                {
+                  "id": "row-select",
+                  "intent": "toggle",
+                  "writes": "selectedIds",
+                  "binding": "item",
+                  "slot": true
+                },
+                {
+                  "id": "leading",
+                  "intent": "ornament",
+                  "slot": true,
+                  "children": [
+                    {
+                      "id": "leading-avatar",
+                      "intent": "icon",
+                      "slot": true
+                    },
+                    {
+                      "id": "leading-icon",
+                      "intent": "icon",
+                      "slot": true
+                    }
+                  ]
+                },
+                {
+                  "id": "body",
+                  "intent": "field-rhythm",
+                  "children": [
+                    {
+                      "id": "title-row",
+                      "intent": "field-rhythm",
+                      "children": [
+                        {
+                          "id": "title",
+                          "intent": "value-display",
+                          "binding": "item.title"
+                        }
+                      ]
+                    },
+                    {
+                      "id": "subtitle",
+                      "intent": "status-message",
+                      "binding": "item.subtitle"
+                    },
+                    {
+                      "id": "description",
+                      "intent": "status-message",
+                      "binding": "item.description"
+                    },
+                    {
+                      "id": "metadata",
+                      "intent": "ornament",
+                      "children": [
+                        {
+                          "id": "tags",
+                          "intent": "ornament",
+                          "traversal": {
+                            "axis": "block"
+                          },
+                          "iterates": "item.tags",
+                          "as": "tag",
+                          "child": {
+                            "id": "tag",
+                            "intent": "state-indicator",
+                            "slot": true
+                          }
+                        },
+                        {
+                          "id": "timestamp",
+                          "intent": "value-display",
+                          "binding": "item.timestamp"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "id": "trailing",
+                  "intent": "ornament",
+                  "slot": true,
+                  "children": [
+                    {
+                      "id": "trailing-text",
+                      "intent": "value-display",
+                      "binding": "item.trailingText"
+                    },
+                    {
+                      "id": "trailing-action",
+                      "intent": "press-action",
+                      "slot": true
+                    },
+                    {
+                      "id": "chevron",
+                      "intent": "state-indicator",
+                      "binding": "item.hasNavigation"
+                    }
+                  ]
+                },
+                {
+                  "id": "row-activate",
+                  "intent": "routing-link",
+                  "emits": "onItemActivate",
+                  "binding": "item"
+                }
+              ]
+            }
+          },
+          {
+            "id": "empty",
+            "intent": "status-message",
+            "binding": "@emptyMessage"
+          }
+        ]
+      }
+    ]
+  },
+  "usage": {
+    "when": [
+      "제목 + 보조줄(subtitle) + 상태 뱃지(statusTag) + 시각·우측 메타를 가진 행 목록. 검색 결과 드롭다운(floating) 또는 패널 안 목록(embedded)",
+      "행 활성화(onItemActivate → chevron) 와 단일·다중 선택(selectionMode) 이 필요할 때"
+    ],
+    "avoid": [
+      "열 비교가 필요한 5행 이상이면 → Table",
+      "단순 옵션 선택이면 → Select / MultiSelect",
+      "statusTag 와 tags 를 한 행에 같이 두지 않는다 — statusTag 가 우선, tags 는 레거시",
+      "부모 패널 안에서 floating 을 쓰지 않는다 → embedded(부모가 스크롤·크롬 담당)"
+    ],
+    "limits": {
+      "items": "floating 은 density 셸 max-h 안 스크롤. embedded 는 max-h-none",
+      "label": "제목·보조줄 한 줄 truncate, description 2줄(line-clamp-2)"
+    },
+    "states": {
+      "loading": "스크림 + Spinner, aria-busy",
+      "empty": "emptyMessage(기본 '항목 없음') 를 목록 안에",
+      "disabled": "행 disabled → opacity-50, 활성화·선택 불가",
+      "overflow": "제목 truncate, description line-clamp-2"
+    },
+    "placement": [
+      "floating 은 앵커 아래 Panel(absolute)",
+      "embedded 는 AnchorContextSurface / Panel 안에, 보더·그림자 없음"
+    ],
+    "examples": [
+      "components-l2-richlist--default",
+      "components-l2-richlist--embedded",
+      "components-l2-richlist--empty",
+      "components-l2-richlist--loading"
+    ]
+  }
+}

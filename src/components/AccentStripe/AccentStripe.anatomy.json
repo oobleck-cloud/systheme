@@ -1,0 +1,44 @@
+{
+  "id": "accent-stripe",
+  "state": {
+    "emphasis": "'info' | 'success' | 'warning' | 'error' | 'primary' | 'neutral'"
+  },
+  "events": [],
+  "anatomy": {
+    "id": "root",
+    "intent": "ornament",
+    "binding": "@accent-stripe",
+    "children": [
+      {
+        "id": "bar",
+        "intent": "state-indicator",
+        "binding": "emphasis"
+      },
+      {
+        "id": "body",
+        "intent": "ornament",
+        "slot": true
+      }
+    ]
+  },
+  "usage": {
+    "when": [
+      "행·카드 왼쪽 가장자리에 상태나 분류를 색 띠 하나로 표시할 때",
+      "보더로는 약하고 배경 채움은 과할 때의 중간 강조"
+    ],
+    "avoid": [
+      "글자가 있는 표식에 쓰지 않는다 → Badge/Tag",
+      "한 목록에서 3색 이상 쓰지 않는다 — 띠는 스캔용이라 색이 많으면 못 읽는다"
+    ],
+    "limits": {
+      "perRegion": 1
+    },
+    "placement": [
+      "행·카드의 왼쪽 모서리에 붙인다. 안쪽 여백을 침범하지 않는다"
+    ],
+    "examples": [
+      "components-l1-accentstripe--default",
+      "components-l1-accentstripe--emphasis-row"
+    ]
+  }
+}

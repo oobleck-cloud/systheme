@@ -1,0 +1,103 @@
+/* Emoji: Tossface — must precede other @import bundles (see CSS @import order). */
+@import './tokens/tossface.css';
+
+@import 'tailwindcss';
+
+/* Layer 1: raw tokens — Style Dictionary 도입 시 이 블록을 생성물로 교체 */
+@import './tokens/color.css';
+@import './tokens/surface-tinted.css';
+@import './tokens/shape-scale.css';
+@import './tokens/typography.css';
+@import './tokens/spacing.css';
+@import './tokens/radius.css';
+@import './tokens/shadow.css';
+@import './tokens/motion.css';
+@import './tokens/density.css';
+@import './tokens/chart.css';
+@import './tokens/brand-kakao.css';
+
+/* Layer 2: Tailwind theme mapping — Style Dictionary 도입 후에도 변경 없음 */
+@import './theme.css';
+
+/*
+ * Tailwind v4 does not emit font-* from arbitrary --font-family-* theme keys alone.
+ * Keep this explicit utility so `font-emoji` in components always resolves.
+ */
+@layer utilities {
+  .font-emoji {
+    font-family: var(--ds-font-emoji);
+  }
+
+  /* Timetable — 좌우 연타 해제 시 그리드 피드백 (감쇠 진동) */
+  @keyframes ds-timetable-shake {
+    0% {
+      transform: translateX(0);
+    }
+    7% {
+      transform: translateX(-4px);
+    }
+    14% {
+      transform: translateX(4px);
+    }
+    21% {
+      transform: translateX(-4px);
+    }
+    28% {
+      transform: translateX(3px);
+    }
+    35% {
+      transform: translateX(-3px);
+    }
+    42% {
+      transform: translateX(2px);
+    }
+    49% {
+      transform: translateX(-2px);
+    }
+    56% {
+      transform: translateX(1px);
+    }
+    63% {
+      transform: translateX(-1px);
+    }
+    72% {
+      transform: translateX(1px);
+    }
+    82% {
+      transform: translateX(-1px);
+    }
+    100% {
+      transform: translateX(0);
+    }
+  }
+
+  .ds-timetable-shake-active {
+    animation: ds-timetable-shake 0.48s linear;
+  }
+
+  /* AnimatedText shimmer — Notion-style highlight sweep on reveal */
+  @keyframes ds-text-shimmer {
+    0% {
+      background-position: 150% center;
+    }
+    100% {
+      background-position: -50% center;
+    }
+  }
+
+  .ds-animated-text-shimmer {
+    background-image: linear-gradient(
+      90deg,
+      var(--color-fg) 0%,
+      var(--color-fg) 38%,
+      var(--color-primary) 50%,
+      var(--color-fg) 62%,
+      var(--color-fg) 100%
+    );
+    background-size: 250% 100%;
+    background-clip: text;
+    -webkit-background-clip: text;
+    color: transparent;
+    animation: ds-text-shimmer var(--ds-duration-effects-slow) var(--ds-ease-standard) forwards;
+  }
+}

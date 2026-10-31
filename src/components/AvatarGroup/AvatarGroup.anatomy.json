@@ -1,0 +1,59 @@
+{
+  "id": "avatar-group",
+  "state": {
+    "avatars": "{ name: string; src?: string }[]",
+    "maxCount": "number"
+  },
+  "events": [],
+  "anatomy": {
+    "id": "root",
+    "intent": "ornament",
+    "children": [
+      {
+        "id": "list",
+        "iterates": "avatars.slice(0, maxCount)",
+        "as": "avatar",
+        "child": {
+          "id": "item",
+          "intent": "ornament",
+          "children": [
+            {
+              "id": "image",
+              "intent": "icon",
+              "binding": "avatar.src"
+            },
+            {
+              "id": "initials",
+              "intent": "value-display",
+              "binding": "avatar.name"
+            }
+          ]
+        }
+      },
+      {
+        "id": "overflow",
+        "intent": "value-display",
+        "binding": "avatars.length - maxCount"
+      }
+    ]
+  },
+  "usage": {
+    "when": [
+      "여러 참여자를 겹친 아바타로 압축해 보일 때"
+    ],
+    "avoid": [
+      "누구인지 정확히 알아야 하는 곳에 쓰지 않는다 → 이름 목록",
+      "클릭 대상으로 쓰지 않는다 — 겹쳐 있어 정확히 못 누른다"
+    ],
+    "limits": {
+      "items": "기본 4명 노출 + 나머지는 +N 배지"
+    },
+    "states": {
+      "overflow": "max 를 넘으면 +N 배지 하나로. 배지가 없으면 잘린 것처럼 보인다"
+    },
+    "examples": [
+      "components-l1-avatargroup--default",
+      "components-l1-avatargroup--no-overflow"
+    ]
+  }
+}

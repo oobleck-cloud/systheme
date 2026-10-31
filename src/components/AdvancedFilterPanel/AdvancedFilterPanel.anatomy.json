@@ -1,0 +1,116 @@
+{
+  "id": "advanced-filter-panel",
+  "state": {
+    "conditions": "FilterCondition[]",
+    "logic": "'AND' | 'OR'",
+    "errorMessage": "string"
+  },
+  "events": [
+    "onSubmit",
+    "onReset"
+  ],
+  "anatomy": {
+    "id": "root",
+    "intent": "ornament",
+    "children": [
+      {
+        "id": "logic-toolbar",
+        "intent": "ornament",
+        "children": [
+          {
+            "id": "logic-toggle",
+            "intent": "toggle",
+            "writes": "logic"
+          },
+          {
+            "id": "logic-hint",
+            "intent": "value-display",
+            "binding": "logic"
+          }
+        ]
+      },
+      {
+        "id": "conditions",
+        "intent": "ornament",
+        "traversal": {
+          "axis": "block"
+        },
+        "iterates": "conditions",
+        "as": "c",
+        "child": {
+          "id": "condition-row",
+          "intent": "ornament",
+          "children": [
+            {
+              "id": "field",
+              "intent": "select-option",
+              "writes": "c.field"
+            },
+            {
+              "id": "operator",
+              "intent": "select-option",
+              "writes": "c.operator"
+            },
+            {
+              "id": "value",
+              "intent": "value-input",
+              "writes": "c.value"
+            },
+            {
+              "id": "remove-condition",
+              "intent": "press-action"
+            }
+          ]
+        }
+      },
+      {
+        "id": "add-condition",
+        "intent": "press-action"
+      },
+      {
+        "id": "footer",
+        "intent": "ornament",
+        "children": [
+          {
+            "id": "reset",
+            "intent": "press-action",
+            "emits": "onReset"
+          },
+          {
+            "id": "submit",
+            "intent": "press-action",
+            "emits": "onSubmit"
+          }
+        ]
+      },
+      {
+        "id": "error",
+        "intent": "status-message",
+        "binding": "errorMessage"
+      }
+    ]
+  },
+  "usage": {
+    "when": [
+      "AND/OR 조건 그룹·필드·연산자·값을 한 트리로 다뤄야 할 때(목록 고급 검색)"
+    ],
+    "avoid": [
+      "조건이 3개 이하면 쓰지 않는다 → 필터 Popover 패널에 행으로(원칙: 필터 진입점 하나)",
+      "값 하나를 고르는 데 쓰지 않는다 → Select"
+    ],
+    "limits": {
+      "items": "조건 10개, 그룹 깊이 2단"
+    },
+    "states": {
+      "error": "잘못된 조건 행에 오류 표시, 적용 버튼 비활성",
+      "empty": "조건이 없으면 '조건 추가' 한 줄만"
+    },
+    "placement": [
+      "목록 상단 필터 진입점 뒤 패널로. 화면에 상시 펼쳐 두지 않는다"
+    ],
+    "examples": [
+      "components-l3-advancedfilterpanel--default",
+      "components-l3-advancedfilterpanel--with-error"
+    ]
+  }
+}

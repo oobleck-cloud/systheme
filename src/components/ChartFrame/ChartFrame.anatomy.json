@@ -1,0 +1,79 @@
+{
+  "id": "chart-frame",
+  "state": {
+    "title": "string | undefined",
+    "description": "string | undefined",
+    "height": "number",
+    "loading": "boolean",
+    "empty": "boolean",
+    "legendItems": "ChartLegendItem[] | undefined",
+    "tooltip": "TooltipState | undefined"
+  },
+  "events": [
+    "onLegendItemClick"
+  ],
+  "anatomy": {
+    "id": "root",
+    "intent": "ornament",
+    "children": [
+      {
+        "id": "title",
+        "intent": "value-display",
+        "slot": true
+      },
+      {
+        "id": "canvas",
+        "intent": "ornament",
+        "children": [
+          {
+            "id": "loading",
+            "intent": "state-indicator"
+          },
+          {
+            "id": "empty",
+            "intent": "status-message",
+            "slot": true
+          },
+          {
+            "id": "tooltip",
+            "intent": "overlay-surface",
+            "iterates": "tooltip.items",
+            "as": "item",
+            "child": {
+              "id": "tooltip-item",
+              "intent": "value-display"
+            }
+          }
+        ]
+      },
+      {
+        "id": "legend",
+        "intent": "ornament",
+        "iterates": "legendItems",
+        "as": "legendItem",
+        "child": {
+          "id": "legend-item",
+          "intent": "chart-series",
+          "emits": "onLegendItemClick",
+          "binding": "legendItem"
+        }
+      }
+    ]
+  },
+  "usage": {
+    "when": [
+      "차트 컴포넌트 내부에서 제목·범례·빈 상태·로딩을 감쌀 때(DS 내부 전용)"
+    ],
+    "avoid": [
+      "앱에서 직접 import 하지 않는다 → BarChart·LineChart 등 구체 차트를 쓴다"
+    ],
+    "states": {
+      "loading": "본문 자리에 Skeleton, 제목·범례는 유지",
+      "empty": "'데이터가 없어요' 한 줄. 축만 남기지 않는다"
+    },
+    "examples": [
+      "components-charts-chartframe--loading",
+      "components-charts-chartframe--empty"
+    ]
+  }
+}

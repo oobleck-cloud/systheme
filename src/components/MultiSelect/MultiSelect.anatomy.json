@@ -1,0 +1,94 @@
+{
+  "id": "multi-select",
+  "primitiveGroup": "combobox-picker",
+  "state": {
+    "value": "string[]",
+    "open": "boolean",
+    "search": "string",
+    "density": "'compact' | 'default' | 'loose'"
+  },
+  "events": [
+    "onChange",
+    "onOpenChange"
+  ],
+  "anatomy": {
+    "id": "root",
+    "intent": "ornament",
+    "children": [
+      {
+        "id": "trigger",
+        "intent": "disclosure",
+        "writes": "open",
+        "children": [
+          {
+            "id": "label",
+            "intent": "value-display",
+            "binding": "value"
+          },
+          {
+            "id": "chevron",
+            "intent": "state-indicator",
+            "binding": "open"
+          }
+        ]
+      },
+      {
+        "id": "panel",
+        "intent": "overlay-surface",
+        "binding": "open",
+        "children": [
+          {
+            "id": "search-input",
+            "intent": "value-input",
+            "writes": "search"
+          },
+          {
+            "id": "list",
+            "traversal": {
+              "axis": "block"
+            },
+            "iterates": "filteredOptions",
+            "as": "option",
+            "child": {
+              "id": "option",
+              "intent": "select-option",
+              "writes": "value",
+              "binding": "option"
+            }
+          }
+        ]
+      }
+    ]
+  },
+  "usage": {
+    "when": [
+      "정해진 선택지에서 여러 개를 고를 때(5개 이상, 또는 공간이 좁을 때). 선택값은 Tag 로 보인다",
+      "옵션이 많으면 searchable 로 패널 안 검색"
+    ],
+    "avoid": [
+      "하나만 고르면 → Select",
+      "2~4개 다중이면 → Checkbox 그룹",
+      "자유 입력으로 찾는 검색이면 → SearchFieldAutocomplete",
+      "필터 툴바에 가로로 늘어놓지 않는다 → 필터 Popover 패널에 행으로"
+    ],
+    "limits": {
+      "items": "목록은 density 셸 높이, 이상은 스크롤",
+      "label": "옵션 라벨 한 줄. 선택 Tag 는 flex-wrap 으로 줄바꿈되어 트리거 높이가 늘어난다"
+    },
+    "states": {
+      "disabled": "값(Tag) 은 보이고 흐리게(opacity-50), 열리지 않는다",
+      "error": "variant=error 보더 + 아래 helper(FormField)",
+      "empty": "옵션 없음·검색 결과 없음 → '옵션 없음'",
+      "overflow": "Tag 줄바꿈으로 높이 증가. 폭을 좁히면 줄이 늘어난다"
+    },
+    "placement": [
+      "라벨은 위(FormField)",
+      "패널은 body 포털 — overflow 부모에 잘리지 않는다"
+    ],
+    "examples": [
+      "components-l1-multiselect--default",
+      "components-l1-multiselect--with-error",
+      "components-l1-multiselect--disabled"
+    ]
+  }
+}

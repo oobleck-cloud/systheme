@@ -1,0 +1,12 @@
+{
+  "id": "timeline",
+  "state": {
+    "density": "'compact' | 'default' | 'loose'"
+  },
+  "events": [],
+  "anatomy": {
+    "id": "root",
+    "intent": "ornament",
+    "slot": true
+  }
+}

@@ -1,0 +1,47 @@
+{
+  "id": "timeline-item-boxed",
+  "state": {
+    "timestamp": "React.ReactNode",
+    "density": "'compact' | 'default' | 'loose'",
+    "isLast": "boolean"
+  },
+  "events": [],
+  "anatomy": {
+    "id": "root",
+    "intent": "ornament",
+    "children": [
+      {
+        "id": "track",
+        "intent": "ornament",
+        "children": [
+          {
+            "id": "marker-host",
+            "intent": "ornament",
+            "slot": true
+          },
+          {
+            "id": "spine",
+            "intent": "state-indicator",
+            "binding": "isLast"
+          }
+        ]
+      },
+      {
+        "id": "body",
+        "intent": "ornament",
+        "children": [
+          {
+            "id": "timestamp",
+            "intent": "value-display",
+            "binding": "timestamp"
+          },
+          {
+            "id": "content",
+            "intent": "ornament",
+            "slot": true
+          }
+        ]
+      }
+    ]
+  }
+}

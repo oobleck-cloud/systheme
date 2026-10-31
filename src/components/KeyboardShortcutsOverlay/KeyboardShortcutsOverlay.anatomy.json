@@ -1,0 +1,100 @@
+{
+  "id": "keyboard-shortcuts-overlay",
+  "state": {
+    "open": "boolean",
+    "groups": "ShortcutGroupModel[]"
+  },
+  "events": [
+    "onOpenChange"
+  ],
+  "usage": {
+    "when": [
+      "사용자가 단축키 전체 목록을 불러볼 때 — 그룹(제목 + chord/설명 행) 다이얼로그"
+    ],
+    "avoid": [
+      "단축키 하나 표기에는 쓰지 않는다 → Kbd",
+      "명령 검색·실행에는 쓰지 않는다 → CommandPalette",
+      "도움말 본문에는 쓰지 않는다 → Modal + 문서"
+    ],
+    "limits": {
+      "items": "그룹 4개, 그룹당 8행. max-h-96 안에서 스크롤",
+      "label": "description 한 줄 말줄임 30자. chord 는 'Ctrl+K' 형식"
+    },
+    "states": {
+      "empty": "groups 가 비면 제목·닫기만 남는다 — 비면 열지 않는다",
+      "overflow": "패널 max-w-lg · max-h-96, 세로 스크롤"
+    },
+    "placement": [
+      "화면 중앙 fixed, 스크림 background/80. Escape·스크림·닫기로 닫힌다",
+      "열기 트리거는 Kbd 가 붙은 Menu 항목 또는 ? 키"
+    ],
+    "examples": [
+      "components-l2-keyboardshortcutsoverlay--default",
+      "components-l2-keyboardshortcutsoverlay--multiple-groups"
+    ]
+  },
+  "anatomy": {
+    "id": "root",
+    "intent": "ornament",
+    "children": [
+      {
+        "id": "backdrop",
+        "intent": "dismiss",
+        "writes": "open",
+        "emits": "onOpenChange"
+      },
+      {
+        "id": "surface",
+        "intent": "overlay-surface",
+        "binding": "open",
+        "children": [
+          {
+            "id": "close",
+            "intent": "dismiss",
+            "writes": "open",
+            "emits": "onOpenChange"
+          },
+          {
+            "id": "group-list",
+            "intent": "ornament",
+            "iterates": "groups",
+            "as": "grp",
+            "child": {
+              "id": "group-block",
+              "intent": "ornament",
+              "children": [
+                {
+                  "id": "group-title",
+                  "intent": "value-display",
+                  "binding": "grp.title"
+                },
+                {
+                  "id": "rows",
+                  "intent": "ornament",
+                  "iterates": "grp.items",
+                  "as": "item",
+                  "child": {
+                    "id": "shortcut-row",
+                    "intent": "ornament",
+                    "children": [
+                      {
+                        "id": "chord",
+                        "intent": "value-display",
+                        "binding": "item.chord"
+                      },
+                      {
+                        "id": "description",
+                        "intent": "value-display",
+                        "binding": "item.description"
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          }
+        ]
+      }
+    ]
+  }
+}

@@ -1,0 +1,32 @@
+{
+  "id": "timetable-time-slot-cell",
+  "state": {
+    "copied": "boolean",
+    "disabled": "boolean",
+    "selected": "boolean"
+  },
+  "events": ["onCellClick"],
+  "anatomy": {
+    "id": "root",
+    "intent": "press-action",
+    "emits": "onCellClick",
+    "children": [
+      {
+        "id": "cell-hover-preview-wrap",
+        "intent": "ornament",
+        "children": [
+          {
+            "id": "cell-hover-preview-surface",
+            "intent": "overlay-surface",
+            "slot": true
+          }
+        ]
+      },
+      {
+        "id": "copy-feedback",
+        "intent": "state-indicator",
+        "binding": "copied"
+      }
+    ]
+  }
+}

@@ -1,0 +1,58 @@
+{
+  "id": "pie-chart",
+  "state": {
+    "data": "CategoryValue[]",
+    "variant": "'pie' | 'donut'",
+    "centerLabel": "string | undefined",
+    "centerSublabel": "string | undefined"
+  },
+  "events": [
+    "onSliceClick"
+  ],
+  "anatomy": {
+    "id": "root",
+    "intent": "ornament",
+    "children": [
+      {
+        "id": "series",
+        "intent": "ornament",
+        "iterates": "data",
+        "as": "item",
+        "child": {
+          "id": "segment",
+          "intent": "chart-series",
+          "binding": "item",
+          "emits": "onSliceClick"
+        }
+      }
+    ]
+  },
+  "usage": {
+    "when": [
+      "전체 대비 비율(합이 100%) 을 조각으로 보여줄 때. 데이터는 CategoryValue[] — 범주 하나에 값 하나",
+      "donut + centerLabel·centerSublabel 로 합계·대표값을 가운데 둘 때"
+    ],
+    "avoid": [
+      "조각 7개 이상이거나 값 차이가 작아 크기 비교가 안 되면 → BarChart",
+      "시간 추이 → LineChart / AreaChart",
+      "계층 비율(대분류 > 소분류) → SunburstChart / TreemapChart",
+      "단계별 전환율 → FunnelChart",
+      "값 자체를 읽어야 하면 파이가 아니라 → BarChart 또는 표"
+    ],
+    "limits": {
+      "items": "조각 6개까지 — 시리즈 색 6종을 순환하므로 7개부터 색이 겹친다",
+      "label": "범례 라벨(label ?? category) 한 줄"
+    },
+    "states": {
+      "empty": "data 빈 배열 → ChartFrame 이 '표시할 데이터가 없습니다'"
+    },
+    "placement": [
+      "제목·설명·범례·툴팁은 ChartFrame 이 그린다. 차트 밖에 범례를 또 만들지 않는다"
+    ],
+    "examples": [
+      "components-charts-piechart--default",
+      "components-charts-piechart--donut",
+      "components-charts-piechart--empty"
+    ]
+  }
+}

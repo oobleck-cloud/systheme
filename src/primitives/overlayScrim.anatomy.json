@@ -1,0 +1,10 @@
+{
+  "id": "overlay-scrim",
+  "state": {},
+  "events": ["onClick"],
+  "anatomy": {
+    "id": "root",
+    "intent": "press-action",
+    "writes": "boolean=false"
+  }
+}

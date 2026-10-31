@@ -1,0 +1,116 @@
+{
+  "id": "emoji-picker",
+  "state": {
+    "value": "string | null",
+    "defaultValue": "string",
+    "open": "boolean",
+    "query": "string",
+    "activeCategory": "string",
+    "filterEmpty": "boolean",
+    "categories": "EmojiPickerCategory[]",
+    "visibleEmojis": "EmojiPickerItem[]"
+  },
+  "events": [
+    "onChange",
+    "onOpenChange"
+  ],
+  "usage": {
+    "when": [
+      "사용자가 항목의 표식으로 이모지 하나를 고를 때(워크스페이스·뷰·태그 심볼)"
+    ],
+    "avoid": [
+      "본문 텍스트에 이모지를 끼워 넣는 입력에는 쓰지 않는다 → Textarea / RichTextEditor",
+      "정해진 아이콘 세트 중 선택에는 쓰지 않는다 → IconBox + ToggleButtonGroup",
+      "운영 콘솔의 상태·분류 표식을 이모지로 하지 않는다 → Badge / Tag"
+    ],
+    "limits": {
+      "label": "트리거는 선택된 이모지 한 글자 또는 placeholder(기본 '이모지 선택…')",
+      "items": "커스텀 categories 는 탭이 한 줄에 드는 6개 이내"
+    },
+    "states": {
+      "disabled": "트리거 Input disabled 톤. 열리지 않는다",
+      "empty": "검색 결과 없으면 패널 안 role=status 문구(No emojis match your search.)",
+      "error": "variant=error 는 보더만. 메시지는 FormField error 로"
+    },
+    "placement": [
+      "패널은 트리거 아래(useAnchoredPanel below). 선택 즉시 닫히고 검색어 초기화",
+      "라벨은 위(FormField)"
+    ],
+    "examples": [
+      "components-l1-emojipicker--default",
+      "components-l1-emojipicker--not-searchable"
+    ]
+  },
+  "anatomy": {
+    "id": "root",
+    "intent": "ornament",
+    "children": [
+      {
+        "id": "trigger",
+        "intent": "disclosure",
+        "writes": "open",
+        "children": [
+          {
+            "id": "glyph",
+            "intent": "value-display",
+            "binding": "value"
+          },
+          {
+            "id": "chevron",
+            "intent": "state-indicator",
+            "binding": "open"
+          }
+        ]
+      },
+      {
+        "id": "panel",
+        "intent": "overlay-surface",
+        "binding": "open",
+        "children": [
+          {
+            "id": "search",
+            "intent": "search-input",
+            "writes": "query"
+          },
+          {
+            "id": "category-tabs",
+            "traversal": {
+              "axis": "inline"
+            },
+            "iterates": "categories",
+            "as": "category",
+            "child": {
+              "id": "category-tab",
+              "intent": "select-option",
+              "writes": "activeCategory",
+              "binding": "category"
+            }
+          },
+          {
+            "id": "empty-hint",
+            "intent": "status-message",
+            "binding": "filterEmpty"
+          },
+          {
+            "id": "grid",
+            "traversal": {
+              "axis": "both"
+            },
+            "iterates": "visibleEmojis",
+            "as": "emoji",
+            "child": {
+              "id": "emoji-cell",
+              "intent": "select-option",
+              "writes": [
+                "value",
+                "open"
+              ],
+              "binding": "emoji",
+              "emits": "onChange"
+            }
+          }
+        ]
+      }
+    ]
+  }
+}

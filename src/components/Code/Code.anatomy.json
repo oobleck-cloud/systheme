@@ -1,0 +1,28 @@
+{
+  "id": "code",
+  "state": {
+    "variant": "'chip' | 'bare'"
+  },
+  "events": [],
+  "anatomy": {
+    "id": "root",
+    "intent": "value-display",
+    "slot": true
+  },
+  "usage": {
+    "when": [
+      "식별자·경로·명령을 본문 안에서 그대로 보여줄 때"
+    ],
+    "avoid": [
+      "인용문에 쓰지 않는다 → Blockquote",
+      "여러 줄 코드 블록에 쓰지 않는다 — 이 컴포넌트는 인라인 전용"
+    ],
+    "limits": {
+      "label": "한 줄. 길면 말줄임하지 말고 줄바꿈 가능한 영역에 둔다"
+    },
+    "examples": [
+      "components-display-code--default",
+      "components-display-code--in-sentence"
+    ]
+  }
+}

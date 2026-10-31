@@ -1,0 +1,16 @@
+:root {
+  /*
+   * Kakao Login brand tokens
+   * @see https://developers.kakao.com/docs/ko/kakaologin/design-guide
+   */
+  --ds-kakao-container-bg: #fee500;
+  --ds-kakao-symbol-color: #000000;
+  --ds-kakao-label-color: rgb(0 0 0 / 0.85);
+  --ds-kakao-radius: var(--ds-radius-lg);
+  --ds-kakao-height: 2.8125rem;
+  --ds-kakao-symbol-size: 1.125rem;
+  --ds-kakao-gap: 0.5rem;
+  --ds-kakao-font-size: var(--ds-font-size-sm);
+  --ds-font-system:
+    ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+}

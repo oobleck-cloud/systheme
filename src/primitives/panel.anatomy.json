@@ -1,0 +1,20 @@
+{
+  "id": "panel",
+  "state": {
+    "scrollHint": "boolean",
+    "appearance": "'glass' | 'solid'",
+    "shape": "'overlay' | 'list' | 'compact' | 'dialog' | 'edge-left' | 'edge-right' | 'edge-top' | 'edge-bottom'"
+  },
+  "anatomy": {
+    "id": "root",
+    "intent": "overlay-surface",
+    "slot": true,
+    "children": [
+      {
+        "id": "scroll-hint",
+        "intent": "ornament",
+        "binding": "scrollHint"
+      }
+    ]
+  }
+}

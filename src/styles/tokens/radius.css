@@ -1,0 +1,10 @@
+:root {
+  --ds-radius-none: 0px;
+  --ds-radius-sm: 0.25rem; /* 4px  — checkbox, dot, micro */
+  --ds-radius-md: 0.5rem; /* 8px  — input, button, tag (+2px) */
+  --ds-radius-lg: 0.75rem; /* 12px — card, select, panel (+4px) */
+  --ds-radius-xl: 1rem; /* 16px — modal inner, large card (+4px) */
+  --ds-radius-2xl: 1.25rem; /* 20px — dialog, drawer (+4px) */
+  --ds-radius-3xl: 1.75rem; /* 28px — bottom sheet, full-screen dialog (M3 extra-large) */
+  --ds-radius-full: 9999px;
+}

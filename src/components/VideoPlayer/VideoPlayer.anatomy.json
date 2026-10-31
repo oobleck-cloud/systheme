@@ -1,0 +1,91 @@
+{
+  "id": "video-player",
+  "state": {
+    "isPlaying": "boolean",
+    "currentTime": "number",
+    "duration": "number",
+    "bufferedRatio": "number",
+    "errorMessage": "string",
+    "captionsAvailable": "boolean",
+    "captionsOn": "boolean"
+  },
+  "events": [
+    "onEnded"
+  ],
+  "anatomy": {
+    "id": "root",
+    "intent": "ornament",
+    "children": [
+      {
+        "id": "viewport",
+        "intent": "ornament"
+      },
+      {
+        "id": "scrubber",
+        "intent": "value-input",
+        "writes": "currentTime"
+      },
+      {
+        "id": "controls",
+        "intent": "ornament",
+        "children": [
+          {
+            "id": "play-toggle",
+            "intent": "toggle",
+            "writes": "isPlaying"
+          },
+          {
+            "id": "time-elapsed",
+            "intent": "value-display",
+            "binding": "currentTime"
+          },
+          {
+            "id": "time-total",
+            "intent": "value-display",
+            "binding": "duration"
+          },
+          {
+            "id": "buffer-indicator",
+            "intent": "state-indicator",
+            "binding": "bufferedRatio"
+          },
+          {
+            "id": "captions-toggle",
+            "intent": "toggle",
+            "writes": "captionsOn"
+          },
+          {
+            "id": "fullscreen",
+            "intent": "press-action"
+          }
+        ]
+      },
+      {
+        "id": "error",
+        "intent": "status-message",
+        "binding": "errorMessage"
+      }
+    ]
+  },
+  "usage": {
+    "when": [
+      "앱이 호스팅하는 영상을 재생하고 진행·자막·전체화면을 다룰 때"
+    ],
+    "avoid": [
+      "외부 임베드(YouTube)에는 쓰지 않는다 — 임베드는 자체 플레이어를 쓴다",
+      "녹화에는 → VideoRecorder"
+    ],
+    "states": {
+      "empty": "src 가 없으면 검은 뷰포트 + '영상 준비 중'. bg-inverse 를 쓰지 않는다(다크에서 밝아진다)",
+      "error": "재생 실패 시 문구 + 다시 시도"
+    },
+    "placement": [
+      "뷰포트는 슬롯, DS 는 컨트롤·상태만 책임진다"
+    ],
+    "examples": [
+      "components-l3-videoplayer--with-src",
+      "components-l3-videoplayer--empty",
+      "components-l3-videoplayer--broken-src"
+    ]
+  }
+}

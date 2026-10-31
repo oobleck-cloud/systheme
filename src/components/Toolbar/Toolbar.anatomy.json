@@ -1,0 +1,46 @@
+{
+  "id": "toolbar",
+  "state": {
+    "visible": "boolean",
+    "density": "'compact' | 'default' | 'loose'"
+  },
+  "events": [
+    "onDismiss"
+  ],
+  "anatomy": {
+    "id": "root",
+    "intent": "ornament",
+    "children": [
+      {
+        "id": "item",
+        "intent": "overlay-surface",
+        "slot": true
+      },
+      {
+        "id": "group",
+        "intent": "overlay-surface",
+        "slot": true
+      }
+    ]
+  },
+  "usage": {
+    "when": [
+      "편집기·지도처럼 본문 위에 떠 있는 컨트롤 묶음이 필요할 때"
+    ],
+    "avoid": [
+      "화면 헤더 액션에 쓰지 않는다 → 헤더 밴드 우측 액션",
+      "목록 필터에 쓰지 않는다 → 필터 진입점 하나"
+    ],
+    "limits": {
+      "items": "그룹 3개, 그룹당 5개 이하"
+    },
+    "placement": [
+      "각 아이템·그룹이 독립 floating surface 다. 툴바 자체는 크롬을 갖지 않는다",
+      "ArrowLeft/Right 로 포커스가 이동한다(WAI-ARIA toolbar)"
+    ],
+    "examples": [
+      "components-l3-toolbar--default",
+      "components-l3-toolbar--mixed-groups"
+    ]
+  }
+}

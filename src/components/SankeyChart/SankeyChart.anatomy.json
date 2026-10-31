@@ -1,0 +1,58 @@
+{
+  "id": "sankey-chart",
+  "state": {
+    "nodes": "SankeyNode[]",
+    "links": "SankeyLink[]",
+    "nodeWidth": "number",
+    "nodePadding": "number"
+  },
+  "events": [
+    "onNodeClick",
+    "onLinkClick"
+  ],
+  "anatomy": {
+    "id": "root",
+    "intent": "ornament",
+    "children": [
+      {
+        "id": "series",
+        "intent": "ornament",
+        "iterates": "nodes",
+        "as": "node",
+        "child": {
+          "id": "segment",
+          "intent": "chart-series",
+          "binding": "node",
+          "emits": "onNodeClick"
+        }
+      }
+    ]
+  },
+  "usage": {
+    "when": [
+      "단계 사이를 흐르는 양(유입 → 상담 → 계약·이탈, 예산 배분) 을 링크 두께로 볼 때. 데이터는 nodes[{id,name}] + links[{source,target,value}]",
+      "한 노드에서 여러 노드로 갈라지거나 모이는 분기가 있을 때. 노드·링크 클릭으로 드릴다운"
+    ],
+    "avoid": [
+      "분기 없는 일직선 전환율이면 → FunnelChart",
+      "전체 대비 비율이면 → PieChart",
+      "순환(A→B→A) 흐름은 그릴 수 없다 → 표",
+      "노드 20개 이상이면 읽히지 않는다 → HeatmapChart 또는 표"
+    ],
+    "limits": {
+      "items": "노드 폭 20·간격 12 기본. 노드 20개 이하",
+      "label": "노드 이름(name) 한 줄, 값은 compactFormat"
+    },
+    "states": {
+      "empty": "nodes 또는 links 가 비면 ChartFrame 이 '표시할 데이터가 없습니다'"
+    },
+    "placement": [
+      "제목·설명·툴팁은 ChartFrame 이 그린다"
+    ],
+    "examples": [
+      "components-charts-sankeychart--default",
+      "components-charts-sankeychart--user-journey",
+      "components-charts-sankeychart--empty"
+    ]
+  }
+}

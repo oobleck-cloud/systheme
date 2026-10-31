@@ -1,0 +1,13 @@
+{
+  "id": "side-sheet-host",
+  "primitiveGroup": "layout",
+  "anatomy": {
+    "id": "root",
+    "intent": "ornament",
+    "children": [
+      { "id": "leading", "intent": "ornament", "slot": true },
+      { "id": "content", "intent": "ornament", "slot": true },
+      { "id": "trailing", "intent": "ornament", "slot": true }
+    ]
+  }
+}

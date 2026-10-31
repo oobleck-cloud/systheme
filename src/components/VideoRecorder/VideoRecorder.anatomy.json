@@ -1,0 +1,95 @@
+{
+  "id": "video-recorder",
+  "state": {
+    "permissionState": "string",
+    "mode": "string",
+    "recordingTime": "number",
+    "error": "string"
+  },
+  "events": [
+    "onChange",
+    "onUseVideo",
+    "onModeChange"
+  ],
+  "anatomy": {
+    "id": "root",
+    "intent": "ornament",
+    "children": [
+      {
+        "id": "permission-layer",
+        "intent": "overlay-surface",
+        "binding": "permissionState",
+        "children": [
+          {
+            "id": "permission-message",
+            "intent": "status-message",
+            "binding": "error"
+          },
+          {
+            "id": "retry-permission",
+            "intent": "press-action"
+          },
+          {
+            "id": "open-settings",
+            "intent": "press-action"
+          },
+          {
+            "id": "dismiss-permission",
+            "intent": "dismiss",
+            "writes": "permissionState"
+          }
+        ]
+      },
+      {
+        "id": "preview",
+        "intent": "ornament"
+      },
+      {
+        "id": "toolbar",
+        "intent": "ornament",
+        "children": [
+          {
+            "id": "elapsed",
+            "intent": "state-indicator",
+            "binding": "recordingTime"
+          },
+          {
+            "id": "start",
+            "intent": "press-action"
+          },
+          {
+            "id": "stop",
+            "intent": "press-action"
+          },
+          {
+            "id": "discard",
+            "intent": "press-action"
+          }
+        ]
+      },
+      {
+        "id": "error-banner",
+        "intent": "status-message",
+        "binding": "error"
+      }
+    ]
+  },
+  "usage": {
+    "when": [
+      "현장에서 영상을 찍어 바로 업로드할 때(방문 촬영)"
+    ],
+    "avoid": [
+      "사진 한 장이면 → CameraCapture",
+      "재생만 필요하면 → VideoPlayer"
+    ],
+    "states": {
+      "forbidden": "권한이 없으면 오버레이로 이유와 요청 버튼",
+      "loading": "업로드 중에는 진행률과 취소를 함께 보인다",
+      "error": "장치·업로드 실패 문구 + 다시 시도"
+    },
+    "examples": [
+      "components-l3-videorecorder--default",
+      "components-l3-videorecorder--uploading"
+    ]
+  }
+}

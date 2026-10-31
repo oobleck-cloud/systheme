@@ -1,0 +1,25 @@
+{
+  "id": "fab-menu",
+  "state": {
+    "open": "boolean"
+  },
+  "events": ["onOpenChange"],
+  "anatomy": {
+    "id": "root",
+    "intent": "ornament",
+    "children": [
+      {
+        "id": "trigger",
+        "intent": "disclosure",
+        "writes": "open",
+        "emits": "onOpenChange"
+      },
+      {
+        "id": "items",
+        "intent": "overlay-surface",
+        "binding": "open",
+        "children": [{ "id": "item", "intent": "press-action", "slot": true }]
+      }
+    ]
+  }
+}

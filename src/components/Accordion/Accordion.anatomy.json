@@ -1,0 +1,78 @@
+{
+  "id": "accordion",
+  "state": {
+    "openItems": "string[]",
+    "items": "{ id: string; label: string; description?: string }[]"
+  },
+  "events": [
+    "onValueChange"
+  ],
+  "anatomy": {
+    "id": "root",
+    "intent": "ornament",
+    "traversal": {
+      "axis": "block"
+    },
+    "iterates": "items",
+    "as": "item",
+    "child": {
+      "id": "accordion-item",
+      "intent": "ornament",
+      "children": [
+        {
+          "id": "trigger",
+          "intent": "disclosure",
+          "writes": "openItems",
+          "emits": "onValueChange",
+          "children": [
+            {
+              "id": "label",
+              "intent": "value-display",
+              "binding": "item.label"
+            },
+            {
+              "id": "description",
+              "intent": "value-display",
+              "binding": "item.description"
+            },
+            {
+              "id": "chevron",
+              "intent": "state-indicator",
+              "binding": "openItems"
+            }
+          ]
+        },
+        {
+          "id": "content",
+          "intent": "collapsible-region",
+          "binding": "openItems",
+          "slot": true
+        }
+      ]
+    }
+  },
+  "usage": {
+    "when": [
+      "긴 목록을 접어 두고 필요한 항목만 펼쳐 읽게 할 때",
+      "한 화면에 다 두기엔 길지만 각 항목이 독립적인 내용(FAQ·설정 그룹)"
+    ],
+    "avoid": [
+      "단계가 있는 절차에 쓰지 않는다 → Steps",
+      "항상 보여야 하는 핵심 정보를 접지 않는다",
+      "펼침 하나에 화면 전체가 바뀌면 탭이다 → TabBar"
+    ],
+    "limits": {
+      "items": "10개 이하. 이상이면 검색·필터를 먼저 둔다"
+    },
+    "states": {
+      "disabled": "항목은 남기고 트리거만 비활성. 왜 못 여는지 보조 텍스트로"
+    },
+    "placement": [
+      "기본은 하나만 열림(single). 비교가 목적이면 multiple"
+    ],
+    "examples": [
+      "components-l1-accordion--default",
+      "components-l1-accordion--disabled-item"
+    ]
+  }
+}

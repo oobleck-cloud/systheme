@@ -1,0 +1,65 @@
+{
+  "id": "timetable-view-toolbar",
+  "state": {
+    "viewportStart": "number",
+    "includeDeactiveDates": "boolean"
+  },
+  "events": [
+    "onViewportChange",
+    "onIncludeDeactiveChange"
+  ],
+  "anatomy": {
+    "id": "root",
+    "intent": "ornament",
+    "children": [
+      {
+        "id": "range-label",
+        "intent": "value-display",
+        "binding": "viewportStart"
+      },
+      {
+        "id": "time-viewport-prev",
+        "intent": "stepper",
+        "writes": "viewportStart",
+        "emits": "onViewportChange",
+        "children": [
+          {
+            "id": "time-viewport-prev-icon",
+            "intent": "icon",
+            "binding": "@arrow-up"
+          }
+        ]
+      },
+      {
+        "id": "time-viewport-next",
+        "intent": "stepper",
+        "writes": "viewportStart",
+        "emits": "onViewportChange",
+        "children": [
+          {
+            "id": "time-viewport-next-icon",
+            "intent": "icon",
+            "binding": "@arrow-down"
+          }
+        ]
+      },
+      {
+        "id": "include-deactive-row",
+        "intent": "ornament",
+        "children": [
+          {
+            "id": "include-deactive-toggle",
+            "intent": "toggle",
+            "writes": "includeDeactiveDates",
+            "emits": "onIncludeDeactiveChange"
+          },
+          {
+            "id": "include-deactive-label",
+            "intent": "ornament",
+            "binding": "@label-include-deactive"
+          }
+        ]
+      }
+    ]
+  }
+}

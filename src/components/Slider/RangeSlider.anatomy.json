@@ -1,0 +1,41 @@
+{
+  "id": "range-slider",
+  "state": {
+    "value": "[number, number]",
+    "min": "number",
+    "max": "number",
+    "step": "number"
+  },
+  "events": ["onChange"],
+  "anatomy": {
+    "id": "root",
+    "intent": "value-input",
+    "writes": "value",
+    "emits": "onChange",
+    "children": [
+      {
+        "id": "track",
+        "intent": "ornament",
+        "children": [
+          {
+            "id": "fill",
+            "intent": "state-indicator",
+            "binding": "value"
+          }
+        ]
+      },
+      {
+        "id": "start-thumb",
+        "intent": "value-input",
+        "writes": "value",
+        "emits": "onChange"
+      },
+      {
+        "id": "end-thumb",
+        "intent": "value-input",
+        "writes": "value",
+        "emits": "onChange"
+      }
+    ]
+  }
+}

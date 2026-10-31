@@ -1,0 +1,61 @@
+{
+  "id": "camera-capture",
+  "state": {
+    "permissionState": "string",
+    "burstCount": "number",
+    "isShutterBusy": "boolean",
+    "error": "string"
+  },
+  "events": [
+    "onCapture"
+  ],
+  "anatomy": {
+    "id": "root",
+    "intent": "ornament",
+    "children": [
+      {
+        "id": "preview",
+        "intent": "ornament"
+      },
+      {
+        "id": "switch-camera",
+        "intent": "press-action"
+      },
+      {
+        "id": "shutter",
+        "intent": "press-action",
+        "emits": "onCapture"
+      },
+      {
+        "id": "burst-count",
+        "intent": "value-display",
+        "binding": "burstCount"
+      },
+      {
+        "id": "error",
+        "intent": "status-message",
+        "binding": "error"
+      }
+    ]
+  },
+  "usage": {
+    "when": [
+      "현장에서 사진을 찍어 바로 첨부할 때(모바일 현장 셸)"
+    ],
+    "avoid": [
+      "파일 선택에 쓰지 않는다 → FileInput",
+      "영상 녹화에 쓰지 않는다 → VideoRecorder"
+    ],
+    "states": {
+      "forbidden": "권한이 없으면 오버레이로 이유와 요청 버튼을 보인다 — 빈 검은 화면을 남기지 않는다",
+      "error": "장치를 못 열면 문구 + 다시 시도"
+    },
+    "placement": [
+      "프리뷰는 슬롯, DS 는 경계·상태·셔터만 책임진다"
+    ],
+    "examples": [
+      "components-l3-cameracapture--default",
+      "components-l3-cameracapture--auto-request"
+    ]
+  }
+}

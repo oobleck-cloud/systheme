@@ -1,0 +1,31 @@
+{
+  "id": "tab-trigger",
+  "primitiveGroup": "tab-navigation",
+  "state": {
+    "tabId": "string",
+    "label": "React.ReactNode",
+    "selectedTabId": "string | undefined",
+    "isSelected": "boolean",
+    "disabled": "boolean | undefined"
+  },
+  "events": ["onSelect"],
+  "anatomy": {
+    "id": "root",
+    "intent": "select-option",
+    "writes": "selectedTabId",
+    "emits": "onSelect",
+    "binding": "tabId",
+    "children": [
+      {
+        "id": "label",
+        "intent": "value-display",
+        "binding": "label"
+      },
+      {
+        "id": "selection-indicator",
+        "intent": "state-indicator",
+        "binding": "isSelected"
+      }
+    ]
+  }
+}

@@ -1,0 +1,33 @@
+{
+  "id": "timetable-controller",
+  "state": {},
+  "events": [],
+  "anatomy": {
+    "id": "root",
+    "intent": "ornament",
+    "children": [
+      {
+        "id": "date-nav",
+        "intent": "ornament",
+        "children": [
+          {
+            "id": "date-nav-slot",
+            "intent": "ornament",
+            "slot": true
+          }
+        ]
+      },
+      {
+        "id": "view-toolbar",
+        "intent": "ornament",
+        "children": [
+          {
+            "id": "view-toolbar-slot",
+            "intent": "ornament",
+            "slot": true
+          }
+        ]
+      }
+    ]
+  }
+}

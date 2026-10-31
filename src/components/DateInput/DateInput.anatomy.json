@@ -1,0 +1,50 @@
+{
+  "id": "date-input",
+  "state": {
+    "value": "string"
+  },
+  "events": [
+    "onChange"
+  ],
+  "usage": {
+    "when": [
+      "사용자가 이미 아는 날짜(생년월일)를 키보드로 칠 때 — 숫자만 받아 YYYY-MM-DD 로 자동 포맷",
+      "폼 값이 8자리 숫자 문자열(YYYYMMDD)로 저장될 때. API 전송은 birthDateDigitsToIso 로"
+    ],
+    "avoid": [
+      "달력을 보며 고르는 날짜(예약일·마감일)에는 쓰지 않는다 → DatePicker",
+      "기간·시간이 함께 필요한 값에는 쓰지 않는다 → PresetDateRangeField / TimePicker",
+      "모바일 현장의 생년월일 스크롤 입력에는 쓰지 않는다 → BirthDateScrollPicker",
+      "라벨을 placeholder 로 대신하지 않는다 → FormField label"
+    ],
+    "limits": {
+      "label": "placeholder 는 예시 날짜 하나(기본 1990-01-15). 지시문 금지",
+      "width": "Input 과 같이 w-full. 폭은 FormField·그리드 열이 정한다"
+    },
+    "states": {
+      "disabled": "Input 과 동일 — disabled-subtle 바탕 + disabled-text, 값은 남고 입력 거부",
+      "error": "스스로 검증하지 않는다. 자릿수 미달·불가능한 날짜는 FormField error 로 보더 error + 아래 메시지",
+      "overflow": "maxDigits(기본 8) 에서 잘린다. 그 이상은 입력되지 않는다"
+    },
+    "placement": [
+      "라벨은 위, 헬퍼/오류는 아래(FormField)",
+      "inputMode=numeric — 모바일에서 숫자 키패드가 뜬다"
+    ],
+    "examples": [
+      "components-l1-dateinput--formats-while-typing",
+      "components-l1-dateinput--with-value"
+    ]
+  },
+  "anatomy": {
+    "id": "root",
+    "intent": "ornament",
+    "children": [
+      {
+        "id": "input",
+        "intent": "value-input",
+        "writes": "value",
+        "emits": "onChange"
+      }
+    ]
+  }
+}

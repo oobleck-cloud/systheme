@@ -1,0 +1,70 @@
+{
+  "id": "bubble-chart",
+  "state": {
+    "series": "BubbleSeries[]",
+    "xLabel": "string | undefined",
+    "yLabel": "string | undefined",
+    "sizeLabel": "string",
+    "maxRadius": "number"
+  },
+  "events": [
+    "onBubbleClick"
+  ],
+  "anatomy": {
+    "id": "root",
+    "intent": "ornament",
+    "children": [
+      {
+        "id": "x-axis",
+        "intent": "plot-axis",
+        "iterates": "xTicks",
+        "as": "tick",
+        "child": {
+          "id": "tick-label",
+          "intent": "value-display"
+        }
+      },
+      {
+        "id": "y-axis",
+        "intent": "plot-axis",
+        "iterates": "yTicks",
+        "as": "tick",
+        "child": {
+          "id": "tick-label",
+          "intent": "value-display"
+        }
+      },
+      {
+        "id": "series",
+        "intent": "ornament",
+        "iterates": "series",
+        "as": "s",
+        "child": {
+          "id": "segment",
+          "intent": "chart-series",
+          "binding": "s",
+          "emits": "onBubbleClick"
+        }
+      }
+    ]
+  },
+  "usage": {
+    "when": [
+      "두 축 위의 값에 크기(세 번째 변수)를 얹어 비교할 때"
+    ],
+    "avoid": [
+      "크기 변수가 없으면 쓰지 않는다 → ScatterPlot",
+      "크기로 정확한 값을 읽게 하지 않는다 — 면적은 눈으로 못 잰다"
+    ],
+    "limits": {
+      "items": "버블 40개 이하"
+    },
+    "states": {
+      "empty": "ChartFrame 의 빈 상태 문구를 쓴다"
+    },
+    "examples": [
+      "components-charts-bubblechart--default",
+      "components-charts-bubblechart--empty"
+    ]
+  }
+}

@@ -1,0 +1,48 @@
+{
+  "id": "sunburst-chart",
+  "state": {
+    "data": "HierarchyDatum",
+    "maxDepth": "number"
+  },
+  "events": [
+    "onNodeClick"
+  ],
+  "anatomy": {
+    "id": "root",
+    "intent": "ornament",
+    "children": [
+      {
+        "id": "series",
+        "intent": "ornament",
+        "iterates": "descendants",
+        "as": "node",
+        "child": {
+          "id": "segment",
+          "intent": "chart-series",
+          "binding": "node",
+          "emits": "onNodeClick"
+        }
+      }
+    ]
+  },
+  "usage": {
+    "when": [
+      "계층이 있는 부분-전체 구조를 깊이별 고리로 볼 때(구역 > 하위 구역)"
+    ],
+    "avoid": [
+      "계층이 없으면 → PieChart",
+      "깊이 3단을 넘기지 않는다 — 바깥 고리는 읽히지 않는다",
+      "정확한 비교에 쓰지 않는다 → BarChart"
+    ],
+    "limits": {
+      "items": "깊이 2~3단"
+    },
+    "states": {
+      "empty": "ChartFrame 의 빈 상태 문구를 쓴다"
+    },
+    "examples": [
+      "components-charts-sunburstchart--default",
+      "components-charts-sunburstchart--empty"
+    ]
+  }
+}

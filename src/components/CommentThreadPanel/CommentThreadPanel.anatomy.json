@@ -1,0 +1,115 @@
+{
+  "id": "comment-thread-panel",
+  "state": {
+    "messages": "ThreadMessageViewModel[]",
+    "draft": "string"
+  },
+  "events": [
+    "onReply",
+    "onLoadMore",
+    "onSubmit"
+  ],
+  "anatomy": {
+    "id": "root",
+    "intent": "ornament",
+    "children": [
+      {
+        "id": "feed",
+        "intent": "ornament",
+        "traversal": {
+          "axis": "block"
+        },
+        "iterates": "messages",
+        "as": "m",
+        "child": {
+          "id": "bubble",
+          "intent": "ornament",
+          "children": [
+            {
+              "id": "avatar-slot",
+              "intent": "ornament",
+              "slot": true
+            },
+            {
+              "id": "author",
+              "intent": "value-display",
+              "binding": "m.author"
+            },
+            {
+              "id": "timestamp",
+              "intent": "value-display",
+              "binding": "m.timestamp"
+            },
+            {
+              "id": "body",
+              "intent": "value-display",
+              "binding": "m.body"
+            },
+            {
+              "id": "reply",
+              "intent": "press-action",
+              "emits": "onReply"
+            },
+            {
+              "id": "reply-area",
+              "intent": "ornament",
+              "children": [
+                {
+                  "id": "reply-input",
+                  "intent": "value-input",
+                  "writes": "draft"
+                },
+                {
+                  "id": "reply-submit",
+                  "intent": "press-action",
+                  "emits": "onSubmit"
+                }
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "id": "load-more",
+        "intent": "press-action",
+        "emits": "onLoadMore"
+      },
+      {
+        "id": "compose",
+        "intent": "ornament",
+        "children": [
+          {
+            "id": "compose-input",
+            "intent": "value-input",
+            "writes": "draft"
+          },
+          {
+            "id": "compose-submit",
+            "intent": "press-action",
+            "emits": "onSubmit"
+          }
+        ]
+      }
+    ]
+  },
+  "usage": {
+    "when": [
+      "대상 하나에 달린 댓글·답글을 시간순으로 읽고 쓸 때"
+    ],
+    "avoid": [
+      "시스템 활동 로그에 쓰지 않는다 → Timeline",
+      "메모 한 줄이면 → MemoThread"
+    ],
+    "limits": {
+      "items": "기본 최근 N건, 나머지는 더 보기"
+    },
+    "states": {
+      "empty": "'첫 댓글을 남겨보세요' + 입력창은 남긴다",
+      "disabled": "더 불러올 것이 없으면 더 보기 버튼을 비활성"
+    },
+    "examples": [
+      "components-l2-commentthreadpanel--default",
+      "components-l2-commentthreadpanel--empty-thread"
+    ]
+  }
+}

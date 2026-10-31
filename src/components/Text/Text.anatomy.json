@@ -1,0 +1,28 @@
+{
+  "id": "text",
+  "state": {
+    "tone": "'default' | 'subtle' | 'muted' | 'brand' | 'inverse' | 'success' | 'warning' | 'error' | 'info'"
+  },
+  "events": [],
+  "anatomy": {
+    "id": "root",
+    "intent": "value-display",
+    "slot": true
+  },
+  "usage": {
+    "when": [
+      "본문·보조 문구를 DS 타이포 스케일과 톤으로 쓸 때"
+    ],
+    "avoid": [
+      "제목에 쓰지 않는다 → Heading",
+      "임의 크기·자간을 넣지 않는다 — size/tone/weight 조합에서만 고른다"
+    ],
+    "limits": {
+      "label": "size 는 xs~xl 스케일에서만"
+    },
+    "examples": [
+      "components-display-text--default",
+      "components-display-text--tones"
+    ]
+  }
+}

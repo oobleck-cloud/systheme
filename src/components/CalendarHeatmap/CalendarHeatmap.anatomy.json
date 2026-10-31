@@ -1,0 +1,69 @@
+{
+  "id": "calendar-heatmap",
+  "state": {
+    "data": "CalendarEntry[]",
+    "startDate": "string | Date",
+    "endDate": "string | Date",
+    "cellSize": "number"
+  },
+  "events": [
+    "onDayClick"
+  ],
+  "anatomy": {
+    "id": "root",
+    "intent": "ornament",
+    "children": [
+      {
+        "id": "x-axis",
+        "intent": "plot-axis",
+        "iterates": "monthLabels",
+        "as": "label",
+        "child": {
+          "id": "tick-label",
+          "intent": "value-display"
+        }
+      },
+      {
+        "id": "y-axis",
+        "intent": "plot-axis",
+        "iterates": "weekdayLabels",
+        "as": "label",
+        "child": {
+          "id": "tick-label",
+          "intent": "value-display"
+        }
+      },
+      {
+        "id": "series",
+        "intent": "ornament",
+        "iterates": "days",
+        "as": "day",
+        "child": {
+          "id": "segment",
+          "intent": "chart-series",
+          "binding": "day",
+          "emits": "onDayClick"
+        }
+      }
+    ]
+  },
+  "usage": {
+    "when": [
+      "날짜별 빈도를 달력 격자의 농도로 볼 때(활동량·건수)"
+    ],
+    "avoid": [
+      "정확한 값 비교에 쓰지 않는다 → BarChart",
+      "기간이 3개월을 넘으면 → ContributionGraph"
+    ],
+    "limits": {
+      "items": "3개월 이하"
+    },
+    "states": {
+      "empty": "ChartFrame 의 빈 상태 문구를 쓴다"
+    },
+    "examples": [
+      "components-charts-calendarheatmap--default",
+      "components-charts-calendarheatmap--empty"
+    ]
+  }
+}

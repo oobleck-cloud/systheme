@@ -1,0 +1,78 @@
+{
+  "id": "toast-region",
+  "primitiveGroup": "notification-banner",
+  "state": {
+    "toasts": "{ id: string; severity: 'info' | 'success' | 'warning' | 'danger' | 'neutral'; title: string; description?: string; open?: boolean }[]"
+  },
+  "events": [
+    "onDismiss"
+  ],
+  "anatomy": {
+    "id": "root",
+    "intent": "notification-region",
+    "children": [
+      {
+        "id": "list",
+        "intent": "ornament",
+        "iterates": "toasts",
+        "as": "toast",
+        "child": {
+          "id": "toast-item",
+          "intent": "status-message",
+          "binding": "toast",
+          "children": [
+            {
+              "id": "severity-dot",
+              "intent": "severity-indicator",
+              "binding": "toast.severity"
+            },
+            {
+              "id": "body",
+              "intent": "ornament",
+              "children": [
+                {
+                  "id": "title",
+                  "intent": "value-display",
+                  "binding": "toast.title"
+                },
+                {
+                  "id": "description",
+                  "intent": "value-display",
+                  "binding": "toast.description"
+                }
+              ]
+            },
+            {
+              "id": "dismiss",
+              "intent": "dismiss",
+              "writes": "toast.open",
+              "emits": "onDismiss"
+            }
+          ]
+        }
+      }
+    ]
+  },
+  "usage": {
+    "when": [
+      "방금 한 동작의 결과를 짧게 알릴 때(저장됨·발송됨·실패)"
+    ],
+    "avoid": [
+      "사용자가 읽고 결정해야 하는 내용에 쓰지 않는다 → Alert/Modal",
+      "동시에 3개 이상 쌓지 않는다"
+    ],
+    "limits": {
+      "perRegion": 3,
+      "label": "한 문장, 액션 1개(실행 취소)"
+    },
+    "states": {
+      "error": "severity danger, 자동 닫힘 없음"
+    },
+    "placement": [
+      "오른쪽 아래. AI Dock 위"
+    ],
+    "examples": [
+      "components-l2-toast--default"
+    ]
+  }
+}

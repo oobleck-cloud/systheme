@@ -1,0 +1,58 @@
+{
+  "id": "tooltip",
+  "state": {
+    "open": "boolean"
+  },
+  "events": [
+    "onOpenChange"
+  ],
+  "anatomy": {
+    "id": "root",
+    "intent": "ornament",
+    "children": [
+      {
+        "id": "trigger",
+        "intent": "disclosure",
+        "writes": "open",
+        "emits": "onOpenChange",
+        "children": [
+          {
+            "id": "trigger-content",
+            "intent": "ornament",
+            "slot": true
+          }
+        ]
+      },
+      {
+        "id": "bubble",
+        "intent": "overlay-surface",
+        "binding": "open",
+        "children": [
+          {
+            "id": "content",
+            "intent": "ornament",
+            "slot": true
+          }
+        ]
+      }
+    ]
+  },
+  "usage": {
+    "when": [
+      "아이콘 버튼의 이름, 잘린 텍스트의 전체, 단위·출처 한 줄"
+    ],
+    "avoid": [
+      "필수 정보를 툴팁에만 두지 않는다(터치에서 안 보인다)",
+      "링크·버튼을 넣지 않는다 → Popover"
+    ],
+    "limits": {
+      "label": "한 줄, 40자"
+    },
+    "placement": [
+      "기본 위. 가장자리에서 자동 반전"
+    ],
+    "examples": [
+      "components-l1-tooltip--default"
+    ]
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "id": "button-group",
+  "state": {
+    "orientation": "'horizontal' | 'vertical'",
+    "gap": "0 | 1 | 2 | 3 | 4 | 5 | 6 | 8 | 10 | 12 | 16",
+    "endShape": "'none' | 'md' | 'full'"
+  },
+  "events": [],
+  "anatomy": {
+    "id": "root",
+    "intent": "ornament",
+    "children": [
+      {
+        "id": "item",
+        "intent": "press-action",
+        "slot": true
+      }
+    ]
+  }
+}

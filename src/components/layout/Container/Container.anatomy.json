@@ -1,0 +1,26 @@
+{
+  "id": "container",
+  "state": {},
+  "events": [],
+  "anatomy": {
+    "id": "root",
+    "intent": "ornament",
+    "slot": true
+  },
+  "usage": {
+    "when": [
+      "화면 본문의 최대 폭과 좌우 여백을 한 곳에서 정할 때"
+    ],
+    "avoid": [
+      "카드 안쪽 여백에 쓰지 않는다 → 카드 자체의 padding",
+      "임의 max-w 를 직접 쓰지 않는다 — size 에서 고른다"
+    ],
+    "placement": [
+      "화면 최상위 한 번만. 중첩하지 않는다"
+    ],
+    "examples": [
+      "components-layout-container--default",
+      "components-layout-container--sizes"
+    ]
+  }
+}

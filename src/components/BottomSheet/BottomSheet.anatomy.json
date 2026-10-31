@@ -1,0 +1,64 @@
+{
+  "id": "bottom-sheet",
+  "primitiveGroup": "overlay-panel",
+  "state": {
+    "open": "boolean",
+    "contained": "boolean"
+  },
+  "events": [
+    "onOpenChange"
+  ],
+  "anatomy": {
+    "id": "root",
+    "intent": "ornament",
+    "children": [
+      {
+        "id": "backdrop",
+        "intent": "dismiss",
+        "writes": "open",
+        "emits": "onOpenChange"
+      },
+      {
+        "id": "panel",
+        "intent": "overlay-surface",
+        "binding": "open",
+        "children": [
+          {
+            "id": "handle",
+            "intent": "ornament"
+          },
+          {
+            "id": "title",
+            "intent": "value-display",
+            "slot": true
+          },
+          {
+            "id": "body",
+            "intent": "ornament",
+            "slot": true
+          }
+        ]
+      }
+    ]
+  },
+  "usage": {
+    "when": [
+      "모바일 현장 셸에서 선택지·입력을 화면 아래에서 올릴 때"
+    ],
+    "avoid": [
+      "데스크톱 운영 콘솔에 쓰지 않는다 → Drawer/Modal",
+      "정보 열람에 쓰지 않는다 → SideSheet",
+      "시트가 열려 있는 동안 페이지 primary CTA 를 남겨 두지 않는다 — 숨긴다(unmount)"
+    ],
+    "limits": {
+      "perRegion": 1,
+      "width": "container 지정 시 그 안에서 absolute, 없으면 뷰포트 fixed"
+    },
+    "placement": [
+      "상단만 radius-3xl, 드래그 핸들, 하단 safe-area 패딩은 컴포넌트가 담당한다"
+    ],
+    "examples": [
+      "components-l1-bottomsheet--contained"
+    ]
+  }
+}

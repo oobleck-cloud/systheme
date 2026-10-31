@@ -1,0 +1,95 @@
+{
+  "id": "calendar",
+  "state": {
+    "value": "Date | null",
+    "month": "YearMonth",
+    "density": "'compact' | 'default' | 'loose'",
+    "isToday": "boolean"
+  },
+  "events": [
+    "onChange",
+    "onMonthChange"
+  ],
+  "anatomy": {
+    "id": "root",
+    "intent": "ornament",
+    "children": [
+      {
+        "id": "header",
+        "intent": "ornament",
+        "children": [
+          {
+            "id": "prev-year",
+            "intent": "stepper",
+            "writes": "month"
+          },
+          {
+            "id": "prev-month",
+            "intent": "stepper",
+            "writes": "month"
+          },
+          {
+            "id": "month-year-label",
+            "intent": "value-display",
+            "binding": "month"
+          },
+          {
+            "id": "next-month",
+            "intent": "stepper",
+            "writes": "month"
+          },
+          {
+            "id": "next-year",
+            "intent": "stepper",
+            "writes": "month"
+          }
+        ]
+      },
+      {
+        "id": "weekdays",
+        "intent": "column-headers",
+        "binding": "@locale.weekdays"
+      },
+      {
+        "id": "grid",
+        "traversal": {
+          "axis": "both"
+        },
+        "iterates": "datesIn(month)",
+        "as": "date",
+        "child": {
+          "id": "day",
+          "intent": "select-option",
+          "writes": "value",
+          "binding": "date",
+          "children": [
+            {
+              "id": "today-dot",
+              "intent": "state-indicator",
+              "binding": "isToday"
+            }
+          ]
+        }
+      }
+    ]
+  },
+  "usage": {
+    "when": [
+      "한 달 격자에서 날짜를 고르거나 일정을 얹어 볼 때"
+    ],
+    "avoid": [
+      "입력 칸 하나에 날짜를 받는 데 쓰지 않는다 → DatePicker",
+      "기간을 고르면 → PresetDateRangeField"
+    ],
+    "states": {
+      "disabled": "min/max 밖 날짜는 클릭 불가로 두고 숨기지 않는다"
+    },
+    "placement": [
+      "패널·사이드에 놓는다. 본문 폭을 다 쓰지 않는다"
+    ],
+    "examples": [
+      "components-l1-calendar--default",
+      "components-l1-calendar--with-min-max"
+    ]
+  }
+}

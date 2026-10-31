@@ -1,0 +1,27 @@
+{
+  "id": "table-header",
+  "state": {},
+  "events": [],
+  "anatomy": {
+    "id": "root",
+    "intent": "ornament",
+    "children": [
+      {
+        "id": "header-row",
+        "intent": "ornament",
+        "children": [
+          {
+            "id": "select-all",
+            "intent": "toggle",
+            "slot": true
+          },
+          {
+            "id": "head-cells",
+            "intent": "ornament",
+            "slot": true
+          }
+        ]
+      }
+    ]
+  }
+}

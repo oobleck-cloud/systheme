@@ -1,0 +1,77 @@
+{
+  "id": "scatter-plot",
+  "state": {
+    "series": "ScatterSeries[]",
+    "xLabel": "string | undefined",
+    "yLabel": "string | undefined",
+    "dotRadius": "number"
+  },
+  "events": [
+    "onPointClick"
+  ],
+  "anatomy": {
+    "id": "root",
+    "intent": "ornament",
+    "children": [
+      {
+        "id": "x-axis",
+        "intent": "plot-axis",
+        "iterates": "xTicks",
+        "as": "tick",
+        "child": {
+          "id": "tick-label",
+          "intent": "value-display"
+        }
+      },
+      {
+        "id": "y-axis",
+        "intent": "plot-axis",
+        "iterates": "yTicks",
+        "as": "tick",
+        "child": {
+          "id": "tick-label",
+          "intent": "value-display"
+        }
+      },
+      {
+        "id": "series",
+        "intent": "ornament",
+        "iterates": "series",
+        "as": "s",
+        "child": {
+          "id": "point",
+          "intent": "press-action",
+          "binding": "s",
+          "emits": "onPointClick"
+        }
+      }
+    ]
+  },
+  "usage": {
+    "when": [
+      "두 연속 수치의 관계·분포(방문 수 × 계약률) 를 볼 때. 데이터는 series[].data = {x, y, label?, group?}[]",
+      "군집을 시리즈별 색으로 나눠 비교할 때. 점 클릭(onPointClick) 으로 개체 드릴다운"
+    ],
+    "avoid": [
+      "x 가 시간이면 → LineChart",
+      "x 가 범주면 → BarChart",
+      "세 번째 수치(크기) 가 있으면 → BubbleChart",
+      "점이 수천 개면 → HeatmapChart(밀도)"
+    ],
+    "limits": {
+      "items": "시리즈 6개까지(색 순환). 점이 많으면 dotRadius 3(기본 5)",
+      "label": "xLabel·yLabel 한 줄, 축 값은 compactFormat"
+    },
+    "states": {
+      "empty": "series 가 없거나 모든 data 가 비면 ChartFrame 이 '표시할 데이터가 없습니다'"
+    },
+    "placement": [
+      "범례는 시리즈 2개 이상일 때만 ChartFrame 이 그린다"
+    ],
+    "examples": [
+      "components-charts-scatterplot--default",
+      "components-charts-scatterplot--multi-cluster",
+      "components-charts-scatterplot--empty"
+    ]
+  }
+}

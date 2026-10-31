@@ -1,0 +1,73 @@
+{
+  "id": "radio",
+  "state": {
+    "checked": "boolean",
+    "value": "string",
+    "label": "string",
+    "description": "string"
+  },
+  "events": [
+    "onCheckedChange"
+  ],
+  "anatomy": {
+    "id": "root",
+    "intent": "ornament",
+    "children": [
+      {
+        "id": "control",
+        "intent": "toggle",
+        "writes": "checked",
+        "emits": "onCheckedChange",
+        "children": [
+          {
+            "id": "indicator",
+            "intent": "state-indicator",
+            "binding": "checked"
+          }
+        ]
+      },
+      {
+        "id": "label",
+        "intent": "value-display",
+        "binding": "label",
+        "slot": true
+      },
+      {
+        "id": "description",
+        "intent": "status-message",
+        "binding": "description",
+        "slot": true
+      }
+    ]
+  },
+  "usage": {
+    "when": [
+      "서로 배타적인 2~4개 선택지를 모두 펼쳐 보이고 하나를 고를 때. 항상 RadioGroup(options 또는 children) 으로 묶는다",
+      "선택지마다 설명(description) 이 붙을 때"
+    ],
+    "avoid": [
+      "5개 이상이면 → Select",
+      "독립 on/off 면 → Checkbox / Switch",
+      "보기 전환(탭 성격) 이면 → SegmentedControl",
+      "그룹 없이 Radio 하나만 두지 않는다 → Checkbox"
+    ],
+    "limits": {
+      "items": "한 그룹 2~4개",
+      "label": "라벨 한 줄, 설명은 아래 줄(text-xs)"
+    },
+    "states": {
+      "disabled": "개별(option.disabled) 또는 그룹 전체(fieldset disabled). 원은 disabled-subtle",
+      "error": "variant=error 보더 — 그룹 단위로 준다, 항목 하나만 error 로 두지 않는다",
+      "empty": "기본 선택 없이 시작할 수 있다(defaultValue 생략)"
+    },
+    "placement": [
+      "세로 기본(gap-2). 가로(orientation=horizontal)는 짧은 라벨만",
+      "라벨은 원 오른쪽. legend 는 그룹 위"
+    ],
+    "examples": [
+      "components-l1-radio--default",
+      "components-l1-radiogroup--default",
+      "components-l1-radiogroup--horizontal"
+    ]
+  }
+}

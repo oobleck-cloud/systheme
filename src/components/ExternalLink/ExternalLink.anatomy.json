@@ -1,0 +1,55 @@
+{
+  "id": "external-link",
+  "primitiveGroup": "navigation",
+  "state": {
+    "label": "string",
+    "href": "string"
+  },
+  "events": [
+    "onClick"
+  ],
+  "usage": {
+    "when": [
+      "사용자가 다른 서비스(HubSpot·레거시 어드민·지도)로 새 탭에서 나갈 때 — 칩 + 외부 화살표"
+    ],
+    "avoid": [
+      "앱 안 화면 이동에는 쓰지 않는다 → Link",
+      "본문 문장 속 링크에는 쓰지 않는다 → Link",
+      "동작을 실행하는 자리에는 쓰지 않는다 → Button / IconButton",
+      "label 에 URL 을 그대로 쓰지 않는다 — 서비스·문서 이름으로"
+    ],
+    "limits": {
+      "label": "서비스 이름 2~12자 한 줄. 줄바꿈 금지, 넘치면 문구를 줄인다"
+    },
+    "states": {
+      "overflow": "여러 개면 inline-flex 로 wrap. 라벨은 한 줄"
+    },
+    "placement": [
+      "상세 헤더 제목 오른쪽 또는 DescriptionRow 값 칸. 본문 사이에 홀로 두지 않는다",
+      "target=_blank + rel=noopener noreferrer 고정. 같은 탭 이동으로 바꾸지 않는다"
+    ],
+    "examples": [
+      "components-l1-externallink--default",
+      "components-l1-externallink--multiple-links",
+      "components-l1-externallink--inline-with-text"
+    ]
+  },
+  "anatomy": {
+    "id": "root",
+    "intent": "routing-link",
+    "binding": "href",
+    "emits": "onClick",
+    "children": [
+      {
+        "id": "label",
+        "intent": "value-display",
+        "binding": "label"
+      },
+      {
+        "id": "external-icon",
+        "intent": "icon",
+        "binding": "@external-arrow"
+      }
+    ]
+  }
+}

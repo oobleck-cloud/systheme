@@ -1,0 +1,32 @@
+{
+  "id": "text-box",
+  "state": {},
+  "events": [],
+  "anatomy": {
+    "id": "root",
+    "intent": "ornament",
+    "children": [
+      {
+        "id": "text",
+        "intent": "ornament",
+        "slot": true
+      }
+    ]
+  },
+  "usage": {
+    "when": [
+      "사람이 아닌 대상을 이니셜·글자 타일로 식별할 때(주문·파일·구역)"
+    ],
+    "avoid": [
+      "사람에게는 → Avatar",
+      "아이콘이 있으면 → IconBox"
+    ],
+    "limits": {
+      "label": "1~2자"
+    },
+    "examples": [
+      "components-l1-textbox--initials",
+      "components-l1-textbox--variants"
+    ]
+  }
+}

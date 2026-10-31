@@ -1,0 +1,41 @@
+{
+  "id": "divider",
+  "state": {},
+  "events": [],
+  "anatomy": {
+    "id": "root",
+    "intent": "ornament",
+    "children": [
+      {
+        "id": "line-start",
+        "intent": "ornament"
+      },
+      {
+        "id": "label",
+        "intent": "ornament",
+        "slot": true
+      },
+      {
+        "id": "line-end",
+        "intent": "ornament"
+      }
+    ]
+  },
+  "usage": {
+    "when": [
+      "같은 표면 안에서 성격이 다른 구획을 가를 때",
+      "도구 묶음 사이 세로 구분(orientation=vertical)"
+    ],
+    "avoid": [
+      "목록 행 사이에는 쓰지 않는다 → divide-y",
+      "여백으로 충분한 곳에 넣지 않는다 — 선이 많으면 위계가 사라진다"
+    ],
+    "limits": {
+      "perRegion": 2
+    },
+    "examples": [
+      "components-layout-divider--horizontal",
+      "components-layout-divider--vertical"
+    ]
+  }
+}

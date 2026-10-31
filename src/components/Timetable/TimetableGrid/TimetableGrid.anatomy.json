@@ -1,0 +1,87 @@
+{
+  "id": "timetable-grid",
+  "state": {
+    "viewportStart": "number",
+    "slotMinutes": "30",
+    "resources": "{ id: string, label: string }[]",
+    "appointments": "{ id: string, resourceId: string, startMinute: number, endMinute: number, label: string }[]",
+    "shakeActive": "boolean"
+  },
+  "events": ["onSlotCellClick", "onAppointmentActivate", "onAppointmentCopy"],
+  "anatomy": {
+    "id": "root",
+    "intent": "ornament",
+    "children": [
+      {
+        "id": "shake-indicator",
+        "intent": "state-indicator",
+        "binding": "shakeActive"
+      },
+      {
+        "id": "grid-scroll-surface",
+        "intent": "ornament",
+        "children": [
+          {
+            "id": "time-rail",
+            "intent": "ornament",
+            "children": [
+              {
+                "id": "time-rail-labels",
+                "intent": "ornament",
+                "binding": "@timetable-time-rail-slot-labels"
+              }
+            ]
+          },
+          {
+            "id": "resource-header-row",
+            "intent": "ornament",
+            "traversal": { "axis": "both" },
+            "iterates": "resources",
+            "as": "resource",
+            "child": {
+              "id": "resource-header-cell",
+              "intent": "ornament",
+              "children": [
+                {
+                  "id": "resource-header-label",
+                  "intent": "value-display",
+                  "binding": "resource.label"
+                }
+              ]
+            }
+          },
+          {
+            "id": "slot-rows",
+            "intent": "ornament",
+            "binding": "@timetable-grid-css-row-layout",
+            "children": [
+              {
+                "id": "slot-row",
+                "intent": "ornament",
+                "children": [
+                  {
+                    "id": "time-slot-cell",
+                    "intent": "press-action",
+                    "emits": "onSlotCellClick"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "id": "appointment-blocks",
+            "intent": "ornament",
+            "binding": "@timetable-grid-css-row-span-blocks",
+            "children": [
+              {
+                "id": "appointment-block-slot",
+                "intent": "ornament",
+                "slot": true
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}

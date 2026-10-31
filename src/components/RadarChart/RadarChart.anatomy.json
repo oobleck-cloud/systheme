@@ -1,0 +1,65 @@
+{
+  "id": "radar-chart",
+  "state": {
+    "series": "RadarSeries[]",
+    "axes": "string[]",
+    "maxValue": "number | undefined",
+    "gridLevels": "number"
+  },
+  "events": [],
+  "anatomy": {
+    "id": "root",
+    "intent": "ornament",
+    "children": [
+      {
+        "id": "x-axis",
+        "intent": "plot-axis",
+        "iterates": "axes",
+        "as": "axis",
+        "child": {
+          "id": "axis-label",
+          "intent": "value-display"
+        }
+      },
+      {
+        "id": "series",
+        "intent": "ornament",
+        "iterates": "series",
+        "as": "s",
+        "child": {
+          "id": "segment",
+          "intent": "chart-series",
+          "binding": "s"
+        }
+      }
+    ]
+  },
+  "usage": {
+    "when": [
+      "같은 척도의 지표 3개 이상을 한 대상의 프로파일로 볼 때(역량 평가·점수 프로필). 데이터는 series[].data = {축이름: 값}, axes 로 축 순서",
+      "2~3개 시리즈를 겹쳐 프로파일 모양을 비교할 때. 범례는 시리즈 2개 이상일 때만 나온다"
+    ],
+    "avoid": [
+      "축 단위가 서로 다르면 쓰지 않는다 → BarChart 여러 개",
+      "시간 추이 → LineChart",
+      "시리즈 4개 이상 겹치면 읽히지 않는다 → HeatmapChart 또는 BarChart(grouped)",
+      "축이 2개 이하면 → BarChart",
+      "값 자체를 읽어야 하면 → 표"
+    ],
+    "limits": {
+      "items": "축 3~8개. 시리즈 6개까지(색 순환)",
+      "label": "축 라벨(axisLabels) 한 줄"
+    },
+    "states": {
+      "empty": "series 또는 axes 가 비면 ChartFrame 이 '표시할 데이터가 없습니다'"
+    },
+    "placement": [
+      "maxValue 를 주지 않으면 데이터 최대값이 바깥 링 — 비교 화면은 maxValue 를 고정한다"
+    ],
+    "examples": [
+      "components-charts-radarchart--default",
+      "components-charts-radarchart--multi-series",
+      "components-charts-radarchart--empty"
+    ]
+  }
+}

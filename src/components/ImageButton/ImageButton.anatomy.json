@@ -1,0 +1,46 @@
+{
+  "id": "image-button",
+  "state": {},
+  "events": [
+    "onClick"
+  ],
+  "usage": {
+    "when": [
+      "이미지 자체가 누르는 대상일 때(썸네일 열기·이미지 선택지·스토어 배지)",
+      "block(기본 w-full)으로 부모 폭을 채우거나 block=false 로 인라인"
+    ],
+    "avoid": [
+      "이미지 위에 라벨·설명이 함께 있는 카드에는 쓰지 않는다 → Surface card + Button",
+      "아이콘에는 쓰지 않는다 → IconButton",
+      "링크 이동에는 쓰지 않는다 → Link",
+      "alt 를 비우지 않는다 — aria-label 이 alt 에서 온다"
+    ],
+    "limits": {
+      "label": "alt = 이미지가 뜻하는 동작(예: '견적서 원본 열기') 2~12자",
+      "width": "block 은 부모 폭. fit 은 fill 기본, contain/cover 로 잘림 제어"
+    },
+    "states": {
+      "disabled": "opacity-50, 포인터 무시",
+      "overflow": "overflow-hidden 으로 잘린다. 비율은 imageClassName 으로"
+    },
+    "placement": [
+      "갤러리 그리드 셀 또는 폼 안 이미지 선택지. 누르면 ImageLightbox 로 연결"
+    ],
+    "examples": [
+      "components-l1-imagebutton--default",
+      "components-l1-imagebutton--inline-width"
+    ]
+  },
+  "anatomy": {
+    "id": "root",
+    "intent": "press-action",
+    "emits": "onClick",
+    "children": [
+      {
+        "id": "image",
+        "intent": "ornament",
+        "binding": "src"
+      }
+    ]
+  }
+}

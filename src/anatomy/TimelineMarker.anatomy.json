@@ -1,0 +1,17 @@
+{
+  "id": "timeline-marker",
+  "state": {
+    "appearance": "'dot' | 'milestone'",
+    "phase": "'pending' | 'active' | 'complete' | 'neutral'"
+  },
+  "events": [],
+  "anatomy": {
+    "id": "root",
+    "intent": "ornament",
+    "children": [
+      { "id": "dot", "intent": "state-indicator", "binding": "phase" },
+      { "id": "glyph", "intent": "icon", "slot": true },
+      { "id": "status-dot", "intent": "state-indicator", "binding": "phase" }
+    ]
+  }
+}

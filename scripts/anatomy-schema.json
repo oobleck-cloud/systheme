@@ -1,0 +1,216 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://miso.design/dsl/anatomy.v1.json",
+  "title": "Component Anatomy",
+  "description": "Layer-based component anatomy. Style/layout는 포함하지 않으며 의미·구조만 표현한다.",
+  "type": "object",
+  "required": ["id", "anatomy"],
+  "additionalProperties": true,
+  "properties": {
+    "id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "state": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "string"
+      }
+    },
+    "events": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "anatomy": {
+      "$ref": "#/definitions/part"
+    },
+    "usage": {
+      "type": "object",
+      "description": "사용 계약 — 언제 쓰고 언제 안 쓰고 어디까지인가. docs/design-system/usage-contract.md",
+      "additionalProperties": false,
+      "properties": {
+        "when": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "minItems": 1
+        },
+        "avoid": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "limits": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "perRegion": {
+              "oneOf": [
+                {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                {
+                  "type": "object",
+                  "additionalProperties": {
+                    "type": "integer",
+                    "minimum": 0
+                  }
+                }
+              ]
+            },
+            "label": {
+              "type": "string"
+            },
+            "items": {
+              "type": "string"
+            },
+            "width": {
+              "type": "string"
+            }
+          }
+        },
+        "states": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "loading": {
+              "type": "string"
+            },
+            "disabled": {
+              "type": "string"
+            },
+            "empty": {
+              "type": "string"
+            },
+            "error": {
+              "type": "string"
+            },
+            "forbidden": {
+              "type": "string"
+            },
+            "overflow": {
+              "type": "string"
+            }
+          }
+        },
+        "placement": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "examples": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "required": ["when"]
+    }
+  },
+  "definitions": {
+    "part": {
+      "type": "object",
+      "required": ["id"],
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "intent": {
+          "type": "string",
+          "minLength": 1
+        },
+        "binding": {
+          "type": "string"
+        },
+        "writes": {
+          "oneOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          ]
+        },
+        "emits": {
+          "oneOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          ]
+        },
+        "iterates": {
+          "type": "string"
+        },
+        "as": {
+          "type": "string"
+        },
+        "traversal": {
+          "type": "object",
+          "required": ["axis"],
+          "additionalProperties": false,
+          "properties": {
+            "axis": {
+              "type": "string",
+              "enum": ["inline", "block", "both"]
+            }
+          }
+        },
+        "slot": {
+          "type": "boolean"
+        },
+        "child": {
+          "$ref": "#/definitions/part"
+        },
+        "children": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/part"
+          }
+        }
+      },
+      "allOf": [
+        {
+          "description": "intent 또는 iterates 둘 중 하나는 반드시 있어야 한다 (iterates wrapper는 자체 intent 면제)",
+          "anyOf": [
+            {
+              "required": ["intent"]
+            },
+            {
+              "required": ["iterates"]
+            }
+          ]
+        },
+        {
+          "description": "iterates가 있으면 as와 child도 있어야 한다",
+          "if": {
+            "required": ["iterates"]
+          },
+          "then": {
+            "required": ["as", "child"]
+          }
+        }
+      ]
+    }
+  }
+}

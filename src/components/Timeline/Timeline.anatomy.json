@@ -1,0 +1,39 @@
+{
+  "id": "timeline",
+  "state": {},
+  "events": [],
+  "anatomy": {
+    "id": "root",
+    "intent": "ornament",
+    "binding": "@timeline",
+    "children": [
+      {
+        "id": "items",
+        "intent": "ornament",
+        "slot": true
+      }
+    ]
+  },
+  "usage": {
+    "when": [
+      "시간순 활동·이력을 축 위에 쌓아 보일 때(주문 이력·에이전트 로그)"
+    ],
+    "avoid": [
+      "사람이 쓰는 댓글에는 → CommentThreadPanel",
+      "단계가 정해진 절차에는 → Steps"
+    ],
+    "limits": {
+      "items": "기본 최근 N건만, 나머지는 더 보기(원칙: 긴 이벤트 목록은 접고 페이징)"
+    },
+    "states": {
+      "empty": "'기록이 없어요' 한 줄. 축만 남기지 않는다"
+    },
+    "placement": [
+      "대상이 바뀌면 접힌 최근 보기로 리셋한다"
+    ],
+    "examples": [
+      "components-l3-timeline--activity-feed",
+      "components-l3-timeline--milestone-only"
+    ]
+  }
+}

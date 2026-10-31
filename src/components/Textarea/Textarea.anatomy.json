@@ -1,0 +1,40 @@
+{
+  "id": "textarea",
+  "state": {
+    "value": "string",
+    "validationMessage": "string | undefined"
+  },
+  "events": [
+    "onValueChange",
+    "onBlurValue",
+    "onValidityChange"
+  ],
+  "anatomy": {
+    "id": "root",
+    "intent": "value-input",
+    "writes": "value",
+    "emits": "onValueChange"
+  },
+  "usage": {
+    "when": [
+      "여러 줄 자유 입력을 받을 때(메모·서술형 답안)"
+    ],
+    "avoid": [
+      "한 줄이면 → Input",
+      "서식이 필요하면 → RichTextEditor"
+    ],
+    "limits": {
+      "label": "rows 로 기본 높이. autoResize 는 maxHeight 와 함께"
+    },
+    "states": {
+      "disabled": "값은 보이고 편집만 막는다",
+      "error": "aria-invalid + error variant, 이유는 아래 helper",
+      "overflow": "autoResize 는 maxHeight 까지, 넘으면 안에서 스크롤"
+    },
+    "examples": [
+      "components-l1-textarea--with-error",
+      "components-l1-textarea--auto-resize-max-height",
+      "components-l1-textarea--disabled"
+    ]
+  }
+}

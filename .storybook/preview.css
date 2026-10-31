@@ -1,0 +1,19 @@
+/*
+ * Storybook 전용 스타일 진입점.
+ *
+ * 배포되는 `@oobleck/systheme/styles`(src/styles/index.css) 그대로에,
+ * **Storybook 이 인덱싱하는 다른 패키지의 소스**를 Tailwind 스캔 범위로 얹는다.
+ *
+ * 왜 index.css 에 직접 넣지 않는가: index.css 는 앱이 소비하는 공개 스타일시트다.
+ * 거기에 `@source ".../collections/src"` 를 넣으면 (a) design-system 이 자기보다
+ * 상위인 collections 를 알게 되는 층위 역전이고, (b) collections 를 안 쓰는 앱
+ * (chat-poc·new-partner-poc·agent-desktop)까지 그 유틸리티를 생성하게 된다.
+ * 스캔 범위는 "그 소스를 렌더하는 쪽"이 선언한다 — 앱은 자기 globals.css 에서
+ * (apps/mvos 가 그렇게 한다), Storybook 은 여기서.
+ *
+ * 이 선언이 빠지면 collections 스토리는 *조용히* 틀린 모습으로 스냅샷된다
+ * (#366: GalleryView 타일이 1열로 붕괴, TableView hover 어포던스가 상시 노출).
+ */
+@import '../src/styles/index.css';
+
+@source "../../collection/packages/collection-views/src";

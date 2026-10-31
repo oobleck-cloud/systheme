@@ -1,0 +1,47 @@
+{
+  "id": "phone-number-input",
+  "state": {
+    "value": "string"
+  },
+  "events": [
+    "onChange"
+  ],
+  "anatomy": {
+    "id": "root",
+    "intent": "ornament",
+    "children": [
+      {
+        "id": "input",
+        "intent": "value-input",
+        "writes": "value",
+        "emits": "onChange"
+      }
+    ]
+  },
+  "usage": {
+    "when": [
+      "한국 전화번호 입력. 상태·서버 값은 숫자만(하이픈 없음), 화면은 010-0000-0000 으로 포맷된다",
+      "type=tel·inputMode=tel·autoComplete=tel 이 붙어 모바일 키패드가 숫자로 열린다"
+    ],
+    "avoid": [
+      "국가코드 포함 국제번호에 쓰지 않는다 → Input type=tel(포맷 없음)",
+      "±조정 숫자에 쓰지 않는다 → NumberInput",
+      "전화번호 검색창에 쓰지 않는다 → SearchField"
+    ],
+    "limits": {
+      "label": "maxDigits 기본 11(휴대폰). 초과 입력은 잘린다. 유선번호는 maxDigits 를 준다"
+    },
+    "states": {
+      "disabled": "Input 과 같다 — 값 보이고 흐리게",
+      "error": "variant=error(Input) 보더 + 아래 helper(FormField)",
+      "empty": "placeholder '010-0000-0000'"
+    },
+    "placement": [
+      "라벨은 위(FormField)"
+    ],
+    "examples": [
+      "components-l1-phonenumberinput--default",
+      "components-l1-phonenumberinput--formats-while-typing"
+    ]
+  }
+}

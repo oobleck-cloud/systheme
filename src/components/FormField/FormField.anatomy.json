@@ -1,0 +1,78 @@
+{
+  "id": "form-field",
+  "state": {
+    "label": "string",
+    "required": "boolean",
+    "helper": "string",
+    "error": "string"
+  },
+  "events": [],
+  "usage": {
+    "when": [
+      "폼 컨트롤(Input·Select·DatePicker·Textarea…)에 라벨·헬퍼·오류를 붙일 때 — 컨트롤은 context 로 id·aria·error variant 를 받는다",
+      "필수 표시(required → 라벨 끝 *)가 필요할 때"
+    ],
+    "avoid": [
+      "컨트롤 옆에 라벨을 직접 그리지 않는다 → 항상 FormField",
+      "읽기 전용 라벨-값 표시에는 쓰지 않는다 → DescriptionRow",
+      "폼 전체 오류·결과 메시지에는 쓰지 않는다 → Alert(폼 상단)",
+      "useFormField 를 앱에서 직접 호출하지 않는다(DS 내부 전용)"
+    ],
+    "limits": {
+      "items": "FormField 하나에 컨트롤 하나",
+      "label": "라벨 2~10자 명사 한 줄. 헬퍼 1줄, 오류 1줄"
+    },
+    "states": {
+      "error": "error 가 있으면 helper 를 숨기고 error 만(role=alert, text-error-text). 컨트롤은 자동 variant=error + aria-invalid",
+      "disabled": "FormField 는 disabled 를 모른다 — 컨트롤에 준다. 라벨은 그대로",
+      "empty": "label 없이 쓸 수 있다(인라인 셀). 헬퍼·오류 자리 규칙은 같다"
+    },
+    "placement": [
+      "라벨 위 → 컨트롤 → 헬퍼/오류 아래. gap-1.5",
+      "필수 표시는 라벨 끝 *(error-primary). 라벨 앞에 두지 않는다"
+    ],
+    "examples": [
+      "components-l1-formfield--default",
+      "components-l1-formfield--required",
+      "components-l1-formfield--with-error",
+      "components-l1-formfield--error-overrides-helper"
+    ]
+  },
+  "anatomy": {
+    "id": "root",
+    "intent": "field-rhythm",
+    "children": [
+      {
+        "id": "label",
+        "intent": "ornament",
+        "children": [
+          {
+            "id": "label-text",
+            "intent": "value-display",
+            "binding": "label"
+          },
+          {
+            "id": "required-mark",
+            "intent": "ornament",
+            "binding": "required"
+          }
+        ]
+      },
+      {
+        "id": "control",
+        "intent": "ornament",
+        "slot": true
+      },
+      {
+        "id": "helper",
+        "intent": "status-message",
+        "binding": "helper"
+      },
+      {
+        "id": "error",
+        "intent": "status-message",
+        "binding": "error"
+      }
+    ]
+  }
+}

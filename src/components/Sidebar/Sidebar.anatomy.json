@@ -1,0 +1,187 @@
+{
+  "id": "sidebar",
+  "state": {
+    "collapsed": "boolean",
+    "bordered": "boolean",
+    "activeItemId": "string",
+    "items": "{ id: string; label: string; href: string; children?: SidebarItem[] }[]",
+    "expandedGroupIds": "Set<string>",
+    "openFlyoutGroupId": "string | null"
+  },
+  "events": [
+    "onCollapseChange",
+    "onNavigate"
+  ],
+  "anatomy": {
+    "id": "root",
+    "intent": "ornament",
+    "children": [
+      {
+        "id": "brand-block",
+        "intent": "ornament",
+        "slot": true
+      },
+      {
+        "id": "nav-list",
+        "intent": "ornament",
+        "traversal": {
+          "axis": "block"
+        },
+        "iterates": "items",
+        "as": "item",
+        "child": {
+          "id": "nav-node",
+          "intent": "ornament",
+          "children": [
+            {
+              "id": "nav-item",
+              "intent": "routing-link",
+              "binding": "item.href",
+              "emits": "onNavigate",
+              "children": [
+                {
+                  "id": "icon",
+                  "intent": "icon",
+                  "slot": true
+                },
+                {
+                  "id": "label",
+                  "intent": "value-display",
+                  "binding": "item.label"
+                },
+                {
+                  "id": "active-indicator",
+                  "intent": "state-indicator",
+                  "binding": "activeItemId"
+                }
+              ]
+            },
+            {
+              "id": "nav-group",
+              "intent": "disclosure",
+              "writes": "expandedGroupIds",
+              "children": [
+                {
+                  "id": "nav-group-trigger",
+                  "intent": "disclosure",
+                  "writes": [
+                    "expandedGroupIds",
+                    "openFlyoutGroupId"
+                  ]
+                },
+                {
+                  "id": "group-chevron",
+                  "intent": "icon"
+                },
+                {
+                  "id": "nav-sub-list",
+                  "intent": "ornament",
+                  "traversal": {
+                    "axis": "block"
+                  },
+                  "iterates": "item.children",
+                  "as": "child",
+                  "child": {
+                    "id": "nav-item",
+                    "intent": "routing-link",
+                    "emits": "onNavigate"
+                  }
+                },
+                {
+                  "id": "collapsed-flyout",
+                  "intent": "overlay-surface",
+                  "binding": "openFlyoutGroupId",
+                  "children": [
+                    {
+                      "id": "flyout-heading",
+                      "intent": "value-display"
+                    },
+                    {
+                      "id": "flyout-list",
+                      "intent": "ornament",
+                      "children": [
+                        {
+                          "id": "flyout-submenu-trigger",
+                          "intent": "disclosure",
+                          "children": [
+                            {
+                              "id": "flyout-submenu-chevron",
+                              "intent": "icon"
+                            }
+                          ]
+                        },
+                        {
+                          "id": "flyout-item",
+                          "intent": "routing-link",
+                          "emits": "onNavigate"
+                        }
+                      ]
+                    },
+                    {
+                      "id": "collapsed-flyout-cascade",
+                      "intent": "overlay-surface",
+                      "children": [
+                        {
+                          "id": "flyout-heading",
+                          "intent": "value-display"
+                        },
+                        {
+                          "id": "flyout-list",
+                          "intent": "ornament",
+                          "children": [
+                            {
+                              "id": "flyout-submenu-trigger",
+                              "intent": "disclosure"
+                            },
+                            {
+                              "id": "flyout-item",
+                              "intent": "routing-link",
+                              "emits": "onNavigate"
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "id": "profile-block",
+        "intent": "ornament",
+        "slot": true
+      },
+      {
+        "id": "collapse-toggle",
+        "intent": "toggle",
+        "writes": "collapsed",
+        "emits": "onCollapseChange"
+      }
+    ]
+  },
+  "usage": {
+    "when": [
+      "운영 콘솔 워크스페이스에서 화면 사이를 오갈 때(1~2단 트리)"
+    ],
+    "avoid": [
+      "제품 셸(recruit·lms)에는 두지 않는다 → 헤더 인라인 화면 링크",
+      "같은 화면 안의 구획 이동에 쓰지 않는다 → TabBar"
+    ],
+    "limits": {
+      "items": "1단 8개 이하, 깊이 2단"
+    },
+    "states": {
+      "disabled": "권한 없는 항목은 숨긴다 — 흐리게 남기지 않는다"
+    },
+    "placement": [
+      "왼쪽 고정. 접으면 아이콘만 남는다"
+    ],
+    "examples": [
+      "components-l2-sidebar--default",
+      "components-l2-sidebar--tree-navigation"
+    ]
+  }
+}

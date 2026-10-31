@@ -1,0 +1,32 @@
+:root {
+  --ds-spacing-0: 0px;
+  --ds-spacing-px: 1px;
+  --ds-spacing-0_5: 0.125rem; /* 2px */
+  --ds-spacing-1: 0.25rem; /* 4px */
+  --ds-spacing-1_5: 0.375rem; /* 6px */
+  --ds-spacing-2: 0.5rem; /* 8px */
+  --ds-spacing-2_5: 0.625rem; /* 10px */
+  --ds-spacing-3: 0.75rem; /* 12px */
+  --ds-spacing-4: 1rem; /* 16px */
+  --ds-spacing-5: 1.25rem; /* 20px */
+  --ds-spacing-6: 1.5rem; /* 24px */
+  --ds-spacing-8: 2rem; /* 32px */
+  --ds-spacing-10: 2.5rem; /* 40px */
+  --ds-spacing-12: 3rem; /* 48px */
+  --ds-spacing-16: 4rem; /* 64px */
+  --ds-spacing-20: 5rem; /* 80px */
+  --ds-spacing-24: 6rem; /* 96px */
+
+  /*
+   * 화면 하단에 떠 있는 앱 크롬(AI Dock 등)이 가리는 높이.
+   *
+   * DS 는 그 크롬의 존재를 모르므로 기본값은 0 이고, 앱 셸이 자기 값으로 덮어쓴다
+   * (mvos: `--ds-bottom-chrome-clearance: var(--mvos-ai-dock-clearance)`).
+   * 자기 스크롤 컨테이너를 갖는 비모달 표면(SideSheet 등)은 이 값을 padding-bottom 으로
+   * 소비한다 — 떠 있는 크롬 아래 깔린 정보는 없는 것과 같기 때문이다.
+   *
+   * 모달(Dialog)도 소비한다. backdrop 이 크롬을 덮을 것 같지만, 크롬이 같은 z 층에서
+   * 더 나중에 그려지면 backdrop 위로 올라온다 — 가려진 확정 버튼은 없는 버튼이다.
+   */
+  --ds-bottom-chrome-clearance: 0px;
+}

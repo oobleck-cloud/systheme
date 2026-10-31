@@ -1,0 +1,54 @@
+{
+  "id": "kakao-login-button",
+  "state": {
+    "labelVariant": "'full' | 'short'",
+    "locale": "'ko' | 'en'"
+  },
+  "events": [
+    "onClick"
+  ],
+  "usage": {
+    "when": [
+      "카카오 계정으로 로그인·가입하는 진입점 — 카카오 브랜드 규정(색·심볼·라벨) 고정",
+      "ko/en × full('카카오 로그인')/short('로그인') 라벨"
+    ],
+    "avoid": [
+      "다른 동작(공유·연결 해제)에는 쓰지 않는다 → Button",
+      "브랜드 색·라운드·심볼을 className 으로 바꾸지 않는다 — 카카오 규정 위반",
+      "로그인 화면 밖에서 쓰지 않는다",
+      "label 을 임의 문장으로 바꾸지 않는다 — 규정 라벨 2종만"
+    ],
+    "limits": {
+      "perRegion": 1,
+      "label": "규정 라벨 고정(full/short). 커스텀 label 은 카카오 가이드 허용 문구만",
+      "width": "block(기본) w-full. 인라인은 block=false + px-4"
+    },
+    "states": {
+      "disabled": "opacity-50, 포인터 무시. 로딩 표시 없음 — 리다이렉트 대기는 화면 레벨 Spinner"
+    },
+    "placement": [
+      "로그인 화면 CTA 영역 맨 위, 단독. 다른 로그인 버튼과 같은 폭"
+    ],
+    "examples": [
+      "components-l1-kakaologinbutton--default",
+      "components-l1-kakaologinbutton--label-variants",
+      "components-l1-kakaologinbutton--inline-width"
+    ]
+  },
+  "anatomy": {
+    "id": "root",
+    "intent": "press-action",
+    "emits": "onClick",
+    "children": [
+      {
+        "id": "symbol",
+        "intent": "icon"
+      },
+      {
+        "id": "label",
+        "intent": "value-display",
+        "binding": "labelVariant"
+      }
+    ]
+  }
+}

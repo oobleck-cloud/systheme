@@ -1,0 +1,70 @@
+{
+  "id": "snackbar-region",
+  "primitiveGroup": "notification-banner",
+  "state": {
+    "snacks": "{ id: string; message: string; open?: boolean }[]"
+  },
+  "events": [
+    "onDismiss",
+    "onAction"
+  ],
+  "anatomy": {
+    "id": "root",
+    "intent": "notification-region",
+    "children": [
+      {
+        "id": "list",
+        "intent": "ornament",
+        "iterates": "snacks",
+        "as": "snack",
+        "child": {
+          "id": "snack-item",
+          "intent": "status-message",
+          "binding": "snack",
+          "children": [
+            {
+              "id": "message",
+              "intent": "value-display",
+              "binding": "snack.message"
+            },
+            {
+              "id": "action",
+              "intent": "press-action",
+              "binding": "actionLabel",
+              "emits": "onAction"
+            },
+            {
+              "id": "dismiss",
+              "intent": "dismiss",
+              "writes": "snack.open",
+              "emits": "onDismiss"
+            }
+          ]
+        }
+      }
+    ]
+  },
+  "usage": {
+    "when": [
+      "모바일 현장 셸에서 방금 한 동작의 결과를 아래에서 짧게 알릴 때"
+    ],
+    "avoid": [
+      "운영 콘솔에서는 → Toast(오른쪽 아래)",
+      "사용자가 읽고 결정해야 하면 → Alert/Modal"
+    ],
+    "limits": {
+      "perRegion": 1,
+      "label": "한 문장 + 액션 1개"
+    },
+    "states": {
+      "error": "오류는 자동 닫힘 없이 남긴다"
+    },
+    "placement": [
+      "화면 하단. 하단 크롬(FAB·CTA) 위로 띄운다"
+    ],
+    "examples": [
+      "components-l2-snackbarregion--default",
+      "components-l2-snackbarregion--action-calls-on-action"
+    ]
+  }
+}

@@ -1,0 +1,40 @@
+{
+  "id": "heading",
+  "state": {
+    "level": "1 | 2 | 3 | 4 | 5 | 6"
+  },
+  "events": [],
+  "usage": {
+    "when": [
+      "페이지·섹션 제목. level 이 태그(h1~h6)와 기본 크기/굵기를 정한다",
+      "시각 크기만 바꿀 때 size/weight 오버라이드 — 태그 위계는 유지"
+    ],
+    "avoid": [
+      "본문·캡션에는 쓰지 않는다 → Text",
+      "굵은 글씨가 필요하다고 Heading 을 쓰지 않는다 → Text weight",
+      "level 을 건너뛰지 않는다(h2 다음 h4 금지) — 크기는 size 로"
+    ],
+    "limits": {
+      "perRegion": {
+        "1": 1
+      },
+      "label": "페이지 제목 20자, 섹션 제목 12자. 한 줄"
+    },
+    "states": {
+      "overflow": "truncate 를 주면 말줄임, 아니면 줄바꿈"
+    },
+    "placement": [
+      "헤더 밴드 왼쪽. 오른쪽 액션은 최대 2개",
+      "섹션 제목과 본문 간격은 Stack 이 정한다. 제목에 margin 을 주지 않는다"
+    ],
+    "examples": [
+      "components-display-heading--levels",
+      "components-display-heading--overridden"
+    ]
+  },
+  "anatomy": {
+    "id": "root",
+    "intent": "value-display",
+    "slot": true
+  }
+}

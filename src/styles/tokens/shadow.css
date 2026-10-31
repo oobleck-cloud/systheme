@@ -1,0 +1,27 @@
+:root {
+  /* float — Dropdown, Select, Tooltip, Toast (미세 lift) */
+  --ds-shadow-float: 0 2px 8px oklch(0% 0 0 / 0.05), 0 1px 2px oklch(0% 0 0 / 0.03);
+
+  /*
+   * panel — glass Panel / overlay
+   * 기준: rgba(100, 100, 111, 0.2) 0 7px 29px — 채도·색상만 살짝 블루(265°) 쪽으로.
+   */
+  --ds-shadow-panel: 0 7px 29px oklch(52% 0.04 265 / 0.2);
+
+  /* dialog — Modal, Drawer */
+  --ds-shadow-dialog: 0 8px 24px oklch(0% 0 0 / 0.07), 0 2px 6px oklch(0% 0 0 / 0.04);
+}
+
+.dark {
+  /*
+   * 다크모드 그림자: 순수 검정 대신 옅은 블루(265°) 틴트.
+   * 라이트모드 panel과 같은 색상축(265°)으로 톤을 맞추고,
+   * 낮은 명도·낮은 채도로 깊이감은 유지하되 푸른 기운만 살짝 더한다.
+   */
+  /* float 는 1px 하이라이트 링을 함께 — 다크에서 그림자는 바닥에 묻히므로 윤곽이 분리를 맡는다. */
+  --ds-shadow-float:
+    0 2px 10px oklch(14% 0.06 265 / 0.45), 0 1px 3px oklch(14% 0.06 265 / 0.3),
+    0 0 0 1px oklch(100% 0 0 / 0.08);
+  --ds-shadow-panel: 0 8px 32px oklch(15% 0.07 265 / 0.55), 0 0 0 1px oklch(100% 0 0 / 0.06);
+  --ds-shadow-dialog: 0 16px 48px oklch(13% 0.06 265 / 0.6), 0 4px 12px oklch(13% 0.06 265 / 0.45);
+}

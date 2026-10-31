@@ -1,0 +1,67 @@
+{
+  "id": "sparkline-chart",
+  "state": {
+    "segments": "SparklineSegment[]",
+    "ticks": "AxisTick[]"
+  },
+  "events": [
+    "onPointSelect"
+  ],
+  "anatomy": {
+    "id": "root",
+    "intent": "ornament",
+    "children": [
+      {
+        "id": "series",
+        "intent": "ornament",
+        "iterates": "segments",
+        "as": "seg",
+        "child": {
+          "id": "segment",
+          "intent": "chart-series",
+          "binding": "seg",
+          "children": [
+            {
+              "id": "point-hit",
+              "intent": "press-action",
+              "emits": "onPointSelect"
+            }
+          ]
+        }
+      },
+      {
+        "id": "axis",
+        "intent": "ornament",
+        "iterates": "ticks",
+        "as": "tick",
+        "child": {
+          "id": "tick-label",
+          "intent": "plot-axis",
+          "binding": "tick"
+        }
+      }
+    ]
+  },
+  "usage": {
+    "when": [
+      "표의 셀·카드 안에서 추세만 작게 보일 때(축·라벨 없음)"
+    ],
+    "avoid": [
+      "값을 읽어야 하면 → LineChart",
+      "단독 차트로 쓰지 않는다 — 옆에 현재 값 숫자가 있어야 의미가 생긴다"
+    ],
+    "limits": {
+      "items": "점 60개 이하"
+    },
+    "states": {
+      "empty": "데이터가 없으면 그리지 않는다 — 평평한 선은 0으로 오해된다"
+    },
+    "placement": [
+      "숫자 오른쪽. 높이는 행 높이를 넘지 않는다"
+    ],
+    "examples": [
+      "components-charts-sparklinechart--default",
+      "components-charts-sparklinechart--flat-series"
+    ]
+  }
+}

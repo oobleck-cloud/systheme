@@ -1,0 +1,20 @@
+{
+  "id": "surface",
+  "state": {
+    "kind": "'section' | 'control' | 'connected'",
+    "variant": "'default' | 'subtle' | 'inverse' | 'callout'",
+    "density": "'compact' | 'default' | 'loose'",
+    "calloutSeverity": "'info' | 'success' | 'warning' | 'danger' | 'neutral'"
+  },
+  "events": [],
+  "anatomy": {
+    "id": "root",
+    "intent": "ornament",
+    "binding": "kind",
+    "children": [
+      { "id": "header", "intent": "ornament", "slot": true },
+      { "id": "body", "intent": "ornament", "slot": true },
+      { "id": "footer", "intent": "ornament", "slot": true }
+    ]
+  }
+}

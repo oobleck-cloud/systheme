@@ -1,0 +1,74 @@
+{
+  "id": "number-input",
+  "state": {
+    "value": "number",
+    "min": "number",
+    "max": "number",
+    "step": "number"
+  },
+  "events": [
+    "onChange"
+  ],
+  "anatomy": {
+    "id": "root",
+    "intent": "ornament",
+    "children": [
+      {
+        "id": "decrement",
+        "intent": "stepper",
+        "writes": "value",
+        "children": [
+          {
+            "id": "icon",
+            "intent": "icon",
+            "binding": "@minus"
+          }
+        ]
+      },
+      {
+        "id": "field",
+        "intent": "value-input",
+        "writes": "value",
+        "emits": "onChange"
+      },
+      {
+        "id": "increment",
+        "intent": "stepper",
+        "writes": "value",
+        "children": [
+          {
+            "id": "icon",
+            "intent": "icon",
+            "binding": "@plus"
+          }
+        ]
+      }
+    ]
+  },
+  "usage": {
+    "when": [
+      "수량·횟수·인원처럼 ±step 으로 조정하는 숫자. min·max 가 있으면 경계에서 버튼이 멈춘다",
+      "소수 step(0.25 등) 도 반올림 오차 없이 처리한다"
+    ],
+    "avoid": [
+      "전화번호·우편번호 같은 숫자 문자열에 쓰지 않는다 → PhoneNumberInput / Input",
+      "자릿수 큰 금액 자유 입력(스텝이 무의미)에 쓰지 않는다 → Input inputMode=numeric",
+      "연속 범위 조정에 쓰지 않는다 → Slider"
+    ],
+    "limits": {
+      "label": "단위(원·명) 는 컴포넌트 안에 없다 → 옆 캡션 또는 FormField 라벨"
+    },
+    "states": {
+      "disabled": "입력·양쪽 버튼 모두 비활성. min·max 경계에서는 해당 방향 버튼만 비활성",
+      "error": "variant=error → aria-invalid + error 보더",
+      "empty": "value 없으면 빈 칸. 스텝을 누르면 0 기준으로 시작"
+    },
+    "placement": [
+      "감소 · 입력(가운데 정렬 tabular-nums) · 증가 순서 고정"
+    ],
+    "examples": [
+      "components-l1-numberinput--default",
+      "components-l1-numberinput--with-bounds"
+    ]
+  }
+}

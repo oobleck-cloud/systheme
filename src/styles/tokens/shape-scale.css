@@ -1,0 +1,20 @@
+/*
+ * Shape scale scope — 조형은 컴포넌트 variant 가 아니라 토큰 사다리 재정의로 바꾼다.
+ *
+ * DS 의 곡률 원칙은 "위계가 형태에 의미를 실어 나른다"이고, 그 위계는 칸의 **순서**다.
+ * 모바일 현장(M3E expressive)은 순서는 그대로 두고 절대값만 한 단씩 올린다:
+ * button/input md 8→12 · card lg 12→16 · large card xl 16→20 · dialog 2xl 20→28.
+ * 컴포넌트는 rounded-md/lg/… 유틸리티를 그대로 쓰므로 이 스코프 아래에서
+ * 123개 컴포넌트가 무수정으로 모바일 조형을 얻는다.
+ *
+ * 사용: 모바일 셸 루트에 data-shape="expressive" (density·surface 스코프와 직교).
+ */
+/* :root[…]로 특이도(0,2,0) 확보 — :root 토큰 선언과의 소스 순서 싸움을 끝낸다.
+ * 중첩 스코프(프레임 등)도 지원하도록 단독 속성 선택자를 병기한다. */
+:root[data-shape='expressive'],
+[data-shape='expressive'] {
+  --ds-radius-md: 0.75rem; /* 12px — button, input, chip */
+  --ds-radius-lg: 1rem; /* 16px — card, select, panel */
+  --ds-radius-xl: 1.25rem; /* 20px — modal inner, large card */
+  --ds-radius-2xl: 1.75rem; /* 28px — dialog, sheet (M3 extra-large) */
+}

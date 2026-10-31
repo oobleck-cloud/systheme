@@ -1,0 +1,70 @@
+{
+  "id": "resizable-split-pane",
+  "state": {
+    "leftRatio": "number",
+    "isDragging": "boolean"
+  },
+  "events": [
+    "onSplitChange",
+    "onDragStart",
+    "onDragEnd"
+  ],
+  "anatomy": {
+    "id": "root",
+    "intent": "ornament",
+    "children": [
+      {
+        "id": "leading",
+        "intent": "ornament",
+        "slot": true
+      },
+      {
+        "id": "splitter",
+        "intent": "ornament",
+        "children": [
+          {
+            "id": "grip",
+            "intent": "press-action",
+            "emits": "onDragStart"
+          },
+          {
+            "id": "commit",
+            "intent": "press-action",
+            "emits": "onDragEnd"
+          }
+        ]
+      },
+      {
+        "id": "trailing",
+        "intent": "ornament",
+        "slot": true
+      }
+    ]
+  },
+  "usage": {
+    "when": [
+      "좌우 두 패널(목록 | 상세, 편집 | 미리보기) 의 비율을 사용자가 드래그·키보드(←→ Home End) 로 바꿔야 할 때. 비율 0.1~0.9",
+      "children 튜플 [leading, trailing] 또는 leading/trailing 슬롯"
+    ],
+    "avoid": [
+      "비율이 고정이면 쓰지 않는다 → layout Grid / Stack",
+      "3분할 이상으로 중첩하지 않는다 → 워크스페이스 Dockview 패널",
+      "모바일(<md) 화면에 쓰지 않는다 — 세로로 쌓이고 스플리터가 의미를 잃는다"
+    ],
+    "limits": {
+      "perRegion": 1,
+      "width": "각 패널 min-h-24. md 미만은 flex-col 로 쌓인다"
+    },
+    "states": {
+      "overflow": "각 패널은 overflow-hidden — 스크롤은 패널 안 콘텐츠가 가진다",
+      "disabled": "없다"
+    },
+    "placement": [
+      "스플리터는 role=separator, 드래그 중 isDragging 상태로 강조"
+    ],
+    "examples": [
+      "components-l3-resizablesplitpane--default",
+      "components-l3-resizablesplitpane--even-split"
+    ]
+  }
+}

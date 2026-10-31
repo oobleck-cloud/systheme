@@ -1,0 +1,79 @@
+{
+  "id": "alert",
+  "state": {
+    "severity": "'info' | 'success' | 'warning' | 'danger' | 'neutral'",
+    "title": "string",
+    "description": "string",
+    "open": "boolean"
+  },
+  "events": [
+    "onDismiss"
+  ],
+  "anatomy": {
+    "id": "root",
+    "intent": "status-message",
+    "binding": "severity",
+    "children": [
+      {
+        "id": "icon",
+        "intent": "severity-indicator",
+        "binding": "severity"
+      },
+      {
+        "id": "body",
+        "intent": "ornament",
+        "children": [
+          {
+            "id": "title",
+            "intent": "value-display",
+            "binding": "title",
+            "slot": true
+          },
+          {
+            "id": "description",
+            "intent": "value-display",
+            "binding": "description",
+            "slot": true
+          }
+        ]
+      },
+      {
+        "id": "action",
+        "intent": "press-action",
+        "emits": "onAction",
+        "slot": true
+      },
+      {
+        "id": "dismiss",
+        "intent": "dismiss",
+        "writes": "open",
+        "emits": "onDismiss"
+      }
+    ]
+  },
+  "usage": {
+    "when": [
+      "화면 안 특정 구획에 남아 있어야 하는 상태 메시지(검증 실패·안내·결과)",
+      "행동 버튼이 붙는 메시지(action 슬롯)"
+    ],
+    "avoid": [
+      "일시적 피드백에 쓰지 않는다 → Toast/Snackbar",
+      "페이지 전체 오류에 쓰지 않는다 → EmptyState(오류)",
+      "본문 문장 안에 링크 문구를 넣지 않는다 → 문장 + action 버튼"
+    ],
+    "limits": {
+      "perRegion": 1,
+      "label": "제목 12자, 본문 2줄"
+    },
+    "states": {
+      "overflow": "본문은 줄바꿈, 제목은 한 줄"
+    },
+    "placement": [
+      "관련 구획의 맨 위. 폼이면 제출 버튼 위가 아니라 폼 상단"
+    ],
+    "examples": [
+      "components-l1-alert--severities",
+      "screens/lms-quiz"
+    ]
+  }
+}

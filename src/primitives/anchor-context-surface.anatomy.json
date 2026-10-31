@@ -1,0 +1,32 @@
+{
+  "id": "anchor-context-surface",
+  "state": {
+    "open": "boolean"
+  },
+  "events": ["onOpenChange"],
+  "anatomy": {
+    "id": "root",
+    "intent": "ornament",
+    "children": [
+      {
+        "id": "anchor",
+        "intent": "disclosure",
+        "writes": "open",
+        "emits": "onOpenChange",
+        "children": [
+          {
+            "id": "surface",
+            "intent": "ornament",
+            "slot": true
+          }
+        ]
+      },
+      {
+        "id": "panel",
+        "intent": "overlay-surface",
+        "binding": "open",
+        "slot": true
+      }
+    ]
+  }
+}

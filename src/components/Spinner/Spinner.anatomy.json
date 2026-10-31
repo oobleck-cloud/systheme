@@ -1,0 +1,40 @@
+{
+  "id": "spinner",
+  "state": {
+    "active": "boolean",
+    "accessibilityLabel": "string"
+  },
+  "events": [],
+  "anatomy": {
+    "id": "root",
+    "intent": "state-indicator",
+    "binding": "active",
+    "children": [
+      {
+        "id": "label",
+        "intent": "value-display",
+        "binding": "accessibilityLabel",
+        "slot": true
+      }
+    ]
+  },
+  "usage": {
+    "when": [
+      "끝을 모르는 짧은 대기(버튼 안, 패널 전환)"
+    ],
+    "avoid": [
+      "레이아웃이 정해진 목록·카드 대기에는 → Skeleton",
+      "3초를 넘길 작업에 단독으로 쓰지 않는다 — 무엇을 기다리는지 문구를 함께"
+    ],
+    "limits": {
+      "perRegion": 1
+    },
+    "states": {
+      "loading": "버튼 안에서는 라벨을 유지하고 폭을 고정한다"
+    },
+    "examples": [
+      "components-l1-spinner--default",
+      "components-l1-spinner--inactive"
+    ]
+  }
+}

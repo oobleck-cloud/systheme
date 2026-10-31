@@ -1,0 +1,63 @@
+{
+  "id": "box-plot",
+  "state": {
+    "data": "BoxPlotGroup[]"
+  },
+  "events": [],
+  "anatomy": {
+    "id": "root",
+    "intent": "ornament",
+    "children": [
+      {
+        "id": "x-axis",
+        "intent": "plot-axis",
+        "iterates": "groups",
+        "as": "group",
+        "child": {
+          "id": "tick-label",
+          "intent": "value-display"
+        }
+      },
+      {
+        "id": "y-axis",
+        "intent": "plot-axis",
+        "iterates": "yTicks",
+        "as": "tick",
+        "child": {
+          "id": "tick-label",
+          "intent": "value-display"
+        }
+      },
+      {
+        "id": "series",
+        "intent": "ornament",
+        "iterates": "data",
+        "as": "group",
+        "child": {
+          "id": "segment",
+          "intent": "chart-series",
+          "binding": "group"
+        }
+      }
+    ]
+  },
+  "usage": {
+    "when": [
+      "분포의 중앙값·사분위·이상치를 그룹끼리 비교할 때(소요시간·금액 분포)"
+    ],
+    "avoid": [
+      "표본이 적으면 쓰지 않는다 → ScatterPlot 으로 점을 직접 보인다",
+      "일반 사용자 화면에 쓰지 않는다 — 읽는 법을 안다는 전제가 필요하다"
+    ],
+    "limits": {
+      "items": "그룹 8개 이하"
+    },
+    "states": {
+      "empty": "ChartFrame 의 빈 상태 문구를 쓴다"
+    },
+    "examples": [
+      "components-charts-boxplot--default",
+      "components-charts-boxplot--empty"
+    ]
+  }
+}

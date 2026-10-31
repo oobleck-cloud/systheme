@@ -1,0 +1,18 @@
+{
+  "id": "box",
+  "state": {
+    "scrollHint": "boolean"
+  },
+  "anatomy": {
+    "id": "root",
+    "intent": "ornament",
+    "slot": true,
+    "children": [
+      {
+        "id": "scroll-hint",
+        "intent": "ornament",
+        "binding": "scrollHint"
+      }
+    ]
+  }
+}

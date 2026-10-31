@@ -1,0 +1,36 @@
+{
+  "id": "timetable-appointment-preview",
+  "state": {
+    "label": "string",
+    "resourceLabel": "string",
+    "startMinute": "number",
+    "endMinute": "number"
+  },
+  "events": [],
+  "anatomy": {
+    "id": "root",
+    "intent": "overlay-surface",
+    "children": [
+      {
+        "id": "preview-title",
+        "intent": "value-display",
+        "binding": "label"
+      },
+      {
+        "id": "preview-resource",
+        "intent": "value-display",
+        "binding": "resourceLabel"
+      },
+      {
+        "id": "preview-time-range",
+        "intent": "value-display",
+        "binding": "@timetable-appointment-time-range"
+      },
+      {
+        "id": "preview-copy-hint",
+        "intent": "ornament",
+        "binding": "@label-click-to-copy"
+      }
+    ]
+  }
+}

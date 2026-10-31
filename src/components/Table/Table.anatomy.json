@@ -1,0 +1,74 @@
+{
+  "id": "table",
+  "state": {
+    "loading": "boolean",
+    "chrome": "'panel' | 'flush'"
+  },
+  "events": [],
+  "anatomy": {
+    "id": "root",
+    "intent": "ornament",
+    "children": [
+      {
+        "id": "loading-scrim",
+        "intent": "overlay-surface",
+        "binding": "loading",
+        "children": [
+          {
+            "id": "loading-indicator",
+            "intent": "state-indicator",
+            "binding": "loading"
+          }
+        ]
+      },
+      {
+        "id": "empty-slot",
+        "intent": "ornament",
+        "slot": true
+      },
+      {
+        "id": "scroll-region",
+        "intent": "ornament",
+        "children": [
+          {
+            "id": "surface",
+            "intent": "ornament",
+            "children": [
+              {
+                "id": "table-frame",
+                "intent": "ornament",
+                "slot": true
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "usage": {
+    "when": [
+      "같은 형태의 행이 5개 이상이고 열 비교가 필요할 때"
+    ],
+    "avoid": [
+      "행이 4개 이하면 목록(RichList/divide-y 행)",
+      "카드 그리드로 표를 흉내 내지 않는다",
+      "비활성·종료 행을 기본 시야에 두지 않는다 → 필터로"
+    ],
+    "limits": {
+      "items": "기본 페이지 50행",
+      "label": "셀은 한 줄, 긴 텍스트는 말줄임 + 툴팁. 숫자는 오른쪽 정렬 tabular-nums"
+    },
+    "states": {
+      "loading": "행 Skeleton",
+      "empty": "EmptyState 를 표 안에",
+      "error": "Alert 를 표 위에"
+    },
+    "placement": [
+      "벌크 액션 바는 하단 고정 + AI Dock 여백"
+    ],
+    "examples": [
+      "components-l3-pivottable--default",
+      "screens/orders-list"
+    ]
+  }
+}

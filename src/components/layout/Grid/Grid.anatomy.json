@@ -1,0 +1,26 @@
+{
+  "id": "grid",
+  "state": {},
+  "events": [],
+  "anatomy": {
+    "id": "root",
+    "intent": "ornament",
+    "slot": true
+  },
+  "usage": {
+    "when": [
+      "같은 크기 카드·타일을 열로 배치할 때"
+    ],
+    "avoid": [
+      "행마다 폭이 다르면 → Stack",
+      "표 데이터에 쓰지 않는다 → Table"
+    ],
+    "placement": [
+      "열 수는 반응형으로. 마지막 줄에 한 칸만 남는 배치를 피한다"
+    ],
+    "examples": [
+      "components-layout-grid--three-columns",
+      "components-layout-grid--responsive"
+    ]
+  }
+}

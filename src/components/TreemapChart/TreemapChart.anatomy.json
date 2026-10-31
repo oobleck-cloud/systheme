@@ -1,0 +1,48 @@
+{
+  "id": "treemap-chart",
+  "state": {
+    "data": "HierarchyDatum",
+    "labelThreshold": "number"
+  },
+  "events": [
+    "onCellClick"
+  ],
+  "anatomy": {
+    "id": "root",
+    "intent": "ornament",
+    "children": [
+      {
+        "id": "series",
+        "intent": "ornament",
+        "iterates": "leaves",
+        "as": "leaf",
+        "child": {
+          "id": "segment",
+          "intent": "chart-series",
+          "binding": "leaf",
+          "emits": "onCellClick"
+        }
+      }
+    ]
+  },
+  "usage": {
+    "when": [
+      "부분-전체를 면적으로 보되 항목이 많아 파이가 불가능할 때"
+    ],
+    "avoid": [
+      "항목이 6개 이하면 → PieChart 또는 BarChart",
+      "면적으로 정확한 비교를 요구하지 않는다 → BarChart",
+      "음수 값에 쓰지 않는다"
+    ],
+    "limits": {
+      "items": "20개 이하"
+    },
+    "states": {
+      "empty": "ChartFrame 의 빈 상태 문구를 쓴다"
+    },
+    "examples": [
+      "components-charts-treemapchart--default",
+      "components-charts-treemapchart--empty"
+    ]
+  }
+}

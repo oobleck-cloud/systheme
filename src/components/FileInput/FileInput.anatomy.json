@@ -1,0 +1,104 @@
+{
+  "id": "file-input",
+  "state": {
+    "files": "File[]",
+    "dragOver": "boolean",
+    "multiple": "boolean"
+  },
+  "events": [
+    "onChange"
+  ],
+  "usage": {
+    "when": [
+      "사용자가 파일을 드래그하거나 골라 올릴 때 — 드롭존 + 선택 파일 목록(이름·크기·제거)",
+      "accept·maxSize 로 형식·크기를 미리 알릴 때 — 드롭존 안에 자동 표기"
+    ],
+    "avoid": [
+      "카메라 촬영에는 쓰지 않는다 → CameraCapture",
+      "다단계 임포트(파일 → 매핑 → 확인)에는 단독으로 쓰지 않는다 → ImportWizardFrame 의 step-body 안에",
+      "업로드 진행률을 이 안에 넣지 않는다 → 목록 아래 Progress",
+      "이미지 한 장 교체(아바타)에는 쓰지 않는다 → ImageButton + sr-only input"
+    ],
+    "limits": {
+      "items": "multiple=false 면 1개(새 선택이 교체). multiple 은 누적 — 상한은 호출부가 10개로 둔다",
+      "label": "placeholder 는 안내 한 줄 + 형식·최대 크기 각 한 줄. 문장 금지"
+    },
+    "states": {
+      "disabled": "드롭존 opacity-50 + cursor-not-allowed. 드롭·클릭 무시",
+      "error": "maxSize 초과 파일은 걸러지고 파일별 오류가 role=alert 목록으로 드롭존 아래. 서버 오류는 FormField error",
+      "empty": "드롭존만 보인다. 목록은 파일이 있을 때만",
+      "overflow": "파일명은 한 줄 말줄임, 크기는 tabular-nums 오른쪽"
+    },
+    "placement": [
+      "라벨은 위(FormField). 드롭존 → 크기 오류 → 파일 목록 순",
+      "폼 안에서 w-full"
+    ],
+    "examples": [
+      "components-l1-fileinput--default",
+      "components-l1-fileinput--multiple",
+      "components-l1-fileinput--restricted-types",
+      "components-l1-fileinput--disabled"
+    ]
+  },
+  "anatomy": {
+    "id": "root",
+    "intent": "ornament",
+    "children": [
+      {
+        "id": "drop-zone",
+        "intent": "value-input",
+        "writes": "files",
+        "emits": "onChange",
+        "children": [
+          {
+            "id": "upload-icon",
+            "intent": "icon",
+            "binding": "@upload"
+          },
+          {
+            "id": "prompt",
+            "intent": "ornament",
+            "slot": true
+          },
+          {
+            "id": "drag-indicator",
+            "intent": "state-indicator",
+            "binding": "dragOver"
+          }
+        ]
+      },
+      {
+        "id": "list",
+        "iterates": "files",
+        "as": "file",
+        "child": {
+          "id": "item",
+          "intent": "ornament",
+          "children": [
+            {
+              "id": "file-icon",
+              "intent": "icon",
+              "binding": "@file"
+            },
+            {
+              "id": "file-name",
+              "intent": "value-display",
+              "binding": "file.name"
+            },
+            {
+              "id": "file-size",
+              "intent": "value-display",
+              "binding": "file.size"
+            },
+            {
+              "id": "remove",
+              "intent": "dismiss",
+              "writes": "files",
+              "emits": "onChange"
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

@@ -1,0 +1,24 @@
+{
+  "id": "table-stacked-text",
+  "state": {
+    "primary": "React.ReactNode",
+    "secondary": "React.ReactNode"
+  },
+  "events": [],
+  "anatomy": {
+    "id": "root",
+    "intent": "ornament",
+    "children": [
+      {
+        "id": "primary",
+        "intent": "value-display",
+        "binding": "primary"
+      },
+      {
+        "id": "secondary",
+        "intent": "value-display",
+        "binding": "secondary"
+      }
+    ]
+  }
+}

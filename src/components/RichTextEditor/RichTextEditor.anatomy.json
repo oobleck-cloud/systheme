@@ -1,0 +1,106 @@
+{
+  "id": "rich-text-editor",
+  "state": {
+    "value": "string",
+    "linkEditorOpen": "boolean",
+    "linkDraftUrl": "string",
+    "mentionQuery": "string"
+  },
+  "events": [
+    "onChange",
+    "onMentionQuery"
+  ],
+  "anatomy": {
+    "id": "root",
+    "intent": "ornament",
+    "children": [
+      {
+        "id": "toolbar",
+        "intent": "ornament",
+        "children": [
+          {
+            "id": "bold",
+            "intent": "press-action"
+          },
+          {
+            "id": "italic",
+            "intent": "press-action"
+          },
+          {
+            "id": "bullet-list",
+            "intent": "press-action"
+          },
+          {
+            "id": "numbered-list",
+            "intent": "press-action"
+          },
+          {
+            "id": "open-link-editor",
+            "intent": "disclosure",
+            "writes": "linkEditorOpen"
+          }
+        ]
+      },
+      {
+        "id": "body",
+        "intent": "value-input",
+        "writes": "value",
+        "emits": "onChange"
+      },
+      {
+        "id": "link-overlay",
+        "intent": "overlay-surface",
+        "binding": "linkEditorOpen",
+        "children": [
+          {
+            "id": "link-url",
+            "intent": "value-input",
+            "writes": "linkDraftUrl"
+          },
+          {
+            "id": "apply-link",
+            "intent": "press-action"
+          },
+          {
+            "id": "close-link",
+            "intent": "dismiss",
+            "writes": "linkEditorOpen"
+          }
+        ]
+      },
+      {
+        "id": "mention-query",
+        "intent": "search-input",
+        "writes": "mentionQuery",
+        "emits": "onMentionQuery"
+      }
+    ]
+  },
+  "usage": {
+    "when": [
+      "굵게·기울임·글머리·번호 목록·링크·멘션 정도의 서식이 필요한 본문(메모·공지). 값은 HTML 문자열",
+      "멘션 picker 를 붙이면 onMentionQuery 로 검색어를 받는다"
+    ],
+    "avoid": [
+      "서식 없는 여러 줄이면 → Textarea",
+      "한 줄이면 → Input",
+      "마크다운·코드 원문 편집이면 → Textarea",
+      "받은 HTML 을 그대로 렌더하지 않는다 — 저장·표시 전 새니타이즈는 소비자 몫"
+    ],
+    "limits": {
+      "items": "도구 5개(굵게·기울임·글머리·번호·링크) + 멘션. 툴바 확장 슬롯 없다"
+    },
+    "states": {
+      "disabled": "없다(prop 없음) → 읽기 전용은 HTML 렌더러로 보여 준다",
+      "error": "없다 → FormField helper 를 바깥에",
+      "empty": "본문 placeholder 없다 → 라벨·캡션으로 안내"
+    },
+    "placement": [
+      "툴바 위, 본문 아래. 링크 편집기는 툴바 아래 인라인으로 열린다"
+    ],
+    "examples": [
+      "components-l3-richtexteditor--default",
+      "components-l3-richtexteditor--anatomy-link-overlay"
+    ]
+  }
+}

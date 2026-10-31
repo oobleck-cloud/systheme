@@ -1,0 +1,27 @@
+{
+  "id": "rich-list-row",
+  "state": {
+    "item": "RichListItem",
+    "selected": "boolean",
+    "selectionMode": "'none' | 'single' | 'multiple'"
+  },
+  "events": ["onRowActivate", "onSelectToggle"],
+  "anatomy": {
+    "id": "root",
+    "intent": "select-option",
+    "binding": "item",
+    "children": [
+      {
+        "id": "row-select",
+        "intent": "toggle",
+        "binding": "selected",
+        "emits": "onSelectToggle"
+      },
+      {
+        "id": "row-activate",
+        "intent": "press-action",
+        "emits": "onRowActivate"
+      }
+    ]
+  }
+}

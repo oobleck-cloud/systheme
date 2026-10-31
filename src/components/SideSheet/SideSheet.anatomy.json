@@ -1,0 +1,87 @@
+{
+  "id": "side-sheet",
+  "primitiveGroup": "inline-region",
+  "state": {
+    "open": "boolean",
+    "side": "'left' | 'right'",
+    "width": "number",
+    "hasHeader": "boolean",
+    "resizable": "boolean"
+  },
+  "events": [
+    "onOpenChange",
+    "onWidthChange"
+  ],
+  "anatomy": {
+    "id": "root",
+    "intent": "collapsible-region",
+    "binding": "open",
+    "children": [
+      {
+        "id": "resize-handle",
+        "intent": "stepper",
+        "binding": "resizable",
+        "writes": "width",
+        "emits": "onWidthChange"
+      },
+      {
+        "id": "panel",
+        "intent": "ornament",
+        "children": [
+          {
+            "id": "header",
+            "intent": "ornament",
+            "binding": "hasHeader",
+            "children": [
+              {
+                "id": "title",
+                "intent": "value-display",
+                "slot": true
+              },
+              {
+                "id": "close",
+                "intent": "dismiss",
+                "writes": "open",
+                "emits": "onOpenChange"
+              }
+            ]
+          },
+          {
+            "id": "body",
+            "intent": "ornament",
+            "slot": true
+          },
+          {
+            "id": "footer",
+            "intent": "ornament",
+            "slot": true
+          }
+        ]
+      }
+    ]
+  },
+  "usage": {
+    "when": [
+      "본문을 보면서 옆에 두고 읽는 참고 정보(고객 이력·상담 근거)",
+      "여는 쪽이 prominence(focus 760px 2단 / reference 420px 1단)를 정한다"
+    ],
+    "avoid": [
+      "결정을 요구하는 대화에 쓰지 않는다 → Modal",
+      "시트 안에서 다시 시트를 열지 않는다"
+    ],
+    "limits": {
+      "perRegion": 1,
+      "width": "reference 420 / focus 760, 사용자가 끌어 바꿀 수 있다"
+    },
+    "states": {
+      "loading": "본문 Skeleton",
+      "empty": "EmptyState"
+    },
+    "placement": [
+      "오른쪽 고정. 하단 크롬(AI Dock) 여백은 시트가 스스로 소비한다"
+    ],
+    "examples": [
+      "widgets/customer-history"
+    ]
+  }
+}

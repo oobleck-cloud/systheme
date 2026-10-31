@@ -1,0 +1,75 @@
+{
+  "id": "panel-nav-bar",
+  "primitiveGroup": "panel-navigation",
+  "state": {
+    "canGoBack": "boolean",
+    "canGoForward": "boolean"
+  },
+  "events": [
+    "onGoBack",
+    "onGoForward"
+  ],
+  "anatomy": {
+    "id": "root",
+    "intent": "ornament",
+    "children": [
+      {
+        "id": "back",
+        "intent": "stepper",
+        "binding": "canGoBack",
+        "emits": "onGoBack",
+        "children": [
+          {
+            "id": "back-icon",
+            "intent": "icon",
+            "binding": "@chevron-left"
+          }
+        ]
+      },
+      {
+        "id": "forward",
+        "intent": "stepper",
+        "binding": "canGoForward",
+        "emits": "onGoForward",
+        "children": [
+          {
+            "id": "forward-icon",
+            "intent": "icon",
+            "binding": "@chevron-right"
+          }
+        ]
+      },
+      {
+        "id": "end",
+        "intent": "ornament"
+      }
+    ]
+  },
+  "usage": {
+    "when": [
+      "패널(Dockview 탭·사이드 패널) 안에서 히스토리 뒤로·앞으로(Alt+←/→) 를 제공할 때",
+      "endContent 로 패널 우측 액션(IconButton·SearchField) 을 한 줄에 붙일 때"
+    ],
+    "avoid": [
+      "앱 전역 내비에 쓰지 않는다 → Sidebar / TabBar",
+      "단계 이동에 쓰지 않는다 → Steps",
+      "페이지 번호 이동에 쓰지 않는다 → Pagination",
+      "히스토리가 없는 패널에 빈 바를 두지 않는다 — 뒤로·앞으로가 둘 다 항상 비활성이면 뺀다"
+    ],
+    "limits": {
+      "perRegion": 1,
+      "items": "endContent 는 한 줄. IconButton 1~2개 또는 SearchField 1개",
+      "width": "높이 h-12(default) / h-10(compact)"
+    },
+    "states": {
+      "disabled": "canGoBack·canGoForward 가 false 인 쪽 버튼만 비활성"
+    },
+    "placement": [
+      "패널 콘텐츠 위, border-b 로 나눈다. 뒤로·앞으로 왼쪽, endContent 오른쪽(ml-auto)"
+    ],
+    "examples": [
+      "components-l1-panelnavbar--default",
+      "components-l1-panelnavbar--with-end-content"
+    ]
+  }
+}

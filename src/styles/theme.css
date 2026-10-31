@@ -1,0 +1,202 @@
+/*
+ * Tailwind v4 theme mapping.
+ * @theme inline: 값을 복사하지 않고 CSS 변수 참조를 유지.
+ * tokens/ 레이어만 교체하면 Tailwind 유틸리티도 자동 반영됨.
+ *
+ * 네이밍 규칙:
+ *  - 상태 토큰 : --color-{state}-{role}   → bg/text/border-{state}-{role}
+ *  - 텍스트    : --color-fg-{variant}     → text-fg-{variant}          (text-text-* 중복 회피)
+ *  - 배경      : --color-background / --color-surface 등 의미 있는 단어 사용
+ *  - 테두리    : --color-border-{variant} → border-border-{variant}
+ *  - 브랜드    : --color-brand-{scale}    → bg/text/border-brand-{scale}
+ */
+@theme inline {
+  /* ── Interactive ─────────────────────────────────────────────── */
+  --color-primary: var(--ds-color-primary);
+  --color-primary-hover: var(--ds-color-primary-hover);
+  --color-primary-fg: var(--ds-color-primary-fg);
+
+  --color-secondary: var(--ds-color-secondary);
+  --color-secondary-hover: var(--ds-color-secondary-hover);
+  --color-secondary-fg: var(--ds-color-secondary-fg);
+
+  --color-destructive: var(--ds-color-destructive);
+  --color-destructive-hover: var(--ds-color-destructive-hover);
+  --color-destructive-fg: var(--ds-color-destructive-fg);
+
+  /* ── State ───────────────────────────────────────────────────── */
+  --color-success-primary: var(--ds-color-success-primary);
+  --color-success-subtle: var(--ds-color-success-subtle);
+  --color-success-text: var(--ds-color-success-text);
+  --color-success-border: var(--ds-color-success-border);
+
+  --color-warning-primary: var(--ds-color-warning-primary);
+  --color-warning-subtle: var(--ds-color-warning-subtle);
+  --color-warning-text: var(--ds-color-warning-text);
+  --color-warning-border: var(--ds-color-warning-border);
+
+  --color-error-primary: var(--ds-color-error-primary);
+  --color-error-subtle: var(--ds-color-error-subtle);
+  --color-error-text: var(--ds-color-error-text);
+  --color-error-border: var(--ds-color-error-border);
+
+  --color-info-primary: var(--ds-color-info-primary);
+  --color-info-subtle: var(--ds-color-info-subtle);
+  --color-info-text: var(--ds-color-info-text);
+  --color-info-border: var(--ds-color-info-border);
+
+  --color-disabled-primary: var(--ds-color-disabled-primary);
+  --color-disabled-subtle: var(--ds-color-disabled-subtle);
+  --color-disabled-text: var(--ds-color-disabled-text);
+  --color-disabled-border: var(--ds-color-disabled-border);
+
+  /* ── Text (fg-* 로 매핑해 text-fg-* 유틸리티 생성) ──────────── */
+  --color-primary-container: var(--ds-color-primary-container);
+  --color-primary-container-hover: var(--ds-color-primary-container-hover);
+  --color-on-primary-container: var(--ds-color-on-primary-container);
+  --color-disabled-container: var(--ds-color-disabled-container);
+  --color-on-disabled: var(--ds-color-on-disabled);
+
+  --color-fg: var(--ds-color-text-default);
+  --color-fg-subtle: var(--ds-color-text-subtle);
+  --color-fg-muted: var(--ds-color-text-muted);
+  --color-fg-disabled: var(--ds-color-text-disabled);
+  --color-fg-inverse: var(--ds-color-text-inverse);
+  --color-fg-brand: var(--ds-color-text-brand);
+
+  /* ── Background ──────────────────────────────────────────────── */
+  /** recessed 페이지 캔버스 — `bg-canvas` 유틸리티. 흰 카드가 뜨도록 한 단계 눌러둔 면 */
+  --color-canvas: var(--ds-color-bg-canvas);
+  --color-background: var(--ds-color-bg-default);
+  --color-surface: var(--ds-color-bg-surface);
+  --color-container-low: var(--ds-color-bg-container-low);
+  --color-container: var(--ds-color-bg-container);
+  --color-container-high: var(--ds-color-bg-container-high);
+  --color-overlay: var(--ds-color-bg-overlay);
+  /** 떠 있는 면(Popover/Menu/Select/Tooltip) — `bg-float`. 다크에서 카드보다 한 단 밝다 */
+  --color-float: var(--ds-color-bg-float);
+  /** shadcn-style `muted` — DS에 별칭 없을 때 `bg-muted`가 깨지지 않도록 overlay와 동일 소스 */
+  --color-muted: var(--ds-color-bg-overlay);
+  --color-inverse: var(--ds-color-bg-inverse);
+  /** scrim — Modal/Drawer 딤(알파 내장). `bg-scrim` 유틸리티 생성 */
+  --color-scrim: var(--ds-color-scrim);
+
+  /* ── Border ──────────────────────────────────────────────────── */
+  --color-border-subtle: var(--ds-color-border-subtle);
+  --color-border: var(--ds-color-border-default);
+  --color-border-strong: var(--ds-color-border-strong);
+  --color-ring: var(--ds-color-border-focus);
+
+  /* ── Motion — easing ─────────────────────────────────────────── */
+  --ease-standard: var(--ds-ease-standard);
+  --ease-expressive: var(--ds-ease-expressive);
+  --ease-snappy: var(--ds-ease-snappy);
+
+  /* ── Motion — duration (effects: 비공간) ─────────────────────── */
+  --duration-effects-fast: var(--ds-duration-effects-fast);
+  --duration-effects-default: var(--ds-duration-effects-default);
+  --duration-effects-slow: var(--ds-duration-effects-slow);
+
+  /* ── Motion — duration (spatial: 위치·크기·레이아웃) ────────── */
+  --duration-spatial-fast: var(--ds-duration-spatial-fast);
+  --duration-spatial-default: var(--ds-duration-spatial-default);
+  --duration-spatial-slow: var(--ds-duration-spatial-slow);
+
+  /* ── Shadow (glass elevation model) ─────────────────────────── */
+  /*
+   * shadow-float  : Dropdown, Select, Tooltip, Toast
+   * shadow-panel  : Panel / glass overlay
+   * shadow-dialog : Modal, Drawer
+   * 정의: tokens/shadow.css — Storybook Foundations/Shadow
+   */
+  --shadow-float: var(--ds-shadow-float);
+  --shadow-panel: var(--ds-shadow-panel);
+  --shadow-dialog: var(--ds-shadow-dialog);
+
+  /* ── Brand spectrum ──────────────────────────────────────────── */
+  --color-brand-50: var(--ds-color-brand-50);
+  --color-brand-100: var(--ds-color-brand-100);
+  --color-brand-200: var(--ds-color-brand-200);
+  --color-brand-300: var(--ds-color-brand-300);
+  --color-brand-400: var(--ds-color-brand-400);
+  --color-brand-500: var(--ds-color-brand-500);
+  --color-brand-600: var(--ds-color-brand-600);
+  --color-brand-700: var(--ds-color-brand-700);
+  --color-brand-800: var(--ds-color-brand-800);
+  --color-brand-900: var(--ds-color-brand-900);
+
+  /* ── Tag palette (노션식 칩) → bg-tag-{c}-subtle / text-tag-{c}-text ── */
+  --color-tag-gray-subtle: var(--ds-color-tag-gray-subtle);
+  --color-tag-gray-text: var(--ds-color-tag-gray-text);
+  --color-tag-red-subtle: var(--ds-color-tag-red-subtle);
+  --color-tag-red-text: var(--ds-color-tag-red-text);
+  --color-tag-orange-subtle: var(--ds-color-tag-orange-subtle);
+  --color-tag-orange-text: var(--ds-color-tag-orange-text);
+  --color-tag-green-subtle: var(--ds-color-tag-green-subtle);
+  --color-tag-green-text: var(--ds-color-tag-green-text);
+  --color-tag-teal-subtle: var(--ds-color-tag-teal-subtle);
+  --color-tag-teal-text: var(--ds-color-tag-teal-text);
+  --color-tag-blue-subtle: var(--ds-color-tag-blue-subtle);
+  --color-tag-blue-text: var(--ds-color-tag-blue-text);
+  --color-tag-purple-subtle: var(--ds-color-tag-purple-subtle);
+  --color-tag-purple-text: var(--ds-color-tag-purple-text);
+  --color-tag-gray-dot: var(--ds-color-tag-gray-dot);
+  --color-tag-red-dot: var(--ds-color-tag-red-dot);
+  --color-tag-orange-dot: var(--ds-color-tag-orange-dot);
+  --color-tag-green-dot: var(--ds-color-tag-green-dot);
+  --color-tag-teal-dot: var(--ds-color-tag-teal-dot);
+  --color-tag-blue-dot: var(--ds-color-tag-blue-dot);
+  --color-tag-purple-dot: var(--ds-color-tag-purple-dot);
+
+  /* ── Typography ──────────────────────────────────────────────── */
+  --font-family-sans: var(--ds-font-sans);
+  --font-family-mono: var(--ds-font-mono);
+  --font-family-emoji: var(--ds-font-emoji);
+
+  --text-xs: var(--ds-font-size-xs);
+  --text-sm: var(--ds-font-size-sm);
+  --text-md: var(--ds-font-size-md);
+  --text-lg: var(--ds-font-size-lg);
+  --text-xl: var(--ds-font-size-xl);
+  --text-2xl: var(--ds-font-size-2xl);
+  --text-3xl: var(--ds-font-size-3xl);
+  --text-4xl: var(--ds-font-size-4xl);
+
+  --font-weight-regular: var(--ds-font-weight-regular);
+  --font-weight-medium: var(--ds-font-weight-medium);
+  --font-weight-semibold: var(--ds-font-weight-semibold);
+  --font-weight-bold: var(--ds-font-weight-bold);
+
+  /* ── Radius ──────────────────────────────────────────────────── */
+  --radius-none: var(--ds-radius-none);
+  --radius-sm: var(--ds-radius-sm);
+  --radius-md: var(--ds-radius-md);
+  --radius-lg: var(--ds-radius-lg);
+  --radius-xl: var(--ds-radius-xl);
+  --radius-2xl: var(--ds-radius-2xl);
+  --radius-3xl: var(--ds-radius-3xl);
+  --radius-full: var(--ds-radius-full);
+
+  /* ── Chart — categorical series ─────────────────────────────── */
+  --color-chart-1: var(--ds-chart-series-1);
+  --color-chart-2: var(--ds-chart-series-2);
+  --color-chart-3: var(--ds-chart-series-3);
+  --color-chart-4: var(--ds-chart-series-4);
+  --color-chart-5: var(--ds-chart-series-5);
+  --color-chart-6: var(--ds-chart-series-6);
+  --color-chart-1-subtle: var(--ds-chart-series-1-subtle);
+  --color-chart-2-subtle: var(--ds-chart-series-2-subtle);
+  --color-chart-3-subtle: var(--ds-chart-series-3-subtle);
+  --color-chart-4-subtle: var(--ds-chart-series-4-subtle);
+  --color-chart-5-subtle: var(--ds-chart-series-5-subtle);
+  --color-chart-6-subtle: var(--ds-chart-series-6-subtle);
+
+  /* ── Chart — structural chrome ──────────────────────────────── */
+  --color-chart-grid: var(--ds-chart-grid);
+  --color-chart-grid-strong: var(--ds-chart-grid-strong);
+  --color-chart-axis: var(--ds-chart-axis);
+  --color-chart-axis-label: var(--ds-chart-axis-label);
+  --color-chart-crosshair: var(--ds-chart-crosshair);
+  --color-chart-tooltip-bg: var(--ds-chart-tooltip-bg);
+  --color-chart-tooltip-fg: var(--ds-chart-tooltip-fg);
+}

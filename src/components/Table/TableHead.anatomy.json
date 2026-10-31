@@ -1,0 +1,10 @@
+{
+  "id": "table-head",
+  "state": {},
+  "events": [],
+  "anatomy": {
+    "id": "root",
+    "intent": "ornament",
+    "slot": true
+  }
+}

@@ -1,0 +1,55 @@
+{
+  "id": "signature-pad-field",
+  "state": {
+    "hasInk": "boolean",
+    "helperText": "string"
+  },
+  "events": [
+    "onClear",
+    "onSubmit",
+    "onChange"
+  ],
+  "anatomy": {
+    "id": "root",
+    "intent": "ornament",
+    "children": [
+      {
+        "id": "canvas-slot",
+        "intent": "ornament",
+        "slot": true
+      },
+      {
+        "id": "helper",
+        "intent": "status-message",
+        "binding": "helperText"
+      },
+      {
+        "id": "clear",
+        "intent": "press-action",
+        "emits": "onClear"
+      },
+      {
+        "id": "commit",
+        "intent": "submit",
+        "emits": "onSubmit"
+      }
+    ]
+  },
+  "usage": {
+    "when": [
+      "현장에서 손으로 서명을 받아 이미지로 남길 때"
+    ],
+    "avoid": [
+      "동의 체크에 쓰지 않는다 → Checkbox",
+      "마우스 환경에 강요하지 않는다 — 터치 전제"
+    ],
+    "states": {
+      "empty": "빈 캔버스에 안내선과 '여기에 서명해 주세요'",
+      "disabled": "그린 서명은 남기고 지우기 버튼만 감춘다"
+    },
+    "examples": [
+      "components-l3-signaturepadfield--default",
+      "components-l3-signaturepadfield--has-ink"
+    ]
+  }
+}

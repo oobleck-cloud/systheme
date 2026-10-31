@@ -1,0 +1,16 @@
+{
+  "id": "table-footer",
+  "state": {},
+  "events": [],
+  "anatomy": {
+    "id": "root",
+    "intent": "ornament",
+    "children": [
+      {
+        "id": "rows",
+        "intent": "ornament",
+        "slot": true
+      }
+    ]
+  }
+}

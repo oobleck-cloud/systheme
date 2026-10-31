@@ -1,0 +1,148 @@
+{
+  "id": "month-grid",
+  "state": {
+    "month": "YearMonth",
+    "defaultMonth": "Date",
+    "selectedDate": "Date | null",
+    "selectionMode": "'none' | 'single'",
+    "density": "'compact' | 'default' | 'comfortable'",
+    "weekStartsOn": "0 | 1",
+    "fitCells": "'default' | 'square'",
+    "squareFitBasis": "'contain' | 'width'",
+    "dayKind": "'default' | 'weekend' | 'holiday' | 'warning' | 'other-month'"
+  },
+  "events": [
+    "onSelectedDateChange",
+    "onDayActivate",
+    "onMonthChange"
+  ],
+  "anatomy": {
+    "id": "root",
+    "intent": "ornament",
+    "children": [
+      {
+        "id": "controller-region",
+        "intent": "ornament",
+        "slot": true,
+        "children": [
+          {
+            "id": "month-nav",
+            "intent": "ornament",
+            "children": [
+              {
+                "id": "month-prev",
+                "intent": "stepper",
+                "writes": "month",
+                "emits": "onMonthChange"
+              },
+              {
+                "id": "month-label",
+                "intent": "value-display",
+                "binding": "month"
+              },
+              {
+                "id": "month-next",
+                "intent": "stepper",
+                "writes": "month",
+                "emits": "onMonthChange"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "grid-region",
+        "intent": "ornament",
+        "children": [
+          {
+            "id": "weekdays",
+            "intent": "column-headers",
+            "binding": "@locale.weekdays"
+          },
+          {
+            "id": "day-grid",
+            "intent": "ornament",
+            "traversal": {
+              "axis": "both"
+            },
+            "iterates": "datesIn(month)",
+            "as": "date",
+            "child": {
+              "id": "day-cell",
+              "intent": "select-option",
+              "writes": "selectedDate",
+              "emits": [
+                "onSelectedDateChange",
+                "onDayActivate"
+              ],
+              "binding": "date",
+              "children": [
+                {
+                  "id": "date-label",
+                  "intent": "value-display",
+                  "binding": "date"
+                },
+                {
+                  "id": "day-kind-indicator",
+                  "intent": "state-indicator",
+                  "binding": "dayKindFor(date)"
+                },
+                {
+                  "id": "selection-indicator",
+                  "intent": "state-indicator",
+                  "binding": "isSelectedDate(date)"
+                },
+                {
+                  "id": "day-adornments",
+                  "intent": "ornament",
+                  "slot": true
+                },
+                {
+                  "id": "cell-content",
+                  "intent": "ornament",
+                  "slot": true
+                }
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "id": "footer-region",
+        "intent": "ornament",
+        "slot": true
+      }
+    ]
+  },
+  "usage": {
+    "when": [
+      "한 달을 7열 격자로 펼치고 날짜별 내용(일정 칩·수량)을 renderCellContent 로 채울 때",
+      "날짜 하나를 고르는 캘린더 화면(selectionMode single) 또는 표시 전용(none)",
+      "휴일·경고일 표시는 getDayMeta(kind·holidayLabel) 로 선언한다"
+    ],
+    "avoid": [
+      "폼의 날짜 입력에 쓰지 않는다 → DatePicker",
+      "기간(시작·종료) 선택에 쓰지 않는다 → PresetDateRangeField",
+      "셀 안에 카드를 또 만들지 않는다 — 칩·수량 텍스트까지"
+    ],
+    "limits": {
+      "perRegion": 1,
+      "items": "셀 콘텐츠는 overflow-hidden — density 높이 안에 들어가는 만큼만 보인다. 넘치는 개수 표시는 renderCellContent 가 한다",
+      "label": "holidayLabel 한 줄 truncate"
+    },
+    "states": {
+      "empty": "콘텐츠 없는 셀은 날짜 숫자만. 빈 문구 없다",
+      "disabled": "없다. selectionMode=none 이 표시 전용(셀이 div)",
+      "overflow": "셀 안은 잘린다(overflow-hidden). fitCells=square + squareFitBasis=width 면 부모가 세로 스크롤"
+    },
+    "placement": [
+      "controllerRegion 은 그리드 위(기본 내장 월 내비, false 로 숨김)",
+      "footerRegion 은 그리드 아래(범례·요약)"
+    ],
+    "examples": [
+      "components-l3-monthgrid--default",
+      "components-l3-monthgrid--with-cell-content",
+      "components-l3-monthgrid--square-fit"
+    ]
+  }
+}

@@ -1,0 +1,68 @@
+{
+  "id": "diff-inline-panel",
+  "state": {
+    "lines": "DiffLineViewModel[]"
+  },
+  "events": [
+    "onLineActivate"
+  ],
+  "usage": {
+    "when": [
+      "사용자가 변경 전/후 텍스트를 줄 단위로 비교하고 특정 줄로 들어갈 때(임포트 미리보기·설정 변경 검토)",
+      "줄마다 add/remove/change/context 가 정해진 DiffLineViewModel[] 이 있을 때 — kind 는 Badge 색(success/error/warning/default)으로"
+    ],
+    "avoid": [
+      "값 하나의 이전/현재 비교에는 쓰지 않는다 → DescriptionRow 두 줄",
+      "코드 블록 표시에는 쓰지 않는다 → Code",
+      "변경 사실 알림에는 쓰지 않는다 → Alert / Toast"
+    ],
+    "limits": {
+      "items": "한 패널 50줄. 이상은 페이징하거나 변경 줄만 필터",
+      "label": "좌·우 텍스트는 font-mono 한 줄 말줄임(truncate). 긴 줄은 Open 으로 들어가서 본다"
+    },
+    "states": {
+      "disabled": "onLineActivate 가 없으면 Open 버튼이 disabled 로 남는다. 읽기 전용이면 핸들러를 빼서 쓴다",
+      "empty": "lines 가 비면 빈 Surface 만 남는다. 호출부가 EmptyState 로 바꾼다"
+    },
+    "placement": [
+      "kind Badge → 왼쪽(이전) → 오른쪽(이후) → Open. 열 순서 고정",
+      "Section Surface(compact) 이므로 카드 안에 다시 감싸지 않는다"
+    ],
+    "examples": [
+      "components-l2-diffinlinepanel--multiple-rows",
+      "components-l2-diffinlinepanel--default"
+    ]
+  },
+  "anatomy": {
+    "id": "root",
+    "intent": "ornament",
+    "iterates": "lines",
+    "as": "line",
+    "child": {
+      "id": "row",
+      "intent": "ornament",
+      "children": [
+        {
+          "id": "kind",
+          "intent": "severity-indicator",
+          "binding": "line.kind"
+        },
+        {
+          "id": "left",
+          "intent": "value-display",
+          "binding": "line.leftText"
+        },
+        {
+          "id": "right",
+          "intent": "value-display",
+          "binding": "line.rightText"
+        },
+        {
+          "id": "open",
+          "intent": "press-action",
+          "emits": "onLineActivate"
+        }
+      ]
+    }
+  }
+}

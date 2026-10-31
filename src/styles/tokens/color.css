@@ -1,0 +1,379 @@
+/* Primitive palette — Style Dictionary가 생성할 레이어 */
+/*
+ * 모든 팔레트는 oklch(Lightness% Chroma Hue) 기준으로 통일.
+ * Lightness 스텝: 97 / 93 / 87 / 79 / 65 / 49 / 43 / 35 / 26 / 18
+ * Chroma는 mid(500)에서 피크, 양 끝으로 감소.
+ * Gray는 surface·border·text 전용 neutral (chroma 0). blue는 brand/state 팔레트만.
+ */
+:root {
+  /* Blue  H=264 — brand anchor: blue-500 */
+  --ds-color-blue-50: oklch(97% 0.02 264);
+  --ds-color-blue-100: oklch(93% 0.05 264);
+  --ds-color-blue-200: oklch(87% 0.1 264);
+  --ds-color-blue-300: oklch(79% 0.17 264);
+  --ds-color-blue-400: oklch(65% 0.23 264);
+  --ds-color-blue-500: oklch(49% 0.28 264);
+  --ds-color-blue-600: oklch(43% 0.25 264);
+  --ds-color-blue-700: oklch(35% 0.2 264);
+  --ds-color-blue-800: oklch(26% 0.14 264);
+  --ds-color-blue-900: oklch(18% 0.09 264);
+
+  /* Green  H=153 — brand anchor: green-500 */
+  --ds-color-green-50: oklch(97% 0.02 153);
+  --ds-color-green-100: oklch(93% 0.04 153);
+  --ds-color-green-200: oklch(87% 0.08 153);
+  --ds-color-green-300: oklch(77% 0.12 153);
+  --ds-color-green-400: oklch(62% 0.14 153);
+  --ds-color-green-500: oklch(47% 0.14 153);
+  --ds-color-green-600: oklch(39% 0.12 153);
+  --ds-color-green-700: oklch(30% 0.09 153);
+  --ds-color-green-800: oklch(22% 0.06 153);
+  --ds-color-green-900: oklch(14% 0.04 153);
+
+  /* Orange  H=50 — brand anchor: orange-500 */
+  --ds-color-orange-50: oklch(97% 0.02 50);
+  --ds-color-orange-100: oklch(94% 0.05 50);
+  --ds-color-orange-200: oklch(89% 0.09 50);
+  --ds-color-orange-300: oklch(83% 0.13 50);
+  --ds-color-orange-400: oklch(76% 0.16 50);
+  --ds-color-orange-500: oklch(67% 0.17 50);
+  --ds-color-orange-600: oklch(57% 0.16 50);
+  --ds-color-orange-700: oklch(46% 0.13 50);
+  --ds-color-orange-800: oklch(34% 0.09 50);
+  --ds-color-orange-900: oklch(23% 0.06 50);
+
+  /* Red  H=27 — brand anchor: red-500 */
+  --ds-color-red-50: oklch(97% 0.02 27);
+  --ds-color-red-100: oklch(93% 0.05 27);
+  --ds-color-red-200: oklch(87% 0.09 27);
+  --ds-color-red-300: oklch(79% 0.14 27);
+  --ds-color-red-400: oklch(67% 0.19 27);
+  --ds-color-red-500: oklch(56% 0.22 27);
+  --ds-color-red-600: oklch(47% 0.21 27);
+  --ds-color-red-700: oklch(38% 0.17 27);
+  --ds-color-red-800: oklch(28% 0.12 27);
+  --ds-color-red-900: oklch(19% 0.07 27);
+
+  /* Gray — neutral surface / border / text (blue tint 없음) */
+  --ds-color-gray-50: oklch(98.5% 0 0);
+  --ds-color-gray-100: oklch(96% 0 0);
+  --ds-color-gray-200: oklch(92% 0 0);
+  --ds-color-gray-300: oklch(85% 0 0);
+  --ds-color-gray-400: oklch(72% 0 0);
+  --ds-color-gray-500: oklch(56% 0 0);
+  --ds-color-gray-600: oklch(43% 0 0);
+  --ds-color-gray-700: oklch(33% 0 0);
+  --ds-color-gray-800: oklch(22% 0 0);
+  --ds-color-gray-900: oklch(14% 0 0);
+
+  /* Purple  H=310 — chart series 5 */
+  --ds-color-purple-50: oklch(97% 0.02 310);
+  --ds-color-purple-100: oklch(93% 0.04 310);
+  --ds-color-purple-200: oklch(87% 0.08 310);
+  --ds-color-purple-300: oklch(79% 0.14 310);
+  --ds-color-purple-400: oklch(67% 0.2 310);
+  --ds-color-purple-500: oklch(53% 0.24 310);
+  --ds-color-purple-600: oklch(44% 0.21 310);
+  --ds-color-purple-700: oklch(35% 0.17 310);
+  --ds-color-purple-800: oklch(26% 0.12 310);
+  --ds-color-purple-900: oklch(17% 0.07 310);
+
+  /* Teal  H=180 — chart series 6 */
+  --ds-color-teal-50: oklch(97% 0.02 180);
+  --ds-color-teal-100: oklch(93% 0.04 180);
+  --ds-color-teal-200: oklch(87% 0.07 180);
+  --ds-color-teal-300: oklch(79% 0.11 180);
+  --ds-color-teal-400: oklch(67% 0.14 180);
+  --ds-color-teal-500: oklch(52% 0.14 180);
+  --ds-color-teal-600: oklch(43% 0.12 180);
+  --ds-color-teal-700: oklch(34% 0.09 180);
+  --ds-color-teal-800: oklch(25% 0.07 180);
+  --ds-color-teal-900: oklch(17% 0.04 180);
+
+  --ds-color-white: oklch(100% 0 0);
+  --ds-color-black: oklch(0% 0 0);
+
+  /* Night — Workstyle 판 eb12e334 표면(n0~n4). 라이트 gray 램프는 그대로 둔다.
+   * night-5 는 구분선(line), night-6 은 보조 글자(ink3)로 강한 구분에 쓴다. */
+  --ds-color-night-0: #0e0f12; /* n0 canvas */
+  --ds-color-night-1: #1e1f22; /* n1 surface */
+  --ds-color-night-2: #27292c; /* n2 raised */
+  --ds-color-night-3: #323437; /* n3 float · secondary */
+  --ds-color-night-4: #3f4144; /* n4 hover */
+  --ds-color-night-5: #2f3033; /* line */
+  --ds-color-night-6: #96989d; /* ink3 */
+
+  /* ================================================================
+   * Semantic aliases
+   * ================================================================ */
+
+  /* --- Interactive --- */
+  --ds-color-primary: #3270cf; /* Workstyle acc-fill */
+  --ds-color-primary-hover: #3270cf;
+  --ds-color-primary-fg: var(--ds-color-white);
+
+  --ds-color-secondary: var(--ds-color-gray-100);
+  --ds-color-secondary-hover: var(--ds-color-gray-200);
+  --ds-color-secondary-fg: var(--ds-color-gray-900);
+
+  --ds-color-destructive: var(--ds-color-red-500);
+  --ds-color-destructive-hover: var(--ds-color-red-600);
+  --ds-color-destructive-fg: var(--ds-color-white);
+
+  /* --- State ---
+   * primary  : 채워진 배경 (badge, filled alert)
+   * subtle   : 연한 배경  (ghost alert, highlight)
+   * text     : subtle 위 텍스트 및 아이콘
+   * border   : 상태 구분 테두리
+   */
+  --ds-color-success-primary: var(--ds-color-green-500);
+  --ds-color-success-subtle: var(--ds-color-green-50);
+  --ds-color-success-text: var(--ds-color-green-700);
+  --ds-color-success-border: var(--ds-color-green-200);
+
+  --ds-color-warning-primary: var(--ds-color-orange-500);
+  --ds-color-warning-subtle: var(--ds-color-orange-50);
+  --ds-color-warning-text: var(--ds-color-orange-700);
+  --ds-color-warning-border: var(--ds-color-orange-200);
+
+  --ds-color-error-primary: var(--ds-color-red-500);
+  --ds-color-error-subtle: var(--ds-color-red-50);
+  --ds-color-error-text: var(--ds-color-red-700);
+  --ds-color-error-border: var(--ds-color-red-200);
+
+  --ds-color-info-primary: var(--ds-color-blue-500);
+  --ds-color-info-subtle: var(--ds-color-blue-50);
+  --ds-color-info-text: var(--ds-color-blue-700);
+  --ds-color-info-border: var(--ds-color-blue-200);
+
+  --ds-color-disabled-primary: var(--ds-color-gray-200);
+  --ds-color-disabled-subtle: var(--ds-color-gray-100);
+  --ds-color-disabled-text: var(--ds-color-gray-400);
+  --ds-color-disabled-border: var(--ds-color-gray-200);
+
+  /* --- Text --- */
+  --ds-color-text-default: var(--ds-color-gray-900);
+  --ds-color-text-subtle: var(--ds-color-gray-600);
+  --ds-color-text-muted: var(--ds-color-gray-400);
+  --ds-color-text-disabled: var(--ds-color-gray-400);
+  --ds-color-text-inverse: var(--ds-color-white);
+  --ds-color-text-brand: var(--ds-color-blue-600); /* acc-fill 은 라이트 canvas 위 4.5 에 못 미친다 */
+
+  /* --- Background ---
+   * Elevation 사다리(중립): canvas(recessed 페이지) < surface(well) < default(raised 카드)
+   *   - bg-canvas   : 화면(페이지) 바탕. 흰 카드가 살짝 뜨도록 한 단계 눌러둔 면(gray-100).
+   *                   워크스페이스 호스트·탭바는 여기서 제외 — 기존처럼 surface(gray-50)로 녹아든다.
+   *   - bg-surface  : 카드 내부의 recessed well(중첩 그룹 · 통계 박스 등) · 워크스페이스 크롬.
+   *   - bg-default  : raised 카드/패널 표면(흰색).
+   */
+  --ds-color-bg-canvas: var(--ds-color-gray-100);
+  --ds-color-bg-default: var(--ds-color-white);
+  --ds-color-bg-surface: var(--ds-color-gray-50);
+  --ds-color-bg-overlay: var(--ds-color-gray-100);
+  /* float — Popover/Menu/Select/Tooltip 처럼 떠 있는 면. 라이트는 카드와 같은 흰색이지만
+   * 다크에서는 카드보다 한 단 밝아야 그림자 없이도 분리된다(M3 surface-container-high). */
+  --ds-color-bg-float: var(--ds-color-white);
+  --ds-color-bg-inverse: var(--ds-color-gray-900);
+  /* scrim — Modal/Drawer 딤. Material `scrim`(검정) 관례: 라이트·다크 모두 검정 기반. */
+  --ds-color-scrim: oklch(0% 0 0 / 0.32);
+
+  /* --- Border --- */
+  --ds-color-border-subtle: var(--ds-color-gray-100); /* 카드, floating panel — 거의 안 보임 */
+  --ds-color-border-default: var(--ds-color-gray-200); /* 입력 컨트롤, 구분선 */
+  --ds-color-border-strong: var(--ds-color-gray-400);
+  --ds-color-border-focus: #3270cf;
+
+  /* --- Brand spectrum (blue 팔레트의 시맨틱 별칭) --- */
+  --ds-color-brand-50: var(--ds-color-blue-50);
+  --ds-color-brand-100: var(--ds-color-blue-100);
+  --ds-color-brand-200: var(--ds-color-blue-200);
+  --ds-color-brand-300: var(--ds-color-blue-300);
+  --ds-color-brand-400: var(--ds-color-blue-400);
+  --ds-color-brand-500: var(--ds-color-blue-500);
+  --ds-color-brand-600: var(--ds-color-blue-600);
+  --ds-color-brand-700: var(--ds-color-blue-700);
+  --ds-color-brand-800: var(--ds-color-blue-800);
+  --ds-color-brand-900: var(--ds-color-blue-900);
+
+  /* --- Tag palette (노션식 칩) ---
+   * 상태 토큰(error/warning/success)과 직교한 "분류 색"이다. 조치 필요도를 뜻하지 않으므로
+   * 값·카테고리 구분에만 쓴다(빨강 태그 ≠ 실패). Tag `color` prop / 컬렉션 select 옵션 색.
+   * 바탕은 100 단계 — 50 은 채도가 0.02 라 흰색과 거의 같아 색끼리 갈리지 않았다(2026-10-02). */
+  --ds-color-tag-gray-subtle: var(--ds-color-gray-100);
+  --ds-color-tag-gray-text: var(--ds-color-gray-700);
+  --ds-color-tag-red-subtle: var(--ds-color-red-100);
+  --ds-color-tag-red-text: var(--ds-color-red-700);
+  --ds-color-tag-orange-subtle: var(--ds-color-orange-100);
+  --ds-color-tag-orange-text: var(--ds-color-orange-700);
+  --ds-color-tag-green-subtle: var(--ds-color-green-100);
+  --ds-color-tag-green-text: var(--ds-color-green-700);
+  --ds-color-tag-teal-subtle: var(--ds-color-teal-100);
+  --ds-color-tag-teal-text: var(--ds-color-teal-700);
+  --ds-color-tag-blue-subtle: var(--ds-color-blue-100);
+  --ds-color-tag-blue-text: var(--ds-color-blue-700);
+  --ds-color-tag-purple-subtle: var(--ds-color-purple-100);
+  --ds-color-tag-purple-text: var(--ds-color-purple-700);
+  /* dot — 점+차분한 칩(B) 표기의 식별 색. 칩 바탕은 중립이고 색은 점이 맡는다. */
+  --ds-color-tag-gray-dot: var(--ds-color-gray-500);
+  --ds-color-tag-red-dot: var(--ds-color-red-500);
+  --ds-color-tag-orange-dot: var(--ds-color-orange-500);
+  --ds-color-tag-green-dot: var(--ds-color-green-500);
+  --ds-color-tag-teal-dot: var(--ds-color-teal-500);
+  --ds-color-tag-blue-dot: var(--ds-color-blue-500);
+  --ds-color-tag-purple-dot: var(--ds-color-purple-500);
+
+  /* --- Container (M3 tonal pair) ---
+   * 강조 컨테이너는 neutral 이 아니라 primary 팔레트의 몫이다.
+   * container 는 짝인 on-container 하고만 조합한다(임의 조합 금지) —
+   * 모바일 선택 상태·히어로 컨테이너·FAB 메뉴가 소비. */
+  --ds-color-primary-container: var(--ds-color-blue-100);
+  --ds-color-primary-container-hover: var(--ds-color-blue-200);
+  --ds-color-on-primary-container: var(--ds-color-blue-700);
+
+  /* --- Surface container 사다리 (M3 neutral) ---
+   * canvas/surface 를 잇는 중간 고도 단계. 기본 테마에서는 무채 gray,
+   * [data-surface='tinted'] 스코프(모바일 현장 셸)에서 hue 264 저채도로 재정의. */
+  --ds-color-bg-container-low: var(--ds-color-gray-50);
+  --ds-color-bg-container: var(--ds-color-gray-100);
+  --ds-color-bg-container-high: var(--ds-color-gray-200);
+
+  /* --- Disabled (M3: on-surface 12%/38%) ---
+   * opacity 반감이 아니라 고정 알파 — 어떤 표면 위에서도 같은 농도로 읽힌다. */
+  --ds-color-disabled-container: oklch(from var(--ds-color-gray-900) l c h / 0.12);
+  --ds-color-on-disabled: oklch(from var(--ds-color-gray-900) l c h / 0.38);
+}
+
+/*
+ * Dark theme
+ *
+ * 원칙 세 가지:
+ *  1. 표면은 gray 램프가 아니라 night 램프(위 primitive)에서 고른다 — 고도 한 단이 2~4포인트.
+ *     라이트: canvas(96) < surface(98.5) < default(100). 다크: 11 < 13.5 < 16.5 < 20(float).
+ *  2. 채움 버튼은 Workstyle acc-fill(#3270cf), 글자·포커스는 acc(#63a0f1).
+ *     acc 위에 흰 글자는 4.5:1 에 못 미쳐 버튼 채움으로 쓰지 않는다.
+ *  3. brand-50~900 별칭은 사다리를 뒤집어 매핑한다. `bg-brand-50` 은 "연한 선택 배경",
+ *     `text-brand-700` 은 "짙은 강조 글자"라는 뜻으로 쓰이므로, 다크에서 그 뜻을 지키려면
+ *     50 이 어둡고 700 이 밝아야 한다.
+ *
+ * Primitive 칩(gray/blue/…)은 그대로 두고 시맨틱 alias 만 재매핑한다.
+ * 대비는 scripts/check-contrast.mjs 로 검증한다(본문 4.5:1, 보조 3:1).
+ */
+.dark {
+  color-scheme: dark;
+
+  /* --- Interactive --- */
+  --ds-color-primary: #3270cf; /* acc-fill */
+  --ds-color-primary-hover: #3270cf;
+  --ds-color-primary-fg: #ffffff; /* on-acc */
+
+  --ds-color-secondary: var(--ds-color-night-3);
+  --ds-color-secondary-hover: var(--ds-color-night-4);
+  --ds-color-secondary-fg: var(--ds-color-text-default);
+
+  --ds-color-destructive: oklch(53% 0.2 27);
+  --ds-color-destructive-hover: oklch(58% 0.2 27);
+  --ds-color-destructive-fg: var(--ds-color-white);
+
+  /* --- State ---
+   * subtle 은 900 을 알파로 깔아 어느 표면 위에서든 같은 농도, text 는 300 으로 올려 대비 확보. */
+  --ds-color-success-primary: #62cd94; /* ok */
+  --ds-color-success-subtle: #1f332a; /* ok-soft */
+  --ds-color-success-text: #62cd94;
+  --ds-color-success-border: #62cd94;
+
+  --ds-color-warning-primary: #ebb75b; /* warn */
+  --ds-color-warning-subtle: #3a3121; /* warn-soft */
+  --ds-color-warning-text: #ebb75b;
+  --ds-color-warning-border: #ebb75b;
+
+  --ds-color-error-primary: #f27a6d; /* bad. 채움 파괴 버튼은 흰 글자 4.5:1 때문에 더 어두운 destructive 를 유지 */
+  --ds-color-error-subtle: #3a2422; /* bad-soft */
+  --ds-color-error-text: #f27a6d;
+  --ds-color-error-border: #f27a6d;
+
+  --ds-color-info-primary: #63a0f1; /* acc */
+  --ds-color-info-subtle: #28313f; /* acc-soft */
+  --ds-color-info-text: #63a0f1;
+  --ds-color-info-border: #63a0f1;
+
+  --ds-color-disabled-primary: var(--ds-color-night-3);
+  --ds-color-disabled-subtle: var(--ds-color-night-1);
+  --ds-color-disabled-text: oklch(56% 0.006 264);
+  --ds-color-disabled-border: var(--ds-color-night-4);
+
+  /* --- Text ---
+   * 본문은 순백(98.5)이 아니라 91 — 11~16 바탕 위에서 순백은 번져 보인다(halation). */
+  --ds-color-text-default: #e8e9ec; /* ink1 */
+  --ds-color-text-subtle: #b4b6ba; /* ink2 */
+  --ds-color-text-muted: #96989d; /* ink3 */
+  --ds-color-text-disabled: oklch(56% 0.006 264);
+  --ds-color-text-inverse: var(--ds-color-night-0);
+  --ds-color-text-brand: #63a0f1; /* acc. 다크 표면 위 글자 */
+
+  /* --- Background --- Elevation 사다리(다크): canvas < surface(well) < default(raised) < float */
+  --ds-color-bg-canvas: var(--ds-color-night-0);
+  --ds-color-bg-surface: var(--ds-color-night-1);
+  --ds-color-bg-default: var(--ds-color-night-2);
+  --ds-color-bg-overlay: var(
+    --ds-color-night-4
+  ); /* muted/hover — float(night-3) 위에서도 보여야 한다 */
+  --ds-color-bg-float: var(--ds-color-night-3);
+  --ds-color-bg-inverse: oklch(92% 0.005 264);
+  /* scrim — 페이지가 이미 어두우므로 더 진한 검정으로 분리를 확보 */
+  --ds-color-scrim: oklch(0% 0 0 / 0.6);
+
+  /* --- Border --- 라이트의 "거의 안 보임/구분선/강조" 세 단을 같은 간격으로 */
+  --ds-color-border-subtle: #323437; /* n3. line 은 n2 와 1.11:1 이라 다음 단을 쓴다 */
+  --ds-color-border-default: #323437;
+  --ds-color-border-strong: var(--ds-color-night-6); /* ink3 */
+  --ds-color-border-focus: #63a0f1; /* acc */
+
+  /* --- Brand spectrum (다크: 사다리 반전) --- */
+  --ds-color-brand-50: oklch(from var(--ds-color-blue-800) l c h / 0.5);
+  --ds-color-brand-100: var(--ds-color-blue-800);
+  --ds-color-brand-200: var(--ds-color-blue-700);
+  --ds-color-brand-300: var(--ds-color-blue-600);
+  --ds-color-brand-400: oklch(62% 0.2 264);
+  --ds-color-brand-500: var(--ds-color-primary);
+  --ds-color-brand-600: oklch(70% 0.17 264);
+  --ds-color-brand-700: oklch(80% 0.12 264);
+  --ds-color-brand-800: var(--ds-color-blue-100);
+  --ds-color-brand-900: var(--ds-color-blue-50);
+
+  /* --- Tag palette (다크) --- subtle 은 800 알파(900 은 카드와 같은 밝기라 사라진다), text 는 300 */
+  --ds-color-tag-gray-subtle: var(--ds-color-night-4);
+  --ds-color-tag-gray-text: oklch(84% 0.005 264);
+  --ds-color-tag-red-subtle: oklch(from var(--ds-color-red-800) l c h / 0.55);
+  --ds-color-tag-red-text: var(--ds-color-red-300);
+  --ds-color-tag-orange-subtle: oklch(from var(--ds-color-orange-800) l c h / 0.55);
+  --ds-color-tag-orange-text: var(--ds-color-orange-300);
+  --ds-color-tag-green-subtle: oklch(from var(--ds-color-green-800) l c h / 0.55);
+  --ds-color-tag-green-text: var(--ds-color-green-300);
+  --ds-color-tag-teal-subtle: oklch(from var(--ds-color-teal-800) l c h / 0.55);
+  --ds-color-tag-teal-text: var(--ds-color-teal-300);
+  --ds-color-tag-blue-subtle: oklch(from var(--ds-color-blue-800) l c h / 0.55);
+  --ds-color-tag-blue-text: var(--ds-color-blue-300);
+  --ds-color-tag-purple-subtle: oklch(from var(--ds-color-purple-800) l c h / 0.55);
+  --ds-color-tag-purple-text: var(--ds-color-purple-300);
+  --ds-color-tag-gray-dot: var(--ds-color-gray-400);
+  --ds-color-tag-red-dot: var(--ds-color-red-400);
+  --ds-color-tag-orange-dot: var(--ds-color-orange-400);
+  --ds-color-tag-green-dot: var(--ds-color-green-400);
+  --ds-color-tag-teal-dot: var(--ds-color-teal-400);
+  --ds-color-tag-blue-dot: var(--ds-color-blue-400);
+  --ds-color-tag-purple-dot: var(--ds-color-purple-400);
+
+  /* --- Container (다크: M3 container P30 / on-container P90) --- */
+  --ds-color-primary-container: #28313f; /* acc-soft */
+  --ds-color-primary-container-hover: #2d3b50; /* sel */
+  --ds-color-on-primary-container: #e8e9ec; /* ink1 */
+
+  /* --- Surface container 사다리 (다크: 위 단계일수록 밝게) --- */
+  --ds-color-bg-container-low: var(--ds-color-night-1);
+  --ds-color-bg-container: var(--ds-color-night-2);
+  --ds-color-bg-container-high: var(--ds-color-night-3);
+
+  /* --- Disabled (다크 on-surface = text-default) --- */
+  --ds-color-disabled-container: oklch(from var(--ds-color-text-default) l c h / 0.12);
+  --ds-color-on-disabled: oklch(from var(--ds-color-text-default) l c h / 0.38);
+}

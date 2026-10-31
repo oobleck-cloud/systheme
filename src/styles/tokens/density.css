@@ -1,0 +1,169 @@
+/*
+ * Density tokens
+ *
+ * 사용법: 어떤 컨테이너에든 `data-density="comfortable|default|compact"` 를 달면
+ * 해당 subtree 의 모든 density-aware 컴포넌트가 자동으로 스케일 조정됩니다.
+ *
+ *   comfortable — 모바일, 온보딩, 넓은 폼 (터치 친화)
+ *   default     — 어드민 일반 화면 (기본값)
+ *   compact     — 데이터 집약적 어드민, POS 화면
+ *
+ * CSS cascade 로 중첩 재정의 가능:
+ *   <main data-density="compact">          ← 페이지 전체 compact
+ *     <dialog data-density="comfortable">  ← 대화상자만 comfortable
+ */
+
+/* ── Default (어드민 baseline) ──────────────────────────────────────────────── */
+:root,
+[data-density='default'] {
+  /* Form controls */
+  --ds-density-control-h-sm: 2rem; /* 32px */
+  --ds-density-control-h-md: 2.5rem; /* 40px */
+  --ds-density-control-h-lg: 2.75rem; /* 44px */
+  --ds-density-control-px-sm: 0.75rem; /* 12px */
+  --ds-density-control-px-md: 1rem; /* 16px — 기존 px-3(12px) → 개선 */
+  --ds-density-control-px-lg: 1.25rem; /* 20px */
+
+  /* Table head */
+  --ds-density-table-head-py: 0.625rem; /* 10px */
+  --ds-density-table-head-px: 0.75rem; /* 12px */
+  --ds-density-table-head-size: 0.75rem; /* 12px = xs */
+
+  /* Table cell */
+  --ds-density-table-cell-py: 0.75rem; /* 12px */
+  --ds-density-table-cell-px: 0.75rem; /* 12px */
+  --ds-density-table-cell-size: 0.875rem; /* 14px = sm */
+
+  /* Section / container */
+  --ds-density-section-px: 1rem; /* 16px */
+  --ds-density-section-py: 0.75rem; /* 12px */
+  --ds-density-gap: 0.75rem; /* 12px */
+
+  /* Timetable — 행 높이·열 폭·레일 타이포 (Table 토큰과 별도로 미세 조정) */
+  --ds-density-timetable-slot-h: 2.25rem;
+  --ds-density-timetable-time-col-w: 3.625rem;
+  --ds-density-timetable-min-col: 6.5rem;
+  --ds-density-timetable-rail-size: 0.625rem; /* 10px — 헤더(14px)보다 두 단 작게 */
+}
+
+/* ── Comfortable (모바일 / 터치) ────────────────────────────────────────────── */
+[data-density='comfortable'] {
+  --ds-density-control-h-sm: 2.25rem; /* 36px */
+  --ds-density-control-h-md: 2.75rem; /* 44px */
+  --ds-density-control-h-lg: 3rem; /* 48px */
+  --ds-density-control-px-sm: 1rem; /* 16px */
+  --ds-density-control-px-md: 1.25rem; /* 20px */
+  --ds-density-control-px-lg: 1.5rem; /* 24px */
+
+  --ds-density-table-head-py: 0.875rem; /* 14px */
+  --ds-density-table-head-px: 1rem; /* 16px */
+  --ds-density-table-head-size: 0.8125rem; /* 13px */
+
+  --ds-density-table-cell-py: 1rem; /* 16px */
+  --ds-density-table-cell-px: 1rem; /* 16px */
+  --ds-density-table-cell-size: 1rem; /* 16px = md */
+
+  --ds-density-section-px: 1.25rem; /* 20px */
+  --ds-density-section-py: 1rem; /* 16px */
+  --ds-density-gap: 1rem; /* 16px */
+
+  --ds-density-timetable-slot-h: 2.5rem;
+  --ds-density-timetable-time-col-w: 4rem;
+  --ds-density-timetable-min-col: 7.25rem;
+  --ds-density-timetable-rail-size: 0.6875rem; /* 11px */
+}
+
+/* ── Compact (데이터 집약형 어드민 / POS) ───────────────────────────────────── */
+[data-density='compact'] {
+  --ds-density-control-h-sm: 1.75rem; /* 28px */
+  --ds-density-control-h-md: 2rem; /* 32px */
+  --ds-density-control-h-lg: 2.25rem; /* 36px */
+  --ds-density-control-px-sm: 0.5rem; /* 8px  */
+  --ds-density-control-px-md: 0.75rem; /* 12px */
+  --ds-density-control-px-lg: 1rem; /* 16px */
+
+  --ds-density-table-head-py: 0.375rem; /* 6px  */
+  --ds-density-table-head-px: 0.625rem; /* 10px */
+  --ds-density-table-head-size: 0.6875rem; /* 11px */
+
+  --ds-density-table-cell-py: 0.375rem; /* 6px  */
+  --ds-density-table-cell-px: 0.625rem; /* 10px */
+  --ds-density-table-cell-size: 0.8125rem; /* 13px */
+
+  --ds-density-section-px: 0.75rem; /* 12px */
+  --ds-density-section-py: 0.5rem; /* 8px  */
+  --ds-density-gap: 0.5rem; /* 8px  */
+
+  --ds-density-timetable-slot-h: 1.875rem;
+  --ds-density-timetable-time-col-w: 3.125rem;
+  --ds-density-timetable-min-col: 5.75rem;
+  --ds-density-timetable-rail-size: 0.5625rem; /* 9px */
+}
+
+/* ── Density utility classes ────────────────────────────────────────────────── */
+@layer utilities {
+  /* Form control heights */
+  .h-density-sm {
+    height: var(--ds-density-control-h-sm);
+  }
+  .h-density-md {
+    height: var(--ds-density-control-h-md);
+  }
+  .h-density-lg {
+    height: var(--ds-density-control-h-lg);
+  }
+
+  /* Form control horizontal padding */
+  .px-density-sm {
+    padding-inline: var(--ds-density-control-px-sm);
+  }
+  .px-density-md {
+    padding-inline: var(--ds-density-control-px-md);
+  }
+  .px-density-lg {
+    padding-inline: var(--ds-density-control-px-lg);
+  }
+
+  /* Table head */
+  .py-density-head {
+    padding-block: var(--ds-density-table-head-py);
+  }
+  .px-density-head {
+    padding-inline: var(--ds-density-table-head-px);
+  }
+  .text-density-head {
+    font-size: var(--ds-density-table-head-size);
+    line-height: 1.5;
+  }
+
+  /* Table cell */
+  .py-density-cell {
+    padding-block: var(--ds-density-table-cell-py);
+  }
+  .px-density-cell {
+    padding-inline: var(--ds-density-table-cell-px);
+  }
+  .text-density-cell {
+    font-size: var(--ds-density-table-cell-size);
+    line-height: 1.5;
+  }
+
+  /* Section / container rhythm */
+  .px-density-section {
+    padding-inline: var(--ds-density-section-px);
+  }
+  .py-density-section {
+    padding-block: var(--ds-density-section-py);
+  }
+  .gap-density {
+    gap: var(--ds-density-gap);
+  }
+
+  /* Timetable — 시간 레일 (열 헤더보다 작은 캡션 느낌) */
+  .text-density-timetable-rail {
+    font-size: var(--ds-density-timetable-rail-size);
+    font-weight: 300;
+    line-height: 1.2;
+    letter-spacing: 0.03em;
+  }
+}

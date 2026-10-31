@@ -1,0 +1,85 @@
+/* Motion Design Tokens — CSS Layer
+ *
+ * ┌─ 두 레이어 분리 모델 ──────────────────────────────────────────┐
+ * │  CSS layer (이 파일)         — Button, Switch, Checkbox 등     │
+ * │                               CSS transition 기반 micro-motion │
+ * │  JS layer (motionTokens.ts)  — Modal, Drawer, Popover 등       │
+ * │                               motion.dev spring 기반 enter/exit│
+ * └───────────────────────────────────────────────────────────────┘
+ *
+ * M3 Expressive 6분류 차용:
+ *   effects(비공간: fade·scale·색) × {fast, default, slow}
+ *   spatial(위치·크기·레이아웃) × {fast, default, slow}
+ *
+ * Easing: spring을 사전 샘플링한 CSS linear() 곡선
+ *   standard   — overshoot 최소, 일상 UI 피드백
+ *   expressive — overshoot 있는 bounce, hero moment·key interaction
+ *   snappy     — 빠르고 약한 overshoot, 반응형 요소
+ *
+ * JS layer의 spring 파라미터(motionTokens.ts)는 이 곡선과 동등한
+ * feel을 motion.dev spring physics로 재현한다.
+ */
+
+:root {
+  /* ── Easing ──────────────────────────────────────────────── */
+
+  /* standard: 감쇠비 1.0, 정밀 전환 — overshoot 없음 */
+  --ds-ease-standard: cubic-bezier(0.2, 0, 0, 1);
+
+  /* expressive: 감쇠비 0.4, bounce — hero·FAB·toolbar 등장 */
+  --ds-ease-expressive: linear(
+    0,
+    0.006,
+    0.025 2.8%,
+    0.101 6.1%,
+    0.539 18.9%,
+    0.721 25.3%,
+    0.849 31.5%,
+    0.937 38.1%,
+    0.968 41.8%,
+    1.003 48.4%,
+    1.014 52.3%,
+    1.011 56.2%,
+    1.001 65%,
+    0.999 72.2%,
+    1
+  );
+
+  /* snappy: 감쇠비 0.75, 약한 overshoot — 버튼 press, 체크박스 */
+  --ds-ease-snappy: linear(
+    0,
+    0.018,
+    0.073 3.4%,
+    0.334 11.5%,
+    0.622 19.5%,
+    0.826 27.1%,
+    0.93 33.4%,
+    0.979 39.1%,
+    0.998 45.7%,
+    1.005 49.4%,
+    1.003 56.3%,
+    1
+  );
+
+  /* ── Duration — Effects (비공간: fade · scale · 색 변화) ── */
+
+  /* fast-effects: micro-interaction, toggle, checkbox ~120ms */
+  --ds-duration-effects-fast: 120ms;
+
+  /* default-effects: 버튼 press, 색 변화 ~200ms */
+  --ds-duration-effects-default: 200ms;
+
+  /* slow-effects: 강조·주의 환기 ~400ms */
+  --ds-duration-effects-slow: 400ms;
+
+  /* ── Duration — Spatial (위치 · 크기 · 레이아웃) ─────────── */
+
+  /* fast-spatial: tooltip, 소형 menu ~150ms */
+  --ds-duration-spatial-fast: 150ms;
+
+  /* default-spatial: navigation, expanding panel/sheet ~300ms */
+  --ds-duration-spatial-default: 300ms;
+
+  /* slow-spatial: full-screen · hero 전환 ~500ms */
+  --ds-duration-spatial-slow: 500ms;
+}

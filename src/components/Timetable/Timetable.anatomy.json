@@ -1,0 +1,79 @@
+{
+  "id": "timetable",
+  "state": {
+    "cursorDate": "Date",
+    "includeDeactiveDates": "boolean",
+    "viewportStart": "number",
+    "selectedSlot": "TimetableSlotSelection | null",
+    "selectedAppointmentId": "string | null",
+    "datePickerOpen": "boolean",
+    "density": "'compact' | 'default'"
+  },
+  "events": [
+    "onCursorDateChange",
+    "onIncludeDeactiveDatesChange",
+    "onViewportStartChange",
+    "onSlotCellClick",
+    "onSelectedSlotChange",
+    "onAppointmentActivate",
+    "onAppointmentCopy",
+    "onDeactiveRevealForced",
+    "onDatePickerOpenChange"
+  ],
+  "anatomy": {
+    "id": "root",
+    "intent": "ornament",
+    "children": [
+      {
+        "id": "shell",
+        "intent": "ornament",
+        "children": [
+          {
+            "id": "controller-region",
+            "intent": "ornament",
+            "children": [
+              {
+                "id": "date-nav",
+                "intent": "ornament",
+                "slot": true
+              },
+              {
+                "id": "view-toolbar",
+                "intent": "ornament",
+                "slot": true
+              }
+            ]
+          },
+          {
+            "id": "grid-region",
+            "intent": "ornament",
+            "slot": true
+          }
+        ]
+      }
+    ]
+  },
+  "usage": {
+    "when": [
+      "시간 × 대상 격자에서 슬롯을 보고 배정할 때(플래너 근무·상담 배정)"
+    ],
+    "avoid": [
+      "단순 목록에 쓰지 않는다 → Table",
+      "한 사람의 하루만 보면 → Timeline"
+    ],
+    "limits": {
+      "items": "열 12개 이하. 밀도는 density 로 조절"
+    },
+    "states": {
+      "empty": "빈 슬롯도 격자를 그린다 — 칸을 지우면 시간축이 무너진다",
+      "disabled": "배정 불가 슬롯은 무채색 + 클릭 불가"
+    },
+    "placement": [
+      "가로 스크롤은 시간축 헤더를 고정한 채로"
+    ],
+    "examples": [
+      "components-l3-timetable--default",
+      "components-l3-timetable--compact"
+    ]
+  }
+}

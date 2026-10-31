@@ -1,0 +1,36 @@
+[
+  {
+    "name": "Button (single import, gzip)",
+    "path": "src/components/Button/index.ts",
+    "import": "{ Button }",
+    "limit": "45 KB",
+    "ignore": ["react", "react-dom", "clsx", "tailwind-merge", "class-variance-authority"]
+  },
+  {
+    "name": "Tooltip (single import, gzip)",
+    "path": "src/components/Tooltip/index.ts",
+    "import": "{ Tooltip }",
+    "limit": "45 KB",
+    "ignore": ["react", "react-dom", "clsx", "tailwind-merge", "class-variance-authority"]
+  },
+  {
+    "name": "Switch (single import, gzip)",
+    "path": "src/components/Switch/index.ts",
+    "import": "{ Switch }",
+    "limit": "3 KB",
+    "ignore": ["react", "react-dom", "clsx", "tailwind-merge", "class-variance-authority"]
+  },
+  {
+    "name": "Calendar (single import, gzip)",
+    "path": "src/components/Calendar/index.ts",
+    "import": "{ Calendar }",
+    "limit": "20 KB",
+    "ignore": ["react", "react-dom", "clsx", "tailwind-merge", "class-variance-authority"]
+  },
+  {
+    "name": "Full barrel (gzip)",
+    "path": "src/index.ts",
+    "limit": "1200 KB",
+    "ignore": ["react", "react-dom", "clsx", "tailwind-merge", "class-variance-authority"]
+  }
+]

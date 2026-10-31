@@ -1,0 +1,74 @@
+{
+  "id": "bar-chart",
+  "state": {
+    "data": "BarDataItem[]",
+    "keys": "string[]",
+    "seriesNames": "string[] | undefined",
+    "variant": "'vertical' | 'horizontal' | 'grouped' | 'stacked' | 'stacked-100'",
+    "showValues": "boolean",
+    "loading": "boolean"
+  },
+  "events": [
+    "onBarClick"
+  ],
+  "anatomy": {
+    "id": "root",
+    "intent": "ornament",
+    "children": [
+      {
+        "id": "x-axis",
+        "intent": "plot-axis",
+        "iterates": "xTicks",
+        "as": "tick",
+        "child": {
+          "id": "tick-label",
+          "intent": "value-display"
+        }
+      },
+      {
+        "id": "y-axis",
+        "intent": "plot-axis",
+        "iterates": "yTicks",
+        "as": "tick",
+        "child": {
+          "id": "tick-label",
+          "intent": "value-display"
+        }
+      },
+      {
+        "id": "series",
+        "intent": "ornament",
+        "iterates": "data",
+        "as": "row",
+        "child": {
+          "id": "segment",
+          "intent": "chart-series",
+          "binding": "row",
+          "emits": "onBarClick"
+        }
+      }
+    ]
+  },
+  "usage": {
+    "when": [
+      "범주 간 값을 비교할 때(지역별 건수·상태별 분포)",
+      "항목 이름이 길면 horizontal"
+    ],
+    "avoid": [
+      "시간 추세에 쓰지 않는다 → LineChart",
+      "부분과 전체의 비율에 쓰지 않는다 → PieChart 또는 stacked100",
+      "기준선이 0이 아닌 축을 만들지 않는다 — 비교가 왜곡된다"
+    ],
+    "limits": {
+      "items": "범주 12개 이하. 이상이면 상위 N + 기타"
+    },
+    "states": {
+      "empty": "ChartFrame 의 빈 상태 문구를 쓴다"
+    },
+    "examples": [
+      "components-charts-barchart--default",
+      "components-charts-barchart--horizontal",
+      "components-charts-barchart--empty"
+    ]
+  }
+}

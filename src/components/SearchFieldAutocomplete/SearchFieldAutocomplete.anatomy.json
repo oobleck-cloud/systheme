@@ -1,0 +1,99 @@
+{
+  "id": "search-autocomplete",
+  "state": {
+    "query": "string",
+    "open": "boolean",
+    "options": "SearchFieldAutocompleteOption[]"
+  },
+  "events": [
+    "onValueChange",
+    "onQueryChange",
+    "onOpenChange",
+    "onOptionSelect"
+  ],
+  "anatomy": {
+    "id": "root",
+    "intent": "ornament",
+    "children": [
+      {
+        "id": "field",
+        "intent": "search-input",
+        "writes": "query",
+        "emits": "onValueChange",
+        "children": [
+          {
+            "id": "leading-icon",
+            "intent": "icon",
+            "slot": true
+          },
+          {
+            "id": "input",
+            "intent": "search-input",
+            "writes": "query",
+            "emits": "onValueChange"
+          },
+          {
+            "id": "clear",
+            "intent": "press-action",
+            "slot": true
+          },
+          {
+            "id": "submit",
+            "intent": "submit",
+            "slot": true
+          }
+        ]
+      },
+      {
+        "id": "suggestions",
+        "intent": "overlay-surface",
+        "binding": "open",
+        "children": [
+          {
+            "id": "list",
+            "intent": "ornament",
+            "traversal": {
+              "axis": "block"
+            },
+            "iterates": "options",
+            "as": "option",
+            "child": {
+              "id": "option",
+              "intent": "select-option",
+              "binding": "option",
+              "emits": "onOptionSelect"
+            }
+          }
+        ]
+      }
+    ]
+  },
+  "usage": {
+    "when": [
+      "입력하면서 제안(고객·주소·플래너) 을 골라야 할 때. minQueryLength(기본 2) 이상에서 패널이 열리고 ↑↓ Enter 로 고른다",
+      "옵션은 {id, label, description?}. 검색어 변화는 onQueryChange, 선택은 onOptionSelect"
+    ],
+    "avoid": [
+      "정해진 옵션 목록이면 → Select / MultiSelect",
+      "제안 없이 조회만 하면 → SearchField",
+      "선택 후 값을 Tag 로 쌓으면 → MultiSelect"
+    ],
+    "limits": {
+      "perRegion": 1,
+      "items": "제안 목록은 listDensity 셸 높이 안 스크롤",
+      "label": "label 한 줄 + description truncate"
+    },
+    "states": {
+      "loading": "isLoading 이고 options 가 없으면 패널에 '검색 중…'",
+      "disabled": "필드 비활성, 패널 열리지 않음",
+      "empty": "options 가 없으면 패널이 열리지 않는다(canSuggest false). '결과 없음' 문구 없다 → 필요하면 바깥에서"
+    },
+    "placement": [
+      "패널은 AnchorContextSurface 로 필드 아래 — overflow 부모에 잘리지 않는다"
+    ],
+    "examples": [
+      "components-l1-searchfieldautocomplete--default",
+      "components-l1-searchfieldautocomplete--keyboard-select"
+    ]
+  }
+}

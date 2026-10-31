@@ -1,0 +1,84 @@
+{
+  "id": "date-picker",
+  "primitiveGroup": "value-picker",
+  "state": {
+    "value": "Date | null",
+    "defaultValue": "Date | null",
+    "open": "boolean",
+    "density": "'compact' | 'default' | 'loose'"
+  },
+  "events": [
+    "onChange"
+  ],
+  "usage": {
+    "when": [
+      "사용자가 달력을 보며 하루를 고를 때(예약일·마감일·조회 기준일)",
+      "min/max 로 고를 수 있는 범위를 잠가야 할 때"
+    ],
+    "avoid": [
+      "이미 아는 날짜를 타이핑하는 생년월일에는 쓰지 않는다 → DateInput",
+      "기간(시작~종료) 선택에는 쓰지 않는다 → PresetDateRangeField",
+      "표 셀 안 인라인 편집에는 쓰지 않는다 → @montize/collections DateCellEditor(DateEditPanel + AnchorContextSurface)",
+      "년·월만 고를 때는 쓰지 않는다 → YearMonthSelector"
+    ],
+    "limits": {
+      "label": "트리거 표기는 'YYYY. MM. DD.' 고정. 빈 값은 placeholder(기본 '날짜 선택')",
+      "width": "트리거 w-full. 패널은 density 별 w-64/w-72/w-80 고정, body 포털"
+    },
+    "states": {
+      "disabled": "트리거가 Input disabled 톤. 패널이 열리지 않는다",
+      "error": "variant=error 는 보더만 바꾼다. 메시지는 FormField error 로",
+      "empty": "값 null 이면 placeholder 를 fg-muted 로"
+    },
+    "placement": [
+      "라벨은 위(FormField)",
+      "패널은 트리거 아래, 화면 밖이면 자동 반전(computeAnchorPanelPosition). 날짜 하나 고르면 즉시 닫힌다",
+      "Escape·바깥 클릭으로 닫힌다"
+    ],
+    "examples": [
+      "components-l1-datepicker--default",
+      "components-l1-datepicker--with-min-max",
+      "components-l1-datepicker--with-error",
+      "components-l1-datepicker--disabled"
+    ]
+  },
+  "anatomy": {
+    "id": "root",
+    "intent": "ornament",
+    "children": [
+      {
+        "id": "trigger",
+        "intent": "disclosure",
+        "writes": "open",
+        "children": [
+          {
+            "id": "calendar-icon",
+            "intent": "icon",
+            "binding": "@calendar"
+          },
+          {
+            "id": "label",
+            "intent": "value-display",
+            "binding": "value"
+          },
+          {
+            "id": "chevron",
+            "intent": "state-indicator",
+            "binding": "open"
+          }
+        ]
+      },
+      {
+        "id": "panel",
+        "intent": "overlay-surface",
+        "binding": "open",
+        "children": [
+          {
+            "id": "calendar",
+            "intent": "ornament"
+          }
+        ]
+      }
+    ]
+  }
+}

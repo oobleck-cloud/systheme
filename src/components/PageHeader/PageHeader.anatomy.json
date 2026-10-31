@@ -1,0 +1,75 @@
+{
+  "id": "page-header",
+  "state": {
+    "eyebrow": "string",
+    "title": "string",
+    "description": "string"
+  },
+  "events": [],
+  "anatomy": {
+    "id": "root",
+    "intent": "ornament",
+    "children": [
+      {
+        "id": "leading",
+        "intent": "icon",
+        "slot": true
+      },
+      {
+        "id": "eyebrow",
+        "intent": "value-display",
+        "binding": "eyebrow"
+      },
+      {
+        "id": "title",
+        "intent": "value-display",
+        "binding": "title"
+      },
+      {
+        "id": "title-addon",
+        "intent": "state-indicator",
+        "slot": true
+      },
+      {
+        "id": "description",
+        "intent": "value-display",
+        "binding": "description"
+      },
+      {
+        "id": "actions",
+        "intent": "press-action",
+        "slot": true
+      },
+      {
+        "id": "subbar",
+        "intent": "ornament",
+        "slot": true
+      }
+    ]
+  },
+  "usage": {
+    "when": [
+      "워크스페이스 콘솔 화면의 맨 위 — 모든 화면이 이것으로 시작한다",
+      "상세 화면의 정체성 머리(아바타는 leading, 상태 배지는 titleAddon)"
+    ],
+    "avoid": [
+      "카드·패널 안의 소제목에 쓰지 않는다 → Heading",
+      "한 화면에 두 개 이상 두지 않는다",
+      "학습자·지원자용 외부 화면(LMS·채용·랜딩)에는 쓰지 않는다"
+    ],
+    "limits": {
+      "perRegion": 1,
+      "label": "제목 한 줄, 설명 한 줄, 액션의 primary 는 하나"
+    },
+    "states": {},
+    "placement": [
+      "화면 루트 flex column 의 첫 자식. 스크롤 영역 밖(shrink-0)",
+      "eyebrow 는 사이드바 그룹 경로(sidebarTrailOf)에서 만든다"
+    ],
+    "examples": [
+      "screens/ops-schedule",
+      "screens/planners",
+      "screens/planner-detail"
+    ]
+  }
+}

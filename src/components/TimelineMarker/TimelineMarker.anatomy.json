@@ -1,0 +1,35 @@
+{
+  "id": "timeline-marker",
+  "state": {
+    "phase": "'pending' | 'active' | 'complete' | 'neutral'"
+  },
+  "events": [],
+  "anatomy": {
+    "id": "root",
+    "intent": "ornament",
+    "children": [
+      {
+        "id": "glyph",
+        "intent": "icon",
+        "slot": true
+      },
+      {
+        "id": "status-dot",
+        "intent": "state-indicator",
+        "binding": "phase"
+      }
+    ]
+  },
+  "usage": {
+    "when": [
+      "Timeline 축 위의 점·단계 표식(phase)을 그릴 때"
+    ],
+    "avoid": [
+      "상태 배지 대용으로 쓰지 않는다 → Badge"
+    ],
+    "examples": [
+      "components-l1-timelinemarker--default",
+      "components-l1-timelinemarker--phases"
+    ]
+  }
+}

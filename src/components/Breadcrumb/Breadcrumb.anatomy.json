@@ -1,0 +1,63 @@
+{
+  "id": "breadcrumb",
+  "state": {
+    "items": "{ label: string; href?: string }[]"
+  },
+  "events": [],
+  "anatomy": {
+    "id": "root",
+    "intent": "ornament",
+    "traversal": {
+      "axis": "inline"
+    },
+    "iterates": "items",
+    "as": "item",
+    "child": {
+      "id": "crumb",
+      "intent": "ornament",
+      "children": [
+        {
+          "id": "link",
+          "intent": "routing-link",
+          "binding": "item.href",
+          "emits": "onClick",
+          "children": [
+            {
+              "id": "link-label",
+              "intent": "value-display",
+              "binding": "item.label"
+            }
+          ]
+        },
+        {
+          "id": "current",
+          "intent": "value-display",
+          "binding": "item.label"
+        },
+        {
+          "id": "separator",
+          "intent": "ornament"
+        }
+      ]
+    }
+  },
+  "usage": {
+    "when": [
+      "계층이 3단 이상인 화면에서 현재 위치와 상위로 가는 길을 보일 때"
+    ],
+    "avoid": [
+      "단계 진행 표시에 쓰지 않는다 → Steps(appearance=text)",
+      "한 단계 위로만 가면 → 되돌아가기 링크 하나(Button ghost + ChevronLeft)"
+    ],
+    "limits": {
+      "items": "4단계 이하. 넘치면 가운데를 … 로 접는다"
+    },
+    "placement": [
+      "화면 제목 위. 마지막 항목은 현재 페이지이므로 링크가 아니다(aria-current)"
+    ],
+    "examples": [
+      "components-l1-breadcrumb--default",
+      "components-l1-breadcrumb--current-page-contract"
+    ]
+  }
+}

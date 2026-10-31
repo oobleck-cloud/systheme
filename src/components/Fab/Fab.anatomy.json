@@ -1,0 +1,58 @@
+{
+  "id": "fab",
+  "state": {
+    "extended": "boolean",
+    "color": "'primary' | 'tonal'"
+  },
+  "events": [
+    "onClick"
+  ],
+  "usage": {
+    "when": [
+      "모바일 현장 화면의 hero 액션 하나(상담 시작·추가) — primary",
+      "라벨이 있으면 extended(h-14 px-5), 없으면 아이콘 전용 size-14(aria-label 필수)",
+      "primary 가 이미 있는 화면의 보조 hero — tonal(container 쌍)"
+    ],
+    "avoid": [
+      "운영 콘솔(데스크톱)에는 쓰지 않는다 → 헤더 밴드 Button primary",
+      "여러 액션이 펼쳐지는 자리에는 단독 Fab 을 쓰지 않는다 → FabMenu",
+      "폼 제출·다음 단계에는 쓰지 않는다 → 하단 CTA Button",
+      "목록 행·카드 안에 넣지 않는다"
+    ],
+    "limits": {
+      "perRegion": {
+        "primary": 1,
+        "tonal": 1
+      },
+      "label": "동사구 2~6자(상담 시작). 문장 금지. 한 줄"
+    },
+    "states": {
+      "disabled": "disabled-container 바탕 + on-disabled 글자, 그림자 유지. 이유는 화면 캡션에",
+      "overflow": "extended 라벨은 한 줄. 넘치면 아이콘 전용으로 바꾼다"
+    },
+    "placement": [
+      "배치는 셸 몫 — 홈은 하단 내비 위, 플로우 화면은 CTA 존 위 우측(h-0 앵커)",
+      "하단 크롬에 고정, 본문 스크롤과 분리. AI Dock 여백을 소비한다"
+    ],
+    "examples": [
+      "components-l1-fab--variants",
+      "components-l1-fab--menu"
+    ]
+  },
+  "anatomy": {
+    "id": "root",
+    "intent": "press-action",
+    "children": [
+      {
+        "id": "icon",
+        "intent": "icon",
+        "slot": true
+      },
+      {
+        "id": "label",
+        "intent": "value-display",
+        "slot": true
+      }
+    ]
+  }
+}

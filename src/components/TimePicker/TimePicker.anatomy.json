@@ -1,0 +1,96 @@
+{
+  "id": "time-picker",
+  "primitiveGroup": "value-picker",
+  "state": {
+    "value": "string",
+    "defaultValue": "string",
+    "open": "boolean",
+    "density": "'compact' | 'default' | 'loose'"
+  },
+  "events": [
+    "onChange"
+  ],
+  "anatomy": {
+    "id": "root",
+    "intent": "ornament",
+    "children": [
+      {
+        "id": "trigger",
+        "intent": "disclosure",
+        "writes": "open",
+        "children": [
+          {
+            "id": "clock-icon",
+            "intent": "icon",
+            "binding": "@clock"
+          },
+          {
+            "id": "label",
+            "intent": "value-display",
+            "binding": "value"
+          },
+          {
+            "id": "chevron",
+            "intent": "state-indicator",
+            "binding": "open"
+          }
+        ]
+      },
+      {
+        "id": "panel",
+        "intent": "overlay-surface",
+        "binding": "open",
+        "children": [
+          {
+            "id": "hour-column",
+            "traversal": {
+              "axis": "block"
+            },
+            "iterates": "hours",
+            "as": "hour",
+            "child": {
+              "id": "hour-option",
+              "intent": "select-option",
+              "writes": "value.hour",
+              "binding": "hour"
+            }
+          },
+          {
+            "id": "minute-column",
+            "traversal": {
+              "axis": "block"
+            },
+            "iterates": "minutes",
+            "as": "minute",
+            "child": {
+              "id": "minute-option",
+              "intent": "select-option",
+              "writes": "value.minute",
+              "binding": "minute"
+            }
+          }
+        ]
+      }
+    ]
+  },
+  "usage": {
+    "when": [
+      "시각을 분 단위로 고를 때(방문 시간·근무 슬롯)"
+    ],
+    "avoid": [
+      "날짜까지 필요하면 → DatePicker 와 함께 둔다",
+      "자유 입력이 필요하면 → Input(패턴 검증)"
+    ],
+    "limits": {
+      "items": "step 은 5·10·30분 중 하나. 1분 단위 목록은 고를 수 없다"
+    },
+    "states": {
+      "disabled": "값은 보이고 패널을 열지 않는다",
+      "error": "보더 error + 아래 helper"
+    },
+    "examples": [
+      "components-l1-timepicker--default",
+      "components-l1-timepicker--with-error"
+    ]
+  }
+}

@@ -1,0 +1,62 @@
+{
+  "id": "popover",
+  "state": {
+    "open": "boolean"
+  },
+  "events": [
+    "onOpenChange"
+  ],
+  "anatomy": {
+    "id": "root",
+    "intent": "ornament",
+    "children": [
+      {
+        "id": "trigger",
+        "intent": "disclosure",
+        "writes": "open",
+        "emits": "onOpenChange",
+        "slot": true
+      },
+      {
+        "id": "panel",
+        "intent": "overlay-surface",
+        "binding": "open",
+        "children": [
+          {
+            "id": "content",
+            "intent": "ornament",
+            "slot": true
+          },
+          {
+            "id": "dismiss",
+            "intent": "dismiss",
+            "writes": "open",
+            "emits": "onOpenChange"
+          }
+        ]
+      }
+    ]
+  },
+  "usage": {
+    "when": [
+      "트리거 옆에 잠깐 펼치는 작은 패널(필터 조건·날짜·설명 확장)"
+    ],
+    "avoid": [
+      "한 줄 설명은 Tooltip",
+      "결정을 요구하면 Modal",
+      "표 안에서 띄우는 패널은 Popover 가 아니라 AnchorContextSurface(포털) — overflow 에 잘린다"
+    ],
+    "limits": {
+      "width": "max-w-sm. 안에서 스크롤"
+    },
+    "states": {
+      "loading": "Skeleton"
+    },
+    "placement": [
+      "Escape·바깥 클릭으로 닫힌다. 트리거는 aria-expanded"
+    ],
+    "examples": [
+      "components-l1-popover--default"
+    ]
+  }
+}

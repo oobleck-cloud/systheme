@@ -1,0 +1,42 @@
+{
+  "id": "skeleton",
+  "state": {
+    "lines": "number"
+  },
+  "events": [],
+  "anatomy": {
+    "id": "root",
+    "intent": "ornament",
+    "children": [
+      {
+        "id": "pulse",
+        "iterates": "lines",
+        "as": "line",
+        "child": {
+          "id": "pulse-bar",
+          "intent": "ornament",
+          "binding": "line"
+        }
+      }
+    ]
+  },
+  "usage": {
+    "when": [
+      "레이아웃이 이미 정해진 자리에 내용이 오기를 기다릴 때"
+    ],
+    "avoid": [
+      "끝을 모르는 대기에 쓰지 않는다 → Spinner",
+      "같은 자리에 Spinner 와 함께 쓰지 않는다 — 둘 중 하나만",
+      "빈 결과에 쓰지 않는다 → EmptyState"
+    ],
+    "states": {
+      "loading": "실제 콘텐츠와 같은 행 수·높이로. 개수가 매번 달라지면 자리가 흔들린다"
+    },
+    "placement": [
+      "카드·표의 본문 자리. 헤더·제목은 그대로 둔다"
+    ],
+    "examples": [
+      "components-l1-skeleton--default"
+    ]
+  }
+}

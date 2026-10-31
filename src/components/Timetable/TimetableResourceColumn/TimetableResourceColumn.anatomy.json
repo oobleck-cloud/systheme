@@ -1,0 +1,27 @@
+{
+  "id": "timetable-resource-column",
+  "state": {
+    "resourceId": "string",
+    "viewportStart": "number",
+    "slotMinutes": "30",
+    "visibleSlotCount": "number"
+  },
+  "events": ["onSlotCellClick"],
+  "anatomy": {
+    "id": "root",
+    "intent": "ornament",
+    "children": [
+      {
+        "id": "slot-stack",
+        "intent": "ornament",
+        "children": [
+          {
+            "id": "time-slot-cell",
+            "intent": "ornament",
+            "slot": true
+          }
+        ]
+      }
+    ]
+  }
+}

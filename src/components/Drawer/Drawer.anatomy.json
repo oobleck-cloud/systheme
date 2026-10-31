@@ -1,0 +1,81 @@
+{
+  "id": "drawer",
+  "primitiveGroup": "overlay-panel",
+  "state": {
+    "open": "boolean",
+    "side": "'left' | 'right' | 'top' | 'bottom'",
+    "hasHeader": "boolean"
+  },
+  "events": [
+    "onOpenChange"
+  ],
+  "anatomy": {
+    "id": "root",
+    "intent": "ornament",
+    "children": [
+      {
+        "id": "backdrop",
+        "intent": "dismiss",
+        "writes": "open",
+        "emits": "onOpenChange"
+      },
+      {
+        "id": "panel",
+        "intent": "overlay-surface",
+        "binding": "open",
+        "children": [
+          {
+            "id": "header",
+            "intent": "ornament",
+            "binding": "hasHeader",
+            "children": [
+              {
+                "id": "title",
+                "intent": "value-display",
+                "slot": true
+              },
+              {
+                "id": "close",
+                "intent": "dismiss",
+                "writes": "open",
+                "emits": "onOpenChange"
+              }
+            ]
+          },
+          {
+            "id": "body",
+            "intent": "ornament",
+            "slot": true
+          },
+          {
+            "id": "footer",
+            "intent": "ornament",
+            "slot": true
+          }
+        ]
+      }
+    ]
+  },
+  "usage": {
+    "when": [
+      "화면 가장자리에서 밀려 나오는 보조 작업(편집 폼·상세)",
+      "하단 시트(edge-bottom)로 선택지를 고를 때"
+    ],
+    "avoid": [
+      "참고용 정보 열람에 쓰지 않는다 → SideSheet(비모달, 본문과 함께 봄)",
+      "짧은 확인에 쓰지 않는다 → Modal"
+    ],
+    "limits": {
+      "width": "max-w-md. 하단은 max-h 85vh"
+    },
+    "states": {
+      "loading": "본문 Skeleton, 헤더는 유지"
+    },
+    "placement": [
+      "닫기는 헤더 오른쪽, 제출은 하단 고정 바"
+    ],
+    "examples": [
+      "components-l2-drawer--default"
+    ]
+  }
+}

@@ -1,0 +1,56 @@
+{
+  "id": "collapsible",
+  "state": {
+    "open": "boolean"
+  },
+  "events": [
+    "onOpenChange"
+  ],
+  "anatomy": {
+    "id": "root",
+    "intent": "ornament",
+    "children": [
+      {
+        "id": "trigger",
+        "intent": "disclosure",
+        "writes": "open",
+        "emits": "onOpenChange",
+        "children": [
+          {
+            "id": "label",
+            "intent": "value-display",
+            "binding": "trigger"
+          },
+          {
+            "id": "accessory",
+            "intent": "value-display",
+            "binding": "accessory"
+          },
+          {
+            "id": "chevron",
+            "intent": "state-indicator",
+            "binding": "open"
+          }
+        ]
+      },
+      {
+        "id": "content",
+        "intent": "collapsible-region",
+        "binding": "open",
+        "slot": true
+      }
+    ]
+  },
+  "usage": {
+    "when": [
+      "한 덩어리를 접었다 펴는 최소 단위가 필요할 때(Accordion 의 부품)"
+    ],
+    "avoid": [
+      "여러 항목을 나열하면 → Accordion",
+      "화면 전환에 쓰지 않는다 → TabBar"
+    ],
+    "states": {
+      "disabled": "트리거만 비활성, 내용은 접힌 채로 둔다"
+    }
+  }
+}

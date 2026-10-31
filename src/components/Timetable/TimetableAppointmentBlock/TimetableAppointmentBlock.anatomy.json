@@ -1,0 +1,42 @@
+{
+  "id": "timetable-appointment-block",
+  "state": {
+    "label": "string",
+    "selected": "boolean",
+    "copied": "boolean — 클릭 복사 직후 피드백"
+  },
+  "events": ["onActivate", "onCopy"],
+  "anatomy": {
+    "id": "root",
+    "intent": "press-action",
+    "emits": "onCopy",
+    "children": [
+      {
+        "id": "hover-preview-wrap",
+        "intent": "ornament",
+        "children": [
+          {
+            "id": "hover-preview-surface",
+            "intent": "overlay-surface",
+            "slot": true
+          }
+        ]
+      },
+      {
+        "id": "title",
+        "intent": "value-display",
+        "binding": "label"
+      },
+      {
+        "id": "selection-ring",
+        "intent": "state-indicator",
+        "binding": "selected"
+      },
+      {
+        "id": "copy-feedback",
+        "intent": "state-indicator",
+        "binding": "copied"
+      }
+    ]
+  }
+}

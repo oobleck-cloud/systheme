@@ -1,0 +1,35 @@
+{
+  "id": "animated-text",
+  "state": {
+    "value": "string",
+    "speed": "number",
+    "effect": "scramble | shimmer"
+  },
+  "events": [],
+  "anatomy": {
+    "id": "root",
+    "intent": "value-display",
+    "binding": "value"
+  },
+  "usage": {
+    "when": [
+      "AI 응답처럼 생성 중인 텍스트가 흘러 들어오는 것을 보일 때",
+      "로딩 대기를 글자 등장으로 대신할 때(shimmer)"
+    ],
+    "avoid": [
+      "정적인 본문에 쓰지 않는다 → Text",
+      "목록·표의 셀에 쓰지 않는다 — 스캔을 방해한다",
+      "동시에 두 곳에서 움직이지 않게 한다"
+    ],
+    "limits": {
+      "perRegion": 1
+    },
+    "states": {
+      "loading": "shimmer 로 대기, 텍스트가 오면 타이핑으로 전환"
+    },
+    "examples": [
+      "display-animatedtext--default",
+      "display-animatedtext--shimmer"
+    ]
+  }
+}

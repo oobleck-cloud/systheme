@@ -1,0 +1,93 @@
+{
+  "id": "command-palette",
+  "state": {
+    "open": "boolean",
+    "query": "string",
+    "selectedId": "string",
+    "commandRows": "CommandPaletteRow[]"
+  },
+  "events": [
+    "onOpenChange",
+    "onQueryChange",
+    "onExecute"
+  ],
+  "anatomy": {
+    "id": "root",
+    "intent": "ornament",
+    "children": [
+      {
+        "id": "backdrop",
+        "intent": "dismiss",
+        "writes": "open",
+        "emits": "onOpenChange"
+      },
+      {
+        "id": "surface",
+        "intent": "overlay-surface",
+        "binding": "open",
+        "children": [
+          {
+            "id": "search",
+            "intent": "search-input",
+            "writes": "query",
+            "emits": "onQueryChange"
+          },
+          {
+            "id": "results",
+            "intent": "ornament",
+            "traversal": {
+              "axis": "block"
+            },
+            "iterates": "commandRows",
+            "as": "row",
+            "child": {
+              "id": "result-row",
+              "intent": "select-option",
+              "writes": "selectedId",
+              "children": [
+                {
+                  "id": "title",
+                  "intent": "value-display",
+                  "binding": "row.title"
+                },
+                {
+                  "id": "subtitle",
+                  "intent": "value-display",
+                  "binding": "row.subtitle"
+                },
+                {
+                  "id": "run",
+                  "intent": "press-action",
+                  "emits": "onExecute"
+                }
+              ]
+            }
+          }
+        ]
+      }
+    ]
+  },
+  "usage": {
+    "when": [
+      "이름으로 명령·화면을 찾아 즉시 실행할 때(단축키 진입)"
+    ],
+    "avoid": [
+      "이름 있는 저장 뷰를 다루지 않는다 → SavedViewRail",
+      "값을 고르는 데 쓰지 않는다 → Select"
+    ],
+    "limits": {
+      "items": "결과 8행까지 보이고 나머지는 스크롤"
+    },
+    "states": {
+      "empty": "검색 결과가 없으면 '결과 없음' 한 줄",
+      "loading": "결과 자리에 Skeleton"
+    },
+    "placement": [
+      "화면 상단 중앙 오버레이. Escape 로 닫힌다"
+    ],
+    "examples": [
+      "components-l2-commandpalette--default",
+      "components-l2-commandpalette--run-selected-row"
+    ]
+  }
+}

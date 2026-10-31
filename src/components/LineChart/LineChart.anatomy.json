@@ -1,0 +1,89 @@
+{
+  "id": "line-chart",
+  "state": {
+    "series": "SeriesData[]",
+    "timeAxis": "boolean",
+    "showDots": "boolean",
+    "showArea": "boolean",
+    "curved": "boolean"
+  },
+  "events": [
+    "onPointClick"
+  ],
+  "usage": {
+    "when": [
+      "값이 시간·순서에 따라 어떻게 변하는지 볼 때 — SeriesData[] (x: number | string | Date, y: number)",
+      "여러 시리즈 비교 — 범례는 시리즈 2개 이상일 때만 자동",
+      "Date x 축은 timeAxis=true"
+    ],
+    "avoid": [
+      "카테고리 간 크기 비교에는 쓰지 않는다 → BarChart",
+      "누적 구성의 변화에는 쓰지 않는다 → AreaChart",
+      "표 셀·KPI 옆 작은 추세에는 쓰지 않는다 → SparklineChart",
+      "x 가 순서 없는 문자열이면 쓰지 않는다 → BarChart",
+      "값의 분포에는 쓰지 않는다 → Histogram"
+    ],
+    "limits": {
+      "items": "시리즈 6개(색 인덱스 1~6). 시리즈당 점 100개 넘으면 showDots=false",
+      "label": "시리즈 name 은 범례 한 줄 8자",
+      "width": "w-full, 높이 기본 300"
+    },
+    "states": {
+      "empty": "series 가 비거나 모두 data 가 없으면 ChartFrame 빈 상태('표시할 데이터가 없습니다')"
+    },
+    "placement": [
+      "title/description 은 ChartFrame. 범례는 차트 아래",
+      "점 클릭은 onPointClick — 상세는 SideSheet"
+    ],
+    "examples": [
+      "components-charts-linechart--default",
+      "components-charts-linechart--multi-series",
+      "components-charts-linechart--with-area",
+      "components-charts-linechart--empty"
+    ]
+  },
+  "anatomy": {
+    "id": "root",
+    "intent": "ornament",
+    "children": [
+      {
+        "id": "x-axis",
+        "intent": "plot-axis",
+        "iterates": "xTicks",
+        "as": "tick",
+        "child": {
+          "id": "tick-label",
+          "intent": "value-display"
+        }
+      },
+      {
+        "id": "y-axis",
+        "intent": "plot-axis",
+        "iterates": "yTicks",
+        "as": "tick",
+        "child": {
+          "id": "tick-label",
+          "intent": "value-display"
+        }
+      },
+      {
+        "id": "series",
+        "intent": "ornament",
+        "iterates": "series",
+        "as": "s",
+        "child": {
+          "id": "segment",
+          "intent": "chart-series",
+          "binding": "s",
+          "children": [
+            {
+              "id": "point",
+              "intent": "press-action",
+              "emits": "onPointClick"
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

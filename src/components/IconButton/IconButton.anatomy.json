@@ -1,0 +1,48 @@
+{
+  "id": "icon-button",
+  "state": {},
+  "events": [
+    "onClick"
+  ],
+  "usage": {
+    "when": [
+      "라벨 없이 아이콘만으로 뜻이 통하는 동작(닫기·복사·더보기·편집) — aria-label 필수",
+      "표 행·카드 헤더·툴바처럼 폭이 좁은 자리"
+    ],
+    "avoid": [
+      "화면의 주 동작에는 쓰지 않는다 → Button primary",
+      "아이콘 뜻이 모호하면 쓰지 않는다 → Button(아이콘 + 라벨)",
+      "상태 토글에는 쓰지 않는다 → Switch / ToggleButtonGroup",
+      "장식 아이콘에 쓰지 않는다 → IconBox"
+    ],
+    "limits": {
+      "items": "행·헤더 끝 3개까지. 넘으면 더보기 Menu 로 접는다",
+      "label": "aria-label 은 동사구 2~6자"
+    },
+    "states": {
+      "loading": "아이콘 자리에 스피너, disabled + aria-busy. 크기 고정",
+      "disabled": "opacity-50, 포인터 무시. 이유는 옆 캡션에"
+    },
+    "placement": [
+      "행 끝 오른쪽 정렬. 기본 ghost·rounded·md, 툴바에서는 size 통일",
+      "circle 은 모바일 액션 규율, 콘솔은 rounded"
+    ],
+    "examples": [
+      "components-l1-iconbutton--variants",
+      "components-l1-iconbutton--loading",
+      "components-l1-iconbutton--disabled"
+    ]
+  },
+  "anatomy": {
+    "id": "root",
+    "intent": "press-action",
+    "emits": "onClick",
+    "children": [
+      {
+        "id": "icon",
+        "intent": "icon",
+        "slot": true
+      }
+    ]
+  }
+}

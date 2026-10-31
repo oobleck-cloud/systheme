@@ -1,0 +1,63 @@
+{
+  "id": "checkbox",
+  "state": {
+    "checked": "boolean | 'indeterminate'",
+    "label": "string",
+    "description": "string"
+  },
+  "events": [
+    "onCheckedChange"
+  ],
+  "anatomy": {
+    "id": "root",
+    "intent": "ornament",
+    "children": [
+      {
+        "id": "control",
+        "intent": "toggle",
+        "writes": "checked",
+        "emits": "onCheckedChange",
+        "children": [
+          {
+            "id": "indicator",
+            "intent": "state-indicator",
+            "binding": "checked"
+          }
+        ]
+      },
+      {
+        "id": "label",
+        "intent": "value-display",
+        "binding": "label",
+        "slot": true
+      },
+      {
+        "id": "description",
+        "intent": "status-message",
+        "binding": "description",
+        "slot": true
+      }
+    ]
+  },
+  "usage": {
+    "when": [
+      "독립적인 켬/끔을 여러 개 고를 때",
+      "부분 선택을 표현할 때 indeterminate"
+    ],
+    "avoid": [
+      "둘 중 하나면 → Radio, 즉시 반영되는 설정 토글이면 → Switch",
+      "화면 이동·실행에 쓰지 않는다 → Button"
+    ],
+    "limits": {
+      "label": "한 줄. 설명은 description 슬롯으로"
+    },
+    "states": {
+      "disabled": "라벨은 남기고 흐리게",
+      "error": "aria-invalid + error variant, 이유는 아래 helper"
+    },
+    "examples": [
+      "components-l1-checkbox--default",
+      "components-l1-checkbox--indeterminate"
+    ]
+  }
+}

@@ -1,0 +1,69 @@
+{
+  "id": "route-map",
+  "primitiveGroup": "map-visualization",
+  "state": {
+    "origin": "GeoPoint",
+    "destination": "GeoPoint",
+    "distance": "string | null"
+  },
+  "events": [],
+  "anatomy": {
+    "id": "root",
+    "intent": "ornament",
+    "children": [
+      {
+        "id": "map-canvas",
+        "intent": "ornament",
+        "binding": "@map-sdk-host"
+      },
+      {
+        "id": "route-overlay",
+        "intent": "state-indicator",
+        "binding": "origin"
+      },
+      {
+        "id": "origin-marker",
+        "intent": "state-indicator",
+        "binding": "origin"
+      },
+      {
+        "id": "destination-marker",
+        "intent": "state-indicator",
+        "binding": "destination"
+      },
+      {
+        "id": "distance-badge",
+        "intent": "value-display",
+        "binding": "distance"
+      }
+    ]
+  },
+  "usage": {
+    "when": [
+      "출발지→목적지 한 구간의 경로와 거리 배지를 SDK 무관하게 보여줄 때(카카오·네이버·Google). SDK 초기화·정리는 onMount",
+      "DS 가 소유하는 것은 프레임·출발/목적지 sr-only 앵커·거리 배지뿐이다. 지도·핀·폴리라인은 불투명 슬롯 — SDK 오버레이가 그린다"
+    ],
+    "avoid": [
+      "Mapbox 면 쓰지 않는다 → MapboxMap(arrows follow=road)",
+      "경유지·마커가 여럿이면 → MapboxMap",
+      "로딩·오류 배지·재시도가 필요하면 → MapEmbedSlot 으로 감싼다"
+    ],
+    "limits": {
+      "perRegion": 1,
+      "width": "기본 높이 없다(h-full) — className 으로 높이를 반드시 준다",
+      "label": "distance 는 짧은 문자열('32 km') 한 줄"
+    },
+    "states": {
+      "empty": "distance null·생략 → 배지 숨김. 지도 없으면 빈 면",
+      "loading": "없다 → MapEmbedSlot",
+      "error": "없다 → MapEmbedSlot"
+    },
+    "placement": [
+      "거리 배지는 하단 가운데(bottom-3) 캡슐 — 컴포넌트가 정한다"
+    ],
+    "examples": [
+      "components-l2-routemap--with-distance",
+      "components-l2-routemap--no-distance"
+    ]
+  }
+}

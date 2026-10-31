@@ -1,0 +1,32 @@
+{
+  "id": "timetable-shell",
+  "state": {},
+  "events": [
+    "onHorizontalArrow",
+    "onDeactiveRevealForced"
+  ],
+  "anatomy": {
+    "id": "root",
+    "intent": "ornament",
+    "traversal": {
+      "axis": "inline"
+    },
+    "children": [
+      {
+        "id": "controller-region",
+        "intent": "ornament",
+        "slot": true
+      },
+      {
+        "id": "grid-region",
+        "intent": "ornament",
+        "slot": true
+      },
+      {
+        "id": "legend-region",
+        "intent": "ornament",
+        "slot": true
+      }
+    ]
+  }
+}

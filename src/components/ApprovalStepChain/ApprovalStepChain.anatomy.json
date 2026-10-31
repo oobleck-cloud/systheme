@@ -1,0 +1,70 @@
+{
+  "id": "approval-step-chain",
+  "state": {
+    "steps": "ApprovalStepViewModel[]"
+  },
+  "events": [
+    "onApprove",
+    "onReject",
+    "onDelegate"
+  ],
+  "anatomy": {
+    "id": "root",
+    "intent": "ornament",
+    "iterates": "steps",
+    "as": "step",
+    "child": {
+      "id": "row",
+      "intent": "ornament",
+      "children": [
+        {
+          "id": "role",
+          "intent": "value-display",
+          "binding": "step.roleLabel"
+        },
+        {
+          "id": "status",
+          "intent": "state-indicator",
+          "binding": "step.status"
+        },
+        {
+          "id": "approve",
+          "intent": "press-action",
+          "emits": "onApprove"
+        },
+        {
+          "id": "reject",
+          "intent": "press-action",
+          "emits": "onReject"
+        },
+        {
+          "id": "delegate",
+          "intent": "press-action",
+          "emits": "onDelegate"
+        }
+      ]
+    }
+  },
+  "usage": {
+    "when": [
+      "결재·승인처럼 사람이 순서대로 처리하는 흐름의 현재 위치와 결과를 보일 때"
+    ],
+    "avoid": [
+      "사용자가 진행하는 입력 절차에 쓰지 않는다 → Steps",
+      "단순 상태 하나에 쓰지 않는다 → Badge"
+    ],
+    "limits": {
+      "items": "6단계 이하"
+    },
+    "states": {
+      "empty": "승인선이 없으면 컴포넌트를 그리지 않는다"
+    },
+    "placement": [
+      "상세 화면 상단 또는 사이드 카드 안"
+    ],
+    "examples": [
+      "components-l2-approvalstepchain--default",
+      "components-l2-approvalstepchain--status-rejected"
+    ]
+  }
+}
