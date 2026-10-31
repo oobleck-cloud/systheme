@@ -39,7 +39,7 @@ type UseAnchoredPanelParams<
   placement?: AnchoredPanelPlacement
   /** side 배치(top/bottom/left/right)에서의 교차축 정렬 */
   align?: AnchorPanelAlign
-  /** 패널 가로 폭을 트리거 폭에 맞춤 (Select/MultiSelect) */
+  /** 패널 가로 폭을 트리거 폭 이상으로 — 라벨이 길면 내용만큼 넓어진다 (Select/MultiSelect) */
   matchWidth?: boolean
   /** side 배치에서 트리거-패널 간격(px) */
   gap?: number
@@ -241,7 +241,8 @@ export function useAnchoredPanel<
 
   const positionClassName = cn(
     'top-[var(--ds-anchor-panel-top)] left-[var(--ds-anchor-panel-left)] z-[1000]',
-    pos.width != null && 'w-[var(--ds-anchor-panel-width)] max-w-none',
+    // 트리거 폭은 **최소** 폭 — 트리거가 좁아도(필터 연산자 칸 등) 옵션 라벨이 잘리지 않게 내용만큼 넓힌다.
+    pos.width != null && 'w-max min-w-[var(--ds-anchor-panel-width)] max-w-[calc(100vw-16px)]',
   )
 
   return { mounted, style, positionClassName }

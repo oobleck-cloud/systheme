@@ -14,7 +14,10 @@ export type MonthGridDayKind = 'default' | 'weekend' | 'holiday' | 'warning' | '
 export type MonthGridDayMeta = {
   /** Override the auto-detected kind for a day. */
   kind?: MonthGridDayKind
-  /** Short holiday name shown below the date number. */
+  /**
+   * Short holiday name. 기본은 화면 읽기용(sr-only)이고, `showHolidayLabels` 면 날짜 숫자 옆에
+   * 「9 한글날」처럼 보인다.
+   */
   holidayLabel?: string
 }
 
@@ -84,6 +87,13 @@ type MonthGridProps = Omit<React.HTMLAttributes<HTMLDivElement>, 'onChange'> & {
    * - `width`: 가로 7열 기준 최대 정사각형 — 그리드가 세로로 길어지면 부모 스크롤
    */
   squareFitBasis?: 'contain' | 'width'
+  /**
+   * 앞뒤 달 칸에 날짜 숫자를 흐리게 적는다(선택·내용 없음). 기본은 빈 칸 —
+   * 선 격자 달력에서 첫 주·끝 주가 비어 보이면 날짜를 세기 어렵다.
+   */
+  showOutsideDays?: boolean
+  /** `getDayMeta` 의 `holidayLabel` 을 날짜 숫자 옆에 보인다(기본은 화면 읽기용만). */
+  showHolidayLabels?: boolean
 }
 
 const WEEKDAYS_SUN = ['일', '월', '화', '수', '목', '금', '토'] as const
@@ -288,6 +298,8 @@ function MonthGrid({
   fitCells = 'default',
   rowSizing = 'fill',
   squareFitBasis = 'contain',
+  showOutsideDays = false,
+  showHolidayLabels = false,
   className,
   ...props
 }: MonthGridProps) {
@@ -312,6 +324,8 @@ function MonthGrid({
   const selected = controlledSelected !== undefined ? controlledSelected : internalSelected
 
   const days = getCalendarDays(viewYear, viewMonth, weekStartsOn)
+  /** 첫 칸의 날짜 — 앞뒤 달 칸(null)의 날짜를 칸 번호로 되살릴 때 쓴다. */
+  const gridStart = new Date(viewYear, viewMonth, 1 - days.findIndex((d) => d !== null))
   const weeks = groupCalendarDaysIntoWeeks(days)
   const interactive = selectionMode !== 'none'
   const squareFit = fitCells === 'square'
@@ -575,6 +589,31 @@ function MonthGrid({
               {week.map((date, di) => {
                 const colKey = date ? date.toISOString() : `empty-${wi}-${di}`
 
+                if (!date && showOutsideDays && !squareFit) {
+                  const outside = new Date(gridStart)
+                  outside.setDate(gridStart.getDate() + wi * 7 + di)
+                  return (
+                    <div
+                      key={colKey}
+                      role="gridcell"
+                      aria-hidden="true"
+                      tabIndex={-1}
+                      data-slot="month-grid-outside-day"
+                      className={cn(
+                        dayCellOuterVariants({ fitCells }),
+                        'bg-surface',
+                        di < 6 && 'border-r border-border',
+                      )}
+                    >
+                      <div className={dateLabelContainerVariants({ density })}>
+                        <span className={cn(dateNumberVariants({ density }), 'text-fg-muted')}>
+                          {outside.getDate()}
+                        </span>
+                      </div>
+                    </div>
+                  )
+                }
+
                 if (!date) {
                   return (
                     <div
@@ -613,9 +652,9 @@ function MonthGrid({
                   kind === 'warning' &&
                     (squareFit
                       ? 'border-warning-border bg-background'
-                      : // 격자가 이미 border-r·border-b 로 칸을 나눈다. 여기서 border 를 더하면
-                        // 경고 칸 둘레에만 선이 두 줄로 겹친다 — 자리를 차지하지 않는 ring 을 쓴다.
-                        'bg-background ring-1 ring-inset ring-warning-border'),
+                      : // 선 격자에선 칸 전체를 경고 배경으로 칠한다 — 칸 안 태그보다 빈 날이 멀리서 보이고,
+                        // 테두리를 더하지 않으니 격자 선이 두 줄로 겹치지 않는다.
+                        'bg-warning-subtle'),
                   kind === 'other-month' && 'bg-background opacity-40',
                 )
 
@@ -646,7 +685,11 @@ function MonthGrid({
                         dayCellInnerVariants({ fitCells, density }),
                         squareFit && squareCellSize == null && 'aspect-square w-full',
                         cellToneClass,
-                        isSelected && 'ring-2 ring-primary ring-inset',
+                        // 선 격자에선 고른 날을 옅은 브랜드 면으로 — 굵은 테두리는 격자 선과 겹쳐 칸이 튄다.
+                        isSelected &&
+                          (squareFit
+                            ? 'ring-2 ring-primary ring-inset'
+                            : 'bg-brand-50 ring-1 ring-primary/40 ring-inset'),
                         interactive && [
                           'cursor-pointer',
                           !isSelected &&
@@ -663,7 +706,12 @@ function MonthGrid({
                           fitCells: squareFit ? 'square' : 'default',
                         })}
                       >
-                        <div className="flex flex-col gap-0.5">
+                        <div
+                          className={cn(
+                            'flex min-w-0',
+                            showHolidayLabels ? 'items-center gap-1' : 'flex-col gap-0.5',
+                          )}
+                        >
                           <span
                             data-slot="month-grid-date-number"
                             className={cn(
@@ -687,7 +735,10 @@ function MonthGrid({
                           {meta?.holidayLabel && (
                             <span
                               data-slot="month-grid-holiday-label"
-                              className={holidayLabelVariants({ density, visible: false })}
+                              className={cn(
+                                holidayLabelVariants({ density, visible: showHolidayLabels }),
+                                showHolidayLabels && density !== 'compact' && 'text-xs',
+                              )}
                             >
                               {meta.holidayLabel}
                             </span>

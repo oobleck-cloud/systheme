@@ -91,4 +91,15 @@ describe('addMarkerLayers — 제자리 갱신', () => {
     expect(images.size).toBe(0)
     expect(layers.size).toBe(0)
   })
+
+  it('그림을 굽는 사이 낡은 호출이 되면 레이어·데이터·그림을 건드리지 않는다', async () => {
+    const { map, images, layers } = fakeMap()
+    let stale = false
+    const pending = addMarkerLayers(map, [marker('a', '#ff0000')], {}, undefined, () => stale)
+    stale = true
+    await pending
+
+    expect(images.size).toBe(0)
+    expect(layers.size).toBe(0)
+  })
 })

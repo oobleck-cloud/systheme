@@ -72,6 +72,7 @@ export type { TimetableAppointmentPreviewProps } from './TimetableAppointmentPre
 export type {
   TimetableAppointment,
   TimetableAppointmentColor,
+  TimetableAppointmentLock,
   TimetableDateMeta,
   TimetableDensity,
   TimetableLabels,
@@ -80,6 +81,7 @@ export type {
   TimetableSlotCellPayload,
   TimetableSlotSelection,
   TimetableSlotTag,
+  TimetableSlotTone,
 } from './timetable-types'
 
 export {

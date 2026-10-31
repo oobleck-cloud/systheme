@@ -5,6 +5,8 @@ import { useCallback, useState } from 'react'
 import { Tooltip } from '@/components/Tooltip'
 import { cn } from '@/utils/cn'
 
+import type { TimetableSlotTone } from './timetable-types'
+
 async function copyText(value: string): Promise<boolean> {
   try {
     if (navigator.clipboard?.writeText) {
@@ -23,6 +25,8 @@ type TimetableTimeSlotCellProps = Omit<React.HTMLAttributes<HTMLDivElement>, 'on
   onCellClick?: () => void
   /** 선택 불가 구간 — 클릭·복사·포커스 비활성 */
   disabled?: boolean
+  /** 고를 수 있는 칸의 결([TimetableSlotTone]). `disabled` 면 무시한다 */
+  tone?: TimetableSlotTone
   /**
    * 현재 그리드에서 선택된 빈 슬롯.
    *
@@ -46,6 +50,7 @@ function TimetableTimeSlotCell({
   copyValue,
   onCellClick,
   disabled = false,
+  tone = 'default',
   selected = false,
   isTabStop = true,
   resourceId,
@@ -74,6 +79,7 @@ function TimetableTimeSlotCell({
     <div
       data-slot="timetable-time-slot-cell"
       data-disabled={disabled ? '1' : undefined}
+      data-tone={!disabled && tone !== 'default' ? tone : undefined}
       data-selected={selected ? '1' : undefined}
       data-resource-id={resourceId}
       data-slot-minute={slotMinute != null ? String(slotMinute) : undefined}
@@ -95,6 +101,8 @@ function TimetableTimeSlotCell({
       className={cn(
         'h-full min-h-0 w-full border-b border-border-subtle bg-background outline-none',
         disabled && 'cursor-not-allowed bg-overlay text-fg-subtle',
+        !disabled && tone === 'attention' && 'bg-warning-subtle',
+        !disabled && tone === 'tentative' && 'border border-dashed border-border',
         // 선택 = 안쪽 브랜드 링. 칸을 채우지 않는다 — 빈 슬롯은 선택돼도 여전히 빈 슬롯이고,
         // 채우면 "배정 블록"(못 고르는 칸)과 형태가 겹친다.
         !disabled && selected && 'ring-2 ring-primary ring-inset',

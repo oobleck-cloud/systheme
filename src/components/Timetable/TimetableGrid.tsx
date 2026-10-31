@@ -11,6 +11,7 @@ import type {
   TimetableAppointment,
   TimetableResource,
   TimetableSlotSelection,
+  TimetableSlotTone,
 } from './timetable-types'
 
 import { Surface } from '@/primitives/surface'
@@ -59,6 +60,8 @@ type TimetableGridProps = React.HTMLAttributes<HTMLDivElement> & {
   chrome?: 'card' | 'bare'
   /** 특정 리소스·슬롯을 선택 불가로 표시 (레거시 TimeTable `disabled` / `blocked` 에 해당) */
   isSlotDisabled?: (ctx: { resourceId: string; slotMinute: number }) => boolean
+  /** 고를 수 있는 빈 칸의 결 — 미지정이면 전부 `default` */
+  getSlotTone?: (ctx: { resourceId: string; slotMinute: number }) => TimetableSlotTone
   /** 빈 슬롯 중 현재 선택 — 클릭 시 시각적으로 구분 */
   selectedSlot?: TimetableSlotSelection | null
   onSlotCellClick?: (resourceId: string, slotMinute: number) => void
@@ -76,6 +79,7 @@ function TimetableGrid({
   shakeActive = false,
   chrome = 'card',
   isSlotDisabled,
+  getSlotTone,
   selectedSlot,
   onSlotCellClick,
   selectedAppointmentId,
@@ -287,6 +291,7 @@ function TimetableGrid({
                       resourceId={r.id}
                       slotMinute={slotMinute}
                       disabled={disabled}
+                      tone={disabled ? undefined : getSlotTone?.({ resourceId: r.id, slotMinute })}
                       selected={selected}
                       isTabStop={isTabStop}
                       className={cn(
@@ -334,6 +339,7 @@ function TimetableGrid({
                 copyValue={appt.copyValue}
                 bgColor={appt.bgColor}
                 fgColor={appt.fgColor}
+                lock={appt.lock}
                 preview={
                   <TimetableAppointmentPreview appointment={appt} resourceLabel={resourceLabel} />
                 }

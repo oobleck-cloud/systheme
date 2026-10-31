@@ -160,6 +160,9 @@ function Modal({
                 density="default"
                 className={cn(
                   'min-h-0 border-0 bg-transparent shadow-none',
+                  // 본문 칸을 세로 flex 로 — 그래야 안쪽 modal-body(overflow-auto)가 남은 높이에 갇혀 스크롤한다.
+                  // 아니면 긴 본문이 칸 밖으로 넘쳐 투명한 바닥(footer) 뒤로 비친다(일괄 발송 대화상자 실측).
+                  '[&>[data-slot=surface-body]]:flex [&>[data-slot=surface-body]]:flex-col',
                   // 스코프 모달은 뷰포트가 아니라 자기 컨테이너(탭 패널) 안에 갇힌다 —
                   // vh 로 재면 패널보다 커져 잘린다.
                   scoped ? 'max-h-full' : 'max-h-[85vh]',

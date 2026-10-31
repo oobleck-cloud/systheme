@@ -5,10 +5,11 @@
  * 모든 데이터 형상을 정의한다. 특정 비즈니스 용어(주문/상담/서비스 구역 등)를
  * 포함하지 않으며, 소비자가 `data` 제네릭과 렌더 슬롯으로 확장한다.
  */
+import type { MarkerDial, MarkerDialTone } from '../lib/clockDial'
 import type { MarkerVariant } from '../lib/markerIcon'
 import type { ReactNode } from 'react'
 
-export type { MarkerVariant }
+export type { MarkerDial, MarkerDialTone, MarkerVariant }
 
 // ── 기본 단위 ────────────────────────────────────────────────────────────────
 
@@ -43,7 +44,16 @@ export interface MapPadding {
 export interface MapView {
   center: LngLat
   zoom: number
+  /**
+   * 카메라 여백(`camera.padding`)을 뺀 안쪽 범위 — mapbox `getBounds()` 그대로.
+   * 맞춤(fit)이 여백을 지도에 남기므로, 패널에 가리지 않은 가운데 범위가 된다.
+   */
   bounds: { sw: LngLat; ne: LngLat }
+  /**
+   * 캔버스 전체 범위 — 여백과 무관하다. 소비자가 가린 폭을 직접 깎을 때 쓴다.
+   * `bounds` 에서 다시 깎으면 여백만큼 두 번 깎인다(2026-10-24 상담지도 「지도에 보이는 주문」).
+   */
+  canvasBounds?: { sw: LngLat; ne: LngLat }
 }
 
 export interface MapCamera {
@@ -117,6 +127,14 @@ export interface MapMarker<TData = unknown> {
    * 좌표를 흔드는 대신 화면 좌표로 비켜야 줌을 해도 간격이 유지된다.
    */
   pixelOffset?: readonly [number, number]
+  /**
+   * 둘레에 두르는 12시간 시계판(12시 = 위). 칸마다 칠을 정해 "언제"를 각도로 보여 준다.
+   *
+   * 있으면 변형과 무관하게 꼬리 없는 원(지름 44px)으로 그리고 앵커는 중심이다. 변형은 가운데
+   * 원의 테두리로만 남는다(`ghost`·`dot` 점선, `hollow` 흐림). 이름표(`label`)는 굽지 않는다.
+   * 칸의 뜻(희망·방문·경고)은 소비자가 정한다 — 디자인시스템은 농도 네 단계만 안다.
+   */
+  dial?: MarkerDial
   /**
    * 물었을 때만 답하는 한 줄 — 커서가 이 핀 위에 있는 동안에만 뜬다.
    *
@@ -203,7 +221,19 @@ export interface MapArrowStop {
    *
    * 문자열은 소비자가 만든다. 디자인시스템은 시각도 여유도 모르고 받은 글자만 그린다.
    */
-  tooltip?: string
+  tooltip?: string /**
+   * 이 자리가 가리키는 시계 위 구간. 있으면 원 둘레에 그 시각 방향으로 쐐기를 내민다
+   * (12시간 시계, 12시 = 위). 선 위 점들끼리 시각을 각도로 견줄 수 있게 한다.
+   */
+  clock?: MapStopClock
+}
+
+/** 빈 자리 표시의 시계 쐐기 — 시작 시각과 길이 */
+export interface MapStopClock {
+  /** 시작 시각(시, 0~24, 소수 허용). 10.5 = 10:30 */
+  startHour: number
+  /** 쐐기가 덮는 길이(분). 30분 = 15° */
+  minutes: number
 }
 
 /**

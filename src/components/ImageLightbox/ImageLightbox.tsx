@@ -19,6 +19,8 @@ export type ImageLightboxProps = Omit<React.HTMLAttributes<HTMLDivElement>, 'chi
   /** uncontrolled 초기 인덱스 (기본값: 0) */
   defaultActiveIndex?: number
   caption: string
+  /** 이미지 수. 주면 이전·다음을 끝에서 막고, 1장이면 숨긴다. 없으면 다음의 상한을 모른다. */
+  count?: number
   onOpenChange?: (open: boolean) => void
   onActiveIndexChange?: (index: number) => void
   onDownloadRequest?: () => void
@@ -34,6 +36,7 @@ const ImageLightbox = forwardRef<HTMLDivElement, ImageLightboxProps>(
       activeIndex: activeIndexProp,
       defaultActiveIndex = 0,
       caption,
+      count,
       onOpenChange,
       onActiveIndexChange,
       onDownloadRequest,
@@ -52,6 +55,11 @@ const ImageLightbox = forwardRef<HTMLDivElement, ImageLightboxProps>(
     const activeIndex = isIndexControlled ? activeIndexProp : internalActiveIndex
     const activeIndexRef = useRef(activeIndex)
     activeIndexRef.current = activeIndex
+    const countRef = useRef(count)
+    countRef.current = count
+    const clampNext = (next: number) =>
+      countRef.current == null ? next : Math.min(next, countRef.current - 1)
+    const stepper = count == null || count > 1
 
     function handleOpenChange(next: boolean) {
       if (!isOpenControlled) setInternalOpen(next)
@@ -74,7 +82,7 @@ const ImageLightbox = forwardRef<HTMLDivElement, ImageLightboxProps>(
           handleActiveIndexChange(Math.max(0, activeIndexRef.current - 1))
         } else if (e.key === 'ArrowRight') {
           e.preventDefault()
-          handleActiveIndexChange(activeIndexRef.current + 1)
+          handleActiveIndexChange(clampNext(activeIndexRef.current + 1))
         }
       },
       // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -122,27 +130,33 @@ const ImageLightbox = forwardRef<HTMLDivElement, ImageLightboxProps>(
               data-slot="image-lightbox-close"
               onClick={() => handleOpenChange(false)}
             >
-              Close
+              닫기
             </Button>
             <Stack direction="horizontal" gap={2} wrap>
-              <Button
-                type="button"
-                size="sm"
-                variant="outline"
-                data-slot="image-lightbox-prev"
-                onClick={() => handleActiveIndexChange(Math.max(0, activeIndex - 1))}
-              >
-                Previous
-              </Button>
-              <Button
-                type="button"
-                size="sm"
-                variant="outline"
-                data-slot="image-lightbox-next"
-                onClick={() => handleActiveIndexChange(activeIndex + 1)}
-              >
-                Next
-              </Button>
+              {stepper && (
+                <>
+                  <Button
+                    type="button"
+                    size="sm"
+                    variant="outline"
+                    data-slot="image-lightbox-prev"
+                    disabled={activeIndex <= 0}
+                    onClick={() => handleActiveIndexChange(Math.max(0, activeIndex - 1))}
+                  >
+                    이전
+                  </Button>
+                  <Button
+                    type="button"
+                    size="sm"
+                    variant="outline"
+                    data-slot="image-lightbox-next"
+                    disabled={count != null && activeIndex >= count - 1}
+                    onClick={() => handleActiveIndexChange(clampNext(activeIndex + 1))}
+                  >
+                    다음
+                  </Button>
+                </>
+              )}
               <Button
                 type="button"
                 size="sm"
@@ -151,13 +165,15 @@ const ImageLightbox = forwardRef<HTMLDivElement, ImageLightboxProps>(
                 disabled={!onDownloadRequest}
                 onClick={onDownloadRequest}
               >
-                Download
+                다운로드
               </Button>
             </Stack>
           </Stack>
           <div
             data-slot="image-lightbox-image-slot"
-            className="flex min-h-48 flex-1 items-center justify-center overflow-hidden rounded-md bg-muted"
+            // min-h-0 이 없으면 flex 자식이 내용(원본 이미지) 높이로 늘어나 화면 밖이 잘린다. 자리 크기가
+            // 정해져야 안의 이미지가 max-h-full 로 맞춰 줄어든다.
+            className="relative flex min-h-48 flex-1 basis-0 items-center justify-center overflow-hidden rounded-md bg-muted"
           >
             {children}
           </div>

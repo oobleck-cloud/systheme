@@ -22,6 +22,39 @@ export type SelectOption = {
   value: string
   label: string
   disabled?: boolean
+  /**
+   * 묶음 머리글 — 같은 group 의 옵션을 모아 머리글 아래에 둔다. 묶음 순서는 처음 나온 순서,
+   * 묶음 안 순서는 원래 순서다. 옵션이 수십 개라 훑기 어려울 때(속성 고르기 등) 쓴다.
+   */
+  group?: string
+  /** 보조 글 — 검색 중에 라벨 옆에 흐리게 보인다. 같은 라벨이 여러 묶음에 있을 때 어디 것인지 가른다. */
+  hint?: string
+  /** 검색이 라벨 말고도 맞춰 볼 말(별칭). 화면에는 보이지 않는다. */
+  keywords?: string[]
+}
+
+/** 같은 group 끼리 모은다 — 묶음은 처음 나온 순서, 묶음 안은 원래 순서. group 이 하나도 없으면 그대로. */
+function groupOptions(options: SelectOption[]): SelectOption[] {
+  if (!options.some((o) => o.group)) return options
+  const order: string[] = []
+  const byGroup = new Map<string, SelectOption[]>()
+  for (const o of options) {
+    const g = o.group ?? ''
+    const list = byGroup.get(g)
+    if (list) list.push(o)
+    else {
+      byGroup.set(g, [o])
+      order.push(g)
+    }
+  }
+  return order.flatMap((g) => byGroup.get(g) ?? [])
+}
+
+function matchesSearch(option: SelectOption, query: string): boolean {
+  const q = query.toLowerCase()
+  return [option.label, option.hint, ...(option.keywords ?? [])].some(
+    (s) => s != null && s.toLowerCase().includes(q),
+  )
 }
 
 type SelectProps = Omit<React.HTMLAttributes<HTMLDivElement>, 'onChange'> &
@@ -66,10 +99,9 @@ function Select({
   const value = isControlled ? controlledValue : internalValue
 
   const selectedOption = options.find((o) => o.value === value)
-  const filteredOptions =
-    searchable && search
-      ? options.filter((o) => o.label.toLowerCase().includes(search.toLowerCase()))
-      : options
+  const searching = searchable && search !== ''
+  const ordered = groupOptions(options)
+  const filteredOptions = searching ? ordered.filter((o) => matchesSearch(o, search)) : ordered
 
   // Refs for stable access inside onIntent callback
   const filteredOptionsRef = useRef(filteredOptions)
@@ -278,7 +310,20 @@ function Select({
                     filteredOptions.map((opt, i) => {
                       const isSelected = opt.value === value
                       const itemProps = getItemProps(i)
-                      return (
+                      // 묶음 머리글 — 묶음이 바뀌는 자리에만. 검색 중에는 hint 가 위치를 말하므로 빼고 목록을 촘촘히 둔다.
+                      const header =
+                        !searching && opt.group && opt.group !== filteredOptions[i - 1]?.group ? (
+                          <li
+                            key={`group:${opt.group}`}
+                            role="presentation"
+                            data-slot="group-header"
+                            className="mx-1 px-3 pt-2.5 pb-1 text-xs font-medium text-fg-muted select-none first:pt-1"
+                          >
+                            {opt.group}
+                          </li>
+                        ) : null
+                      return [
+                        header,
                         // eslint-disable-next-line jsx-a11y/click-events-have-key-events -- keyboard navigation handled by listbox container via contextProps.onKeyDown (Enter/Space → activate intent bubbles up)
                         <li
                           key={opt.value}
@@ -297,7 +342,12 @@ function Select({
                             opt.disabled && 'cursor-not-allowed opacity-50',
                           )}
                         >
-                          <span className="truncate">{opt.label}</span>
+                          <span className="flex min-w-0 items-baseline gap-2">
+                            <span className="truncate">{opt.label}</span>
+                            {searching && opt.hint ? (
+                              <span className="truncate text-xs text-fg-muted">{opt.hint}</span>
+                            ) : null}
+                          </span>
                           {isSelected && (
                             <svg
                               aria-hidden="true"
@@ -312,8 +362,8 @@ function Select({
                               <path d="M3 8l3.5 3.5 6.5-7" />
                             </svg>
                           )}
-                        </li>
-                      )
+                        </li>,
+                      ]
                     })
                   )}
                 </ul>

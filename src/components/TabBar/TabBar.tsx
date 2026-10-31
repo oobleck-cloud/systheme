@@ -18,10 +18,12 @@ type TabBarShared = Omit<React.HTMLAttributes<HTMLDivElement>, 'onChange' | 'chi
     /**
      * 탭 너비 전략.
      * - `'auto'`(기본): 탭 이름 길이에 맞게 유동적으로 조절.
+     * - `'fill'`: 탭들이 줄 폭을 같은 몫으로 나눠 가진다(글자는 칸 가운데). 패널처럼 폭이 정해진
+     *   좁은 자리에서 할 일 2~4개를 고를 때 — 왼쪽에 몰려 오른쪽이 비지 않게.
      * - `number`: 해당 픽셀 너비로 고정. 이름이 길면 `…` 으로 잘림.
      * Items API(`tabs` prop) 사용 시에만 적용됨. 합성 모드에서는 각 `TabTrigger`에 직접 지정.
      */
-    tabWidth?: 'auto' | number
+    tabWidth?: 'auto' | 'fill' | number
   }
 
 type TabBarWithItems = TabBarShared & {
@@ -136,7 +138,13 @@ function TabBarItems({
           disabled={tab.disabled}
           onSelect={handleTabChange}
           style={{ '--ds-tab-w': isFixed ? `${tabWidth}px` : undefined }}
-          className={isFixed ? 'w-[var(--ds-tab-w)] overflow-hidden' : undefined}
+          className={
+            isFixed
+              ? 'w-[var(--ds-tab-w)] overflow-hidden'
+              : tabWidth === 'fill'
+                ? 'min-w-0 flex-1 basis-0'
+                : undefined
+          }
         />
       ))}
     </TabList>

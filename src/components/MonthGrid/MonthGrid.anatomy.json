@@ -118,7 +118,8 @@
     "when": [
       "한 달을 7열 격자로 펼치고 날짜별 내용(일정 칩·수량)을 renderCellContent 로 채울 때",
       "날짜 하나를 고르는 캘린더 화면(selectionMode single) 또는 표시 전용(none)",
-      "휴일·경고일 표시는 getDayMeta(kind·holidayLabel) 로 선언한다"
+      "휴일·경고일 표시는 getDayMeta(kind·holidayLabel) 로 선언한다 — 이름을 칸에 보이려면 showHolidayLabels(「9 한글날」)",
+      "앞뒤 달 날짜를 흐린 숫자로 채우려면 showOutsideDays(선 격자 전용, 선택·내용 없음)"
     ],
     "avoid": [
       "폼의 날짜 입력에 쓰지 않는다 → DatePicker",

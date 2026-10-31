@@ -94,3 +94,36 @@ export const AllVariants: Story = {
     </div>
   ),
 }
+
+/** 08~20시 30분 칸 24개. 희망(연하게)·방문(진하게)·희망 밖 방문(경고) */
+const DIAL_CELLS = Array.from({ length: 24 }, (_, index) =>
+  index === 7 ? 'strong' : index === 14 ? 'warn' : index >= 2 && index < 10 ? 'soft' : 'base',
+) as ('base' | 'soft' | 'strong' | 'warn')[]
+
+export const ClockDial: Story = {
+  name: 'Clock dial (station)',
+  args: {
+    marker: {
+      badge: '2',
+      color: '#2563eb',
+      variant: 'station',
+      dial: { startHour: 8, cellMinutes: 30, cells: DIAL_CELLS },
+    },
+  },
+}
+
+export const ClockDialUnassigned: Story = {
+  name: 'Clock dial (dot · 미배정)',
+  args: {
+    marker: {
+      badge: '–',
+      color: '#475569',
+      variant: 'dot',
+      dial: {
+        startHour: 8,
+        cellMinutes: 30,
+        cells: DIAL_CELLS.map((tone) => (tone === 'soft' ? 'soft' : 'base')),
+      },
+    },
+  },
+}

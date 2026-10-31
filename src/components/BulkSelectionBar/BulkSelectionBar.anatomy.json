@@ -1,7 +1,8 @@
 {
   "id": "bulk-selection-bar",
   "state": {
-    "selectedCount": "number"
+    "selectedCount": "number",
+    "floating": "boolean"
   },
   "events": [
     "onClearSelection",
@@ -48,7 +49,8 @@
       "empty": "선택 0건이면 렌더하지 않는다"
     },
     "placement": [
-      "목록 하단 고정. AI Dock 여백(--mvos-ai-dock-clearance)을 소비한다 — 가려지면 체크박스가 쓸모없어진다"
+      "목록 하단 고정. 띠(기본)는 AI Dock 여백(--mvos-ai-dock-clearance)을 소비한다 — 가려지면 체크박스가 쓸모없어진다",
+      "floating 은 뷰포트 바닥에 고정(포털) — 하단 크롬과 같은 높이(--ds-floating-bar-bottom), 그 폭(--ds-bottom-chrome-inline-clearance)을 비운 나머지의 가운데. 앱 셸이 두 값을 준다"
     ],
     "examples": [
       "components-l1-bulkselectionbar--default",

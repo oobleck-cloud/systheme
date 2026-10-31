@@ -61,6 +61,7 @@ function injectPopupStyles() {
 
 import { FloatingBounce } from './FloatingBounce'
 import { useArrows } from './hooks/useArrows'
+import { useHoverGrow } from './hooks/useHoverGrow'
 import { useMapboxMap } from './hooks/useMapboxMap'
 import { useMarkers } from './hooks/useMarkers'
 import { useOverlays } from './hooks/useOverlays'
@@ -142,7 +143,21 @@ export interface MapboxMapProps<TMarker = unknown, TRegion = Record<string, unkn
 
   // Events
   onMarkerClick?: (marker: MapMarker<TMarker>) => void
+  /**
+   * 커서가 마커 위에 올라오거나(마커 id) 벗어날 때(null). 바뀔 때만 부른다.
+   * 지도 밖 목록에서 같은 항목을 강조하는 데 쓴다.
+   */
+  onMarkerHover?: (markerId: string | null) => void
   onRegionClick?: (event: MapFeatureClickEvent<TRegion> | null) => void
+
+  /**
+   * 커서가 가까이 간 노드 하나를 살짝(1.2배) 키운다. 기본값: false
+   *
+   * 노드는 마커와 선·루프 위 중간 표시다. 그림 바로 위가 아니어도 테두리에서 12px 안이면
+   * 반응하고, 둘을 통틀어 가장 가까운 하나만 커진다. 버튼을 누른 채 움직이는 동안(지도·중간
+   * 표시 끌기)은 키우지 않는다. 클릭·`onMarkerHover`·커서 모양은 그대로 그림 위에서만 반응한다.
+   */
+  hoverGrow?: boolean
 
   /**
    * 선·루프 위의 중간 표시를 끌어다 놓았을 때.
@@ -230,7 +245,9 @@ export const MapboxMap: FC<MapboxMapProps> = ({
   activeMarkerId,
   onActiveMarkerChange,
   onMarkerClick,
+  onMarkerHover,
   onRegionClick,
+  hoverGrow = false,
   onStopDrop,
   onStopDragStart,
   onStopDragCancel,
@@ -382,6 +399,7 @@ export const MapboxMap: FC<MapboxMapProps> = ({
     // markerLayers 내부의 "외부 렌더 경로"가 활성화된다.
     onActiveMarkerMount: usesActiveMarkerOverlay ? handleActiveMarkerMount : undefined,
     onActiveMarkerUnmount: usesActiveMarkerOverlay ? handleActiveMarkerUnmount : undefined,
+    onMarkerHover,
     cluster,
   })
 
@@ -391,6 +409,8 @@ export const MapboxMap: FC<MapboxMapProps> = ({
   useStopHints({ map, arrows, loops, markers, isLoaded })
 
   useStopDrag({ map, isLoaded, onStopDrop, onStopDragStart, onStopDragCancel })
+
+  useHoverGrow({ map, isLoaded, enabled: hoverGrow })
 
   const overlaySlots = useOverlays({ map, overlays, isLoaded })
 
@@ -406,10 +426,18 @@ export const MapboxMap: FC<MapboxMapProps> = ({
       if (!b) return
       const sw = b.getSouthWest()
       const ne = b.getNorthEast()
+      // 여백을 무시한 캔버스 네 귀퉁이 — 회전·기울임이 없는 지도라 두 귀퉁이로 충분하다
+      const canvas = map.getCanvas()
+      const csw = map.unproject([0, canvas.clientHeight])
+      const cne = map.unproject([canvas.clientWidth, 0])
       latestCameraMove.current?.({
         center: { lng: c.lng, lat: c.lat },
         zoom: map.getZoom(),
         bounds: { sw: { lng: sw.lng, lat: sw.lat }, ne: { lng: ne.lng, lat: ne.lat } },
+        canvasBounds: {
+          sw: { lng: csw.lng, lat: csw.lat },
+          ne: { lng: cne.lng, lat: cne.lat },
+        },
       })
     }
     map.on('moveend', emit)

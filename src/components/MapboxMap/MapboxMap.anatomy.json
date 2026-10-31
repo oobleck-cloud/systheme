@@ -8,12 +8,14 @@
     "overlays": "MapOverlay[]",
     "activeMarkerId": "string | null",
     "animateActiveMarker": "boolean",
+    "hoverGrow": "boolean",
     "camera": "MapCamera",
     "isLoaded": "boolean",
     "theme": "'light' | 'dark'"
   },
   "events": [
     "onMarkerClick",
+    "onMarkerHover",
     "onActiveMarkerChange",
     "onRegionClick",
     "onStopDragStart",
@@ -76,6 +78,7 @@
               "writes": "activeMarkerId",
               "emits": [
                 "onMarkerClick",
+                "onMarkerHover",
                 "onActiveMarkerChange"
               ]
             }
@@ -146,7 +149,8 @@
     },
     "placement": [
       "지도 위 떠 있는 정보 카드는 overlays 로 좌표에 고정하거나 지도 밖 패널로 뺀다",
-      "선택 마커 강조는 activeMarkerId + animateActiveMarker. 커스텀은 renderActiveMarker"
+      "선택 마커 강조는 activeMarkerId + animateActiveMarker. 커스텀은 renderActiveMarker",
+      "노드가 빽빽해 겨누기 어려운 화면(상담 지도)은 hoverGrow — 커서에 가장 가까운 마커·중간 표시 하나를 1.2배로"
     ],
     "examples": [
       "components-l2-mapboxmap--multiple-markers",

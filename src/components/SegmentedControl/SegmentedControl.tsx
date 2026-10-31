@@ -5,7 +5,8 @@ import { forwardRef, useState } from 'react'
 
 import { cn } from '@/utils/cn'
 
-const segmentedControlVariants = cva('gap-1 rounded-lg bg-surface-muted p-1', {
+// 회색 판(track) — `bg-muted`(시안 color/muted). 예전 `bg-surface-muted` 는 테마에 없는 토큰이라 판이 그려지지 않았다.
+const segmentedControlVariants = cva('gap-1 rounded-lg bg-muted p-1', {
   variants: {
     block: {
       true: 'grid w-full auto-cols-fr grid-flow-col',

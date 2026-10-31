@@ -52,6 +52,42 @@ export const Searchable: Story = {
   },
 }
 
+/** 속성 고르기처럼 선택지가 수십 개일 때 — 묶음 머리글 아래 모이고, 검색하면 hint 가 위치를 말한다. */
+export const Grouped: Story = {
+  render: () => {
+    const [val, setVal] = useState<string | undefined>(undefined)
+    return (
+      <div className="w-64">
+        <Select
+          searchable
+          placeholder="+ 필터 추가"
+          value={val}
+          onChange={setVal}
+          options={[
+            { value: 'misoOrderId', label: '주문번호', group: '주문 › 기본 정보' },
+            { value: 'status', label: '상태', group: '주문 › 기본 정보' },
+            { value: 'moveDate', label: '이사 예정일', group: '주문 › 일정', keywords: ['이사일'] },
+            { value: 'departure', label: '출발지', group: '주문 › 장소' },
+            {
+              value: 'contractPartnerScore',
+              label: '평점',
+              group: '견적 › 계약 파트너',
+              hint: '견적 › 계약 파트너',
+              keywords: ['별점'],
+            },
+            {
+              value: 'quotedPartnerMaxScore',
+              label: '최고 평점',
+              group: '견적 › 견적 참여 파트너',
+              hint: '견적 › 견적 참여 파트너',
+            },
+          ]}
+        />
+      </div>
+    )
+  },
+}
+
 export const WithValue: Story = {
   render: () => {
     const [val, setVal] = useState('banana')

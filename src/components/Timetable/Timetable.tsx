@@ -23,6 +23,7 @@ import type {
   TimetableLabels,
   TimetableResource,
   TimetableSlotSelection,
+  TimetableSlotTone,
 } from './timetable-types'
 
 import { cn } from '@/utils/cn'
@@ -48,6 +49,8 @@ type TimetableProps = Omit<React.HTMLAttributes<HTMLDivElement>, 'children'> & {
   onSlotCellClick?: (resourceId: string, slotMinute: number) => void
   /** 빈 슬롯 선택 불가 여부 — `true`이면 비활성 스타일·클릭 무시 */
   isSlotDisabled?: (ctx: { resourceId: string; slotMinute: number }) => boolean
+  /** 고를 수 있는 빈 칸의 결([TimetableSlotTone]) — 예외 배정·아직 없는 칸을 구분해 보일 때 */
+  getSlotTone?: (ctx: { resourceId: string; slotMinute: number }) => TimetableSlotTone
   /** controlled 빈 슬롯 선택 */
   selectedSlot?: TimetableSlotSelection | null
   defaultSelectedSlot?: TimetableSlotSelection | null
@@ -94,6 +97,7 @@ function Timetable({
   visibleSlotCount = 10,
   onSlotCellClick,
   isSlotDisabled,
+  getSlotTone,
   selectedSlot: selectedSlotControlled,
   defaultSelectedSlot = null,
   onSelectedSlotChange,
@@ -297,6 +301,7 @@ function Timetable({
             visibleSlotCount={visibleSlotCount}
             shakeActive={shakeActive}
             isSlotDisabled={isSlotDisabled}
+            getSlotTone={getSlotTone}
             selectedSlot={selectedSlot}
             onSlotCellClick={handleEmptySlotClick}
             selectedAppointmentId={selectedAppointmentId}

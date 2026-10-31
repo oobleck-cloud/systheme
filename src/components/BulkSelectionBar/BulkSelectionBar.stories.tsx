@@ -39,6 +39,16 @@ export const WithSlotActions: Story = {
   },
 }
 
+export const Floating: Story = {
+  args: { floating: true, selectedCount: 3, selectedSuffix: '건 선택', primaryLabel: '참여 확정' },
+  render: (args) => (
+    <div className="h-64 overflow-y-auto bg-surface">
+      <div className="h-96 p-4 text-sm text-fg-muted">스크롤되는 목록</div>
+      <BulkSelectionBar {...args} />
+    </div>
+  ),
+}
+
 export const ZeroSelection: Story = {
   args: { selectedCount: 0 },
 }

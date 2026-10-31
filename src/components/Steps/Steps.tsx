@@ -24,8 +24,11 @@ type StepsProps = React.HTMLAttributes<HTMLOListElement> & {
    * `text` — "영상 시청 › 문제 풀기 › 이수 완료" 한 줄 글자 브레드크럼. 현재 단계만 진하게.
    *   콘텐츠(영상·문서) 위에 얹는 얇은 위치 표시용 — 학습 화면(LMS)에서 왔다.
    *   가로 전용이며 description 은 그리지 않는다.
+   * `compact` — 한 줄 「(✓) 필요 인원 — (✓) 가능 일정 — (3) 초안 다듬기」. 원(20px) 오른쪽에 라벨, 짧은
+   *   연결선. 페이지 머리(PageHeader 제목 옆)처럼 높이가 한 줄뿐인 자리용. 원 색 규칙은 default 와 같다
+   *   (지금 단계만 진한 primary, 끝난 단계는 primary-container + 체크). 가로 전용, description 없음.
    */
-  appearance?: 'default' | 'text'
+  appearance?: 'default' | 'text' | 'compact'
 }
 
 /** 글자 브레드크럼 — 상호작용 없이 위치만 말한다(onStepChange 는 무시). */
@@ -68,7 +71,64 @@ const TextSteps = forwardRef<
 })
 TextSteps.displayName = 'Steps.Text'
 
-function CheckIcon() {
+/** 한 줄 단계 — 머리 높이에 들어가는 작은 원 + 옆 라벨. 상호작용 없이 위치만 말한다. */
+const CompactSteps = forwardRef<
+  HTMLOListElement,
+  Omit<StepsProps, 'appearance' | 'orientation' | 'onStepChange'>
+>(({ steps, currentStep, className, ...props }, ref) => {
+  return (
+    <ol
+      ref={ref}
+      data-slot="steps"
+      data-appearance="compact"
+      className={cn('flex items-center gap-2', className)}
+      {...props}
+    >
+      {steps.map((step, index) => {
+        const status: StepStatus =
+          index < currentStep ? 'completed' : index === currentStep ? 'current' : 'upcoming'
+        return (
+          <li
+            key={step.id}
+            data-slot="step-item"
+            data-status={status}
+            className="flex items-center gap-2"
+          >
+            {index > 0 && <span aria-hidden className="h-px w-6 bg-border" />}
+            <span className="flex items-center gap-1.5">
+              <span
+                data-slot="steps-indicator"
+                aria-hidden
+                className={cn(
+                  'flex size-5 shrink-0 items-center justify-center rounded-full text-xs font-semibold tabular-nums',
+                  status === 'completed' && 'bg-primary-container text-primary',
+                  status === 'current' && 'bg-primary text-primary-fg',
+                  status === 'upcoming' && 'border border-border bg-background text-fg-muted',
+                )}
+              >
+                {status === 'completed' ? <CheckIcon className="size-3" /> : index + 1}
+              </span>
+              <span
+                data-slot="steps-label"
+                aria-current={status === 'current' ? 'step' : undefined}
+                className={cn(
+                  'text-sm whitespace-nowrap',
+                  status === 'current' ? 'font-semibold text-fg' : 'text-fg-muted',
+                )}
+              >
+                {step.label}
+                {status === 'completed' && <span className="sr-only"> (완료)</span>}
+              </span>
+            </span>
+          </li>
+        )
+      })}
+    </ol>
+  )
+})
+CompactSteps.displayName = 'Steps.Compact'
+
+function CheckIcon({ className = 'size-3.5' }: { className?: string }) {
   return (
     <svg
       viewBox="0 0 16 16"
@@ -77,7 +137,7 @@ function CheckIcon() {
       strokeWidth="2"
       strokeLinecap="round"
       strokeLinejoin="round"
-      className="size-3.5"
+      className={className}
       aria-hidden
     >
       <path d="M3 8l3.5 3.5L13 4" />
@@ -99,6 +159,19 @@ const Steps = forwardRef<HTMLOListElement, StepsProps>(
     },
     ref,
   ) => {
+    if (appearance === 'compact') {
+      return (
+        <CompactSteps
+          ref={ref}
+          steps={steps}
+          currentStep={currentStep}
+          className={className}
+          onKeyDown={onKeyDown}
+          {...props}
+        />
+      )
+    }
+
     if (appearance === 'text') {
       return (
         <TextSteps
@@ -158,17 +231,15 @@ const Steps = forwardRef<HTMLOListElement, StepsProps>(
       if (targetIdx !== currentIdx) onStepChange(targetIdx)
     }
 
+    const horizontal = orientation === 'horizontal'
+
     return (
       // eslint-disable-next-line jsx-a11y/no-noninteractive-element-interactions -- onKeyDown delegated to inner step indicator buttons
       <ol
         ref={ref}
         data-slot="steps-root"
         data-orientation={orientation}
-        className={cn(
-          'flex',
-          orientation === 'horizontal' ? 'flex-row items-start' : 'flex-col',
-          className,
-        )}
+        className={cn('flex', horizontal ? 'flex-row items-start' : 'flex-col', className)}
         onKeyDown={handleKeyDown}
         {...props}
       >
@@ -184,98 +255,82 @@ const Steps = forwardRef<HTMLOListElement, StepsProps>(
               data-slot="step-item"
               data-status={status}
               className={cn(
-                'flex',
-                orientation === 'horizontal'
-                  ? 'flex-1 flex-col items-center'
-                  : 'flex-row items-start gap-3',
+                'relative flex min-w-0',
+                // 가로: 칸마다 원을 가운데 두고 라벨을 그 아래 가운데 — 원과 라벨이 한 축에 선다.
+                // 세로: 원 오른쪽에 라벨·설명, 다음 단계까지 간격을 둔다.
+                horizontal ? 'flex-1 flex-col items-center' : 'flex-row gap-3 pb-6 last:pb-0',
               )}
             >
-              <div
+              {/* 연결선 — 이 원의 가장자리에서 다음 원의 가장자리까지(원 지름 24px + 여백 4px). */}
+              {!isLast && (
+                <div
+                  aria-hidden
+                  data-slot="steps-connector"
+                  className={cn(
+                    'absolute overflow-hidden rounded-full bg-border',
+                    horizontal
+                      ? 'top-3 right-[calc(-50%+1rem)] left-[calc(50%+1rem)] h-0.5 -translate-y-1/2'
+                      : 'top-7 bottom-1 left-3 w-0.5 -translate-x-1/2',
+                  )}
+                >
+                  <motion.div
+                    className="h-full w-full bg-primary-container-hover"
+                    initial={false}
+                    animate={
+                      horizontal
+                        ? { scaleX: index < currentStep ? 1 : 0 }
+                        : { scaleY: index < currentStep ? 1 : 0 }
+                    }
+                    style={horizontal ? { originX: 0 } : { originY: 0 }}
+                    transition={spring.standard}
+                  />
+                </div>
+              )}
+
+              {/* Step indicator button */}
+              <button
+                type="button"
+                aria-current={status === 'current' ? 'step' : undefined}
+                aria-label={`${typeof step.label === 'string' ? step.label : `단계 ${index + 1}`}${status === 'completed' ? ' (완료)' : status === 'current' ? ' (현재)' : ''}`}
+                onClick={isClickable ? () => onStepChange?.(index) : undefined}
+                disabled={!isClickable}
+                data-slot="steps-indicator"
                 className={cn(
-                  'flex',
-                  orientation === 'horizontal'
-                    ? 'w-full flex-col items-center'
-                    : 'flex-row items-start gap-3',
+                  'relative flex size-6 shrink-0 items-center justify-center rounded-full',
+                  'text-xs font-semibold tabular-nums transition-colors',
+                  // 진한 원은 지금 단계 하나뿐 — 끝난 단계는 옅은 원 + 체크로 가라앉힌다.
+                  status === 'completed' && 'bg-primary-container text-primary',
+                  status === 'current' && 'bg-primary text-primary-fg',
+                  status === 'upcoming' && 'border border-border bg-background text-fg-muted',
+                  isClickable
+                    ? 'cursor-pointer focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-1 focus-visible:outline-none'
+                    : 'cursor-default',
                 )}
               >
-                {/* Indicator + Connector row */}
-                <div
+                {status === 'completed' ? <CheckIcon /> : index + 1}
+              </button>
+
+              {/* Label */}
+              <div
+                data-slot="steps-label"
+                className={cn(
+                  'flex min-w-0 flex-col gap-0.5',
+                  horizontal ? 'mt-2 items-center px-1 text-center' : 'pt-0.5',
+                )}
+              >
+                <span
                   className={cn(
-                    'flex items-center',
-                    orientation === 'horizontal' ? 'w-full' : 'flex-col',
+                    'text-sm',
+                    status === 'current' && 'font-semibold text-fg',
+                    status === 'completed' && 'font-medium text-fg',
+                    status === 'upcoming' && 'font-medium text-fg-muted',
                   )}
                 >
-                  {/* Step indicator button */}
-                  <button
-                    type="button"
-                    aria-current={status === 'current' ? 'step' : undefined}
-                    aria-label={`${typeof step.label === 'string' ? step.label : `단계 ${index + 1}`}${status === 'completed' ? ' (완료)' : status === 'current' ? ' (현재)' : ''}`}
-                    onClick={isClickable ? () => onStepChange?.(index) : undefined}
-                    disabled={!isClickable}
-                    data-slot="steps-indicator"
-                    className={cn(
-                      'flex h-8 w-8 shrink-0 items-center justify-center rounded-full border-2',
-                      'text-sm font-semibold transition-colors',
-                      status === 'completed' && 'border-primary bg-primary text-primary-fg',
-                      status === 'current' && 'border-primary bg-background text-primary',
-                      status === 'upcoming' && 'border-border bg-background text-fg-muted',
-                      isClickable
-                        ? 'cursor-pointer focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-1 focus-visible:outline-none'
-                        : 'cursor-default',
-                    )}
-                  >
-                    {status === 'completed' ? <CheckIcon /> : index + 1}
-                  </button>
-
-                  {/* Connector line */}
-                  {!isLast && (
-                    <div
-                      aria-hidden
-                      data-slot="steps-connector"
-                      className={cn(
-                        'overflow-hidden bg-border',
-                        orientation === 'horizontal'
-                          ? 'mx-2 h-px flex-1'
-                          : 'mt-1 mb-1 ml-[0.9375rem] h-6 w-px',
-                      )}
-                    >
-                      <motion.div
-                        className="h-full w-full bg-primary"
-                        initial={false}
-                        animate={
-                          orientation === 'horizontal'
-                            ? { scaleX: index < currentStep ? 1 : 0 }
-                            : { scaleY: index < currentStep ? 1 : 0 }
-                        }
-                        style={orientation === 'horizontal' ? { originX: 0 } : { originY: 0 }}
-                        transition={spring.standard}
-                      />
-                    </div>
-                  )}
-                </div>
-
-                {/* Label */}
-                <div
-                  data-slot="steps-label"
-                  className={cn(
-                    'flex flex-col',
-                    orientation === 'horizontal' && 'mt-2 items-center text-center',
-                  )}
-                >
-                  <span
-                    className={cn(
-                      'text-sm font-medium',
-                      status === 'current' && 'text-fg',
-                      status === 'completed' && 'text-fg-subtle',
-                      status === 'upcoming' && 'text-fg-muted',
-                    )}
-                  >
-                    {step.label}
-                  </span>
-                  {step.description != null && (
-                    <span className="text-xs text-fg-muted">{step.description}</span>
-                  )}
-                </div>
+                  {step.label}
+                </span>
+                {step.description != null && (
+                  <span className="text-xs text-fg-muted">{step.description}</span>
+                )}
               </div>
             </li>
           )

@@ -1,0 +1,84 @@
+{
+  "id": "choice-group",
+  "state": {
+    "options": "ChoiceOption[]",
+    "value": "string[]",
+    "selectionMode": "'single' | 'multiple'",
+    "appearance": "'chip' | 'card'"
+  },
+  "events": [
+    "onValueChange"
+  ],
+  "usage": {
+    "when": [
+      "폼에서 답이 보기 안에 있는 질문 — 요일·시간대·종류. 보기를 모두 펼쳐 보이고 누르는 자리를 크게 줄 때",
+      "짧은 보기(1~4자, 요일·횟수)는 appearance=chip, 설명이 붙는 보기(시간대 + 시각)는 appearance=card",
+      "여러 개 고르면 selectionMode=multiple(기본), 하나만 고르면 single",
+      "선택 신호는 하나만: chip 은 채운 primary(고르지 않은 칩은 테두리 없는 회색 면), card 는 두꺼운 primary 테두리 + 오른쪽 위 체크 원(바탕·글자색은 그대로). 모바일 현장(data-surface=tinted)에서는 플래너 앱 option-list 문법 — 고르지 않은 보기 = 흰 filled 타일, 고른 보기 = primary-container + 굵은 글자(스트로크 없음)"
+    ],
+    "avoid": [
+      "카드·칩 안에 Checkbox·Radio 를 넣지 않는다 — 선택 표시가 두 겹이 된다. 이 부품이 선택을 색·테두리·체크로 말한다",
+      "목록을 좁히는 필터에는 쓰지 않는다 → FilterChipGroup",
+      "보기 전환(탭 성격)에는 쓰지 않는다 → SegmentedControl",
+      "보기가 8개를 넘으면 → MultiSelect / Select"
+    ],
+    "limits": {
+      "perRegion": 1,
+      "items": "chip 은 8개 이내(요일 7개까지), card 는 2~6개. card 열 수는 보기 수(최대 4), 모바일 폭에서 4개 이상이면 columns=2",
+      "label": "chip 라벨 1~4자, card 라벨 한 줄 + 설명 한 줄(text-xs)"
+    },
+    "states": {
+      "disabled": "그룹 disabled 또는 option.disabled. opacity 50%",
+      "empty": "고른 것 없음 = 미응답. 안내는 묶음 아래 캡션 또는 하단 액션 바 왼쪽에",
+      "overflow": "chip 은 가로 wrap, card 는 grid 열 고정. 스크롤 금지"
+    },
+    "placement": [
+      "질문 제목(text-sm semibold) 바로 아래. 한 질문에 한 묶음",
+      "키보드 ←/→/↑/↓/Home/End 로 이동, 탭 스톱은 하나(roving). single 은 화살표가 곧 선택"
+    ],
+    "examples": [
+      "components-l2-choicegroup--chips",
+      "components-l2-choicegroup--cards",
+      "screens/drafts/planner-onboarding 2-3 활동 시간"
+    ]
+  },
+  "anatomy": {
+    "id": "root",
+    "intent": "ornament",
+    "traversal": {
+      "axis": "both"
+    },
+    "iterates": "options",
+    "as": "option",
+    "child": {
+      "id": "item",
+      "intent": "toggle",
+      "writes": "value",
+      "emits": "onValueChange",
+      "binding": "option.value",
+      "children": [
+        {
+          "id": "content",
+          "intent": "ornament",
+          "children": [
+            {
+              "id": "label",
+              "intent": "value-display",
+              "binding": "option.label"
+            },
+            {
+              "id": "description",
+              "intent": "value-display",
+              "binding": "option.description"
+            }
+          ]
+        },
+        {
+          "id": "check",
+          "intent": "state-indicator",
+          "binding": "value"
+        }
+      ]
+    }
+  }
+}

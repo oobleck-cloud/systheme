@@ -42,6 +42,7 @@ export function useMarkers({
   onPopupClose,
   onActiveMarkerMount,
   onActiveMarkerUnmount,
+  onMarkerHover,
   cluster,
 }: UseMarkersOptions) {
   // 렌더마다 최신 콜백을 동기적으로 덮어쓴다 (effect 없이).
@@ -53,6 +54,7 @@ export function useMarkers({
     onPopupClose,
     onActiveMarkerMount,
     onActiveMarkerUnmount,
+    onMarkerHover,
   }
 
   // stable wrapper: 최초 1회 생성. 각 함수는 호출 시점에 latestHandlers.current를 읽는다.
@@ -70,6 +72,7 @@ export function useMarkers({
     onPopupClose: () => latestHandlers.current.onPopupClose?.(),
     onActiveMarkerMount: (...args) => latestHandlers.current.onActiveMarkerMount?.(...args),
     onActiveMarkerUnmount: () => latestHandlers.current.onActiveMarkerUnmount?.(),
+    onMarkerHover: (...args) => latestHandlers.current.onMarkerHover?.(...args),
   })
 
   // 이번 effect 사이클에서 사용할 handlers.
@@ -83,6 +86,7 @@ export function useMarkers({
         onActiveMarkerChange: stableHandlers.current.onActiveMarkerChange,
         onPopupOpen: stableHandlers.current.onPopupOpen,
         onPopupClose: stableHandlers.current.onPopupClose,
+        onMarkerHover: stableHandlers.current.onMarkerHover,
       }
 
   useEffect(() => {
@@ -104,7 +108,7 @@ export function useMarkers({
     let cancelled = false
     let cleanup: (() => void) | null = null
 
-    addMarkerLayers(map, valid, effectiveHandlers, cluster).then((fn) => {
+    addMarkerLayers(map, valid, effectiveHandlers, cluster, () => cancelled).then((fn) => {
       if (cancelled) fn()
       else cleanup = fn
     })

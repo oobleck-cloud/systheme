@@ -1,0 +1,102 @@
+{
+  "id": "detail-panel",
+  "state": {
+    "title": "ReactNode",
+    "count": "number",
+    "badge": "ReactNode",
+    "action": "ReactNode",
+    "rows": "Array<[ReactNode, ReactNode]>",
+    "meta": "ReactNode",
+    "lead": "ReactNode",
+    "trailing": "ReactNode",
+    "flush": "boolean",
+    "children": "ReactNode"
+  },
+  "usage": {
+    "when": [
+      "서랍 · 옆 패널 · 상세 화면처럼 칸(섹션)으로 나뉘는 화면 — 견적 상세 서랍, 플래너 일별 구역, 고객 상세",
+      "맨 위 요약(DetailSummary) 아래로 처리 · 시세 · 이력 같은 칸(DetailSection)을 쌓을 때"
+    ],
+    "avoid": [
+      "칸마다 테두리 카드로 감싸지 않는다 — 칸 사이는 구분선, 칸 안 묶음만 DetailInset",
+      "칸 제목을 11px · 대문자로 쓰지 않는다 — DetailSection 의 sm 굵은 제목 하나",
+      "같은 열을 비교할 행이 5개 이상이면 쓰지 않는다 → Table"
+    ],
+    "limits": {
+      "label": "DetailFacts 이름 6rem(12자 이내) — 길면 DetailStacked",
+      "items": "DetailSection 머리의 배지는 하나, 오른쪽 행동은 글자 하나"
+    },
+    "states": {
+      "empty": "칸은 세우고 내용 자리에 한 줄(text-sm fg-subtle)로 왜 비었는지 적는다",
+      "overflow": "목록 줄은 말줄임(truncate), 이름-값의 값은 줄바꿈"
+    },
+    "placement": [
+      "DetailPanel > DetailSummary? > DetailSection* — 칸 위마다 1px 구분선 + 위아래 24",
+      "패널 바닥 적용 줄은 마지막 DetailSection 안에 바뀔 내용 한 줄 + 꽉 찬 주 버튼"
+    ],
+    "examples": [
+      "components-l2-detailpanel--quote-drawer",
+      "components-l2-detailpanel--customer"
+    ]
+  },
+  "anatomy": {
+    "id": "root",
+    "intent": "decorative",
+    "binding": "@detail-panel",
+    "children": [
+      {
+        "id": "summary",
+        "intent": "value-display",
+        "binding": "children",
+        "slot": true
+      },
+      {
+        "id": "section",
+        "intent": "decorative",
+        "binding": "title",
+        "slot": true,
+        "children": [
+          {
+            "id": "section-header",
+            "intent": "value-display",
+            "binding": "title"
+          }
+        ]
+      },
+      {
+        "id": "facts",
+        "intent": "field-rhythm",
+        "binding": "rows"
+      },
+      {
+        "id": "stacked",
+        "intent": "field-rhythm",
+        "binding": "rows"
+      },
+      {
+        "id": "list",
+        "intent": "value-display",
+        "binding": "children",
+        "children": [
+          {
+            "id": "list-item",
+            "intent": "value-display",
+            "binding": "title"
+          }
+        ]
+      },
+      {
+        "id": "inset",
+        "intent": "decorative",
+        "binding": "children",
+        "slot": true
+      },
+      {
+        "id": "actions",
+        "intent": "press-action",
+        "binding": "children",
+        "slot": true
+      }
+    ]
+  }
+}

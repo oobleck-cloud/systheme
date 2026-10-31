@@ -8,7 +8,7 @@
 import { validate } from 'mapbox-gl/dist/style-spec/index.cjs'
 import { describe, expect, it } from 'vitest'
 
-import { setHiddenLeg, STOP_HANDLE_LAYERS, type MapLayerSpec } from './arrows'
+import { setHiddenLeg, STOP_HANDLE_LAYERS, stopClockLayer, type MapLayerSpec } from './arrows'
 import { STOP_DRAG_PREVIEW_LAYERS } from './stopDrag'
 import { STOP_HINT_LAYERS } from './stopHint'
 
@@ -47,6 +47,11 @@ describe('MapboxMap 레이어 정의 — style-spec 검증', () => {
 
   it('호버 힌트 레이어가 스펙을 지킨다', () => {
     expect(validate(styleWith(STOP_HINT_LAYERS))).toEqual([])
+  })
+
+  it('시계 쐐기 레이어가 스펙을 지킨다 — 돌림 각도는 표시마다 다르다', () => {
+    const layer = stopClockLayer('clock', 'stops', ['!=', ['get', 'clockImage'], ''])
+    expect(validate(styleWith([layer]))).toEqual([])
   })
 
   it('셋을 한 스타일에 함께 올려도 id 충돌이 없다', () => {

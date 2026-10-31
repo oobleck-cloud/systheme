@@ -8,7 +8,10 @@
     "stickyTone": "'page' | 'card'",
     "primary": "ContributionGraphPrimary",
     "colorScale": "Partial<level 0-5 override>",
-    "hoveredCell": "GraphCell | null"
+    "hoveredCell": "GraphCell | null",
+    "yLabelMaxWidth": "number (px) — 넘는 행 라벨은 말줄임",
+    "getYLabelTitle": "(rowLabel) => string — 행 라벨 title",
+    "fill": "boolean — 판 폭 채우기(열이 남는 폭을 나눠 가짐, 칸 높이는 cellSize)"
   },
   "events": [
     "onCellClick"

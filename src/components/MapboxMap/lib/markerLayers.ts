@@ -4,6 +4,7 @@ import {
   loadMarkerIconAsImage,
   createMarkerIconDataUrl,
   isCenterAnchored,
+  markerFootprint,
   markerImageId,
   type MarkerIconOptions,
 } from './markerIcon'
@@ -25,6 +26,43 @@ const DEFAULT_COLOR = '#055cf5'
 /** 스프라이트는 2배 크기로 구워 절반으로 그린다 — 고밀도 화면에서 흐려지지 않게 */
 const ICON_SIZE = 0.5
 
+/**
+ * 커서가 가까이 간 노드를 키우는 배율(`hoverGrow`). 큰 노드(마커)·작은 노드(중간 표시)가 같은
+ * 값을 쓴다 — 크기가 달라도 "가리켰다"는 같은 말이어야 한다. 1.2 아래로 내리면 지름 11px 인
+ * 중간 표시가 2px 남짓 커져 눈에 띄지 않는다.
+ */
+export const HOVER_GROW_SCALE = 1.2
+
+/** 맨 위로 올릴 정렬 키 — 마커 순번(index)이 넘볼 수 없는 값 */
+const HOVER_SORT_KEY = 1e9
+
+/**
+ * 마커 하나를 키우는 레이아웃. `null` 이면 원래 값이다 — 레이어를 만들 때도 이 값을 쓴다.
+ *
+ * `icon-size` 는 레이아웃 속성이라 feature-state 를 받지 못한다(style-spec 이 거절한다). 그래서
+ * 가리킨 id 를 표현식에 직접 박아 바꿔 끼운다. 바꿀 때마다 이 소스를 다시 배치하지만, 가리킨
+ * 노드가 **바뀔 때만** 부르므로 커서가 움직일 때마다 도는 일은 없다.
+ *
+ * `icon-offset` 도 같이 바꾸는 이유: 오프셋은 `icon-size` 가 곱해진 뒤 픽셀이 되므로, 그대로
+ * 두면 원 둘레에 앉힌 마커(`pixelOffset`)가 커지면서 바깥으로 밀려난다.
+ */
+export function markerGrowLayout(markerId: string | null): Record<string, unknown> {
+  if (markerId == null) {
+    return {
+      'icon-size': ICON_SIZE,
+      'icon-offset': ['get', 'iconOffset'],
+      'symbol-sort-key': ['get', 'symbolSortKey'],
+    }
+  }
+  const hovered = ['==', ['get', 'id'], markerId]
+  return {
+    'icon-size': ['case', hovered, ICON_SIZE * HOVER_GROW_SCALE, ICON_SIZE],
+    'icon-offset': ['case', hovered, ['get', 'grownIconOffset'], ['get', 'iconOffset']],
+    // 커진 노드가 겹친 이웃 아래에 깔리면 키운 보람이 없다.
+    'symbol-sort-key': ['case', hovered, HOVER_SORT_KEY, ['get', 'symbolSortKey']],
+  }
+}
+
 /** `badge` 우선, 없으면 1-based 인덱스 */
 function resolveBadge(m: MapMarker, index: number): string {
   return m.badge ?? String(index + 1)
@@ -37,6 +75,7 @@ function iconOptions(m: MapMarker, index: number): MarkerIconOptions {
     color: m.color ?? DEFAULT_COLOR,
     variant: m.variant,
     active: m.active,
+    ...(m.dial ? { dial: m.dial } : {}),
   }
 }
 
@@ -47,28 +86,42 @@ function iconOptions(m: MapMarker, index: number): MarkerIconOptions {
 function markersToGeoJSON(markers: MapMarker[]): GeoJSON.FeatureCollection {
   return {
     type: 'FeatureCollection',
-    features: markers.map((m, index) => ({
-      type: 'Feature' as const,
-      geometry: {
-        type: 'Point' as const,
-        coordinates: [m.position.lng, m.position.lat],
-      },
-      properties: {
-        id: m.id,
-        imageId: markerImageId(iconOptions(m, index)),
-        color: m.color ?? DEFAULT_COLOR,
-        // 호버 힌트가 읽어 가는 한 줄. 도메인 필드가 아니라 표시 문자열이므로 실어 보낸다 —
-        // 커서가 지나갈 때마다 소비자에게 되묻지 않으려면 지도가 들고 있어야 한다.
-        tooltip: m.tooltip ?? '',
-        // 꼬리 있는 핀은 뾰족한 끝이, 역 원은 원의 중심이 좌표다.
-        iconAnchor: isCenterAnchored(m.variant) ? 'center' : 'bottom',
-        /** 겹칠 때 렌더 순서: 값이 클수록 위 (나중 마커가 위) */
-        symbolSortKey: index,
-        // icon-offset 은 icon-size 가 곱해진 뒤 픽셀이 된다. 소비자가 픽셀로 말하게 하려고
-        // 여기서 나눠 둔다 (ICON_SIZE 0.5 → 2배).
-        iconOffset: [(m.pixelOffset?.[0] ?? 0) / ICON_SIZE, (m.pixelOffset?.[1] ?? 0) / ICON_SIZE],
-      },
-    })),
+    features: markers.map((m, index) => {
+      const offsetX = m.pixelOffset?.[0] ?? 0
+      const offsetY = m.pixelOffset?.[1] ?? 0
+      const footprint = markerFootprint(m)
+      return {
+        type: 'Feature' as const,
+        geometry: {
+          type: 'Point' as const,
+          coordinates: [m.position.lng, m.position.lat],
+        },
+        properties: {
+          id: m.id,
+          imageId: markerImageId(iconOptions(m, index)),
+          color: m.color ?? DEFAULT_COLOR,
+          // 호버 힌트가 읽어 가는 한 줄. 도메인 필드가 아니라 표시 문자열이므로 실어 보낸다 —
+          // 커서가 지나갈 때마다 소비자에게 되묻지 않으려면 지도가 들고 있어야 한다.
+          tooltip: m.tooltip ?? '',
+          // 꼬리 있는 핀은 뾰족한 끝이, 역 원은 원의 중심이 좌표다.
+          iconAnchor: isCenterAnchored(m.variant, m.dial) ? 'center' : 'bottom',
+          /** 겹칠 때 렌더 순서: 값이 클수록 위 (나중 마커가 위) */
+          symbolSortKey: index,
+          // icon-offset 은 icon-size 가 곱해진 뒤 픽셀이 된다. 소비자가 픽셀로 말하게 하려고
+          // 여기서 나눠 둔다 (ICON_SIZE 0.5 → 2배).
+          iconOffset: [offsetX / ICON_SIZE, offsetY / ICON_SIZE],
+          grownIconOffset: [
+            offsetX / (ICON_SIZE * HOVER_GROW_SCALE),
+            offsetY / (ICON_SIZE * HOVER_GROW_SCALE),
+          ],
+          // 커서와의 거리를 재는 원(`hoverGrow`). 질의 결과로 되돌아와야 하므로 스칼라로 싣는다.
+          offsetX,
+          offsetY,
+          footprintRadius: footprint.radius,
+          footprintLift: footprint.lift,
+        },
+      }
+    }),
   }
 }
 
@@ -82,6 +135,11 @@ export interface MarkerLayerHandlers {
    */
   onPopupOpen?: (element: HTMLElement, data: { markerId: string }) => void
   onPopupClose?: () => void
+  /**
+   * 커서가 마커 위에 올라오거나(id) 벗어날 때(null). 같은 마커 위에서 움직이는 동안에는
+   * 다시 부르지 않는다 — 목록의 같은 행을 강조하는 데 쓰므로 바뀔 때만 알리면 된다.
+   */
+  onMarkerHover?: (markerId: string | null) => void
 
   /**
    * 선택된 마커 위치에 "외부 DOM 오버레이"가 마운트되었을 때 호출.
@@ -100,12 +158,17 @@ export interface MarkerLayerHandlers {
 /**
  * 스프라이트 기반 마커 레이어를 map에 추가한다.
  * 반환된 cleanup을 호출하면 이벤트·레이어·이미지까지 안전하게 정리.
+ *
+ * `isStale` 이 그림을 다 구운 시점에 참이면 지도에 아무것도 반영하지 않는다 — 더 새 갱신이
+ * 이미 지도를 맞춘 뒤 늦게 끝난 호출이 낡은 핀을 다시 올리지 않게(2026-10-23 상담지도:
+ * 집계 배율로 마커 0개가 된 뒤 취소된 47개 갱신이 끝나 핀이 남았다).
  */
 export function addMarkerLayers(
   map: mapboxgl.Map,
   markers: MapMarker[],
   handlers: MarkerLayerHandlers = {},
   cluster?: MapClusterOptions,
+  isStale?: () => boolean,
 ): Promise<() => void> {
   if (markers.length === 0) {
     removeMarkerLayers(map, [])
@@ -127,6 +190,7 @@ export function addMarkerLayers(
       loadMarkerIconAsImage(options).then((img) => ({ imageId, img })),
     ),
   ).then((loaded) => {
+    if (isStale?.()) return () => {}
     const owned = ownedImagesOf(map)
     loaded.forEach(({ imageId, img }) => {
       if (!map.hasImage(imageId)) {
@@ -172,11 +236,9 @@ export function addMarkerLayers(
         source: SOURCE_ID,
         layout: {
           'icon-image': ['get', 'imageId'],
-          'icon-size': ICON_SIZE,
           'icon-anchor': ['get', 'iconAnchor'],
-          'icon-offset': ['get', 'iconOffset'],
           'icon-allow-overlap': true,
-          'symbol-sort-key': ['get', 'symbolSortKey'],
+          ...markerGrowLayout(null),
         },
         filter: baseSpriteFilter(wantsCluster),
       })
@@ -267,8 +329,10 @@ function bindInteractions(
     onPopupClose,
     onActiveMarkerMount,
     onActiveMarkerUnmount,
+    onMarkerHover,
   } = handlers
   let disposed = false
+  let hoveredId: string | null = null
 
   // popup이 필요한 마커가 하나라도 있을 때만 Mapbox Popup 객체를 생성한다.
   // 모두 popup이 없으면(예: 외부에서 별도 플로팅 UI로 처리) 빈 popup DOM이 깜빡이는 현상을 방지.
@@ -416,6 +480,7 @@ function bindInteractions(
             color: marker.color ?? DEFAULT_COLOR,
             variant: marker.variant,
             active: marker.active,
+            ...(marker.dial ? { dial: marker.dial } : {}),
           }).then(({ dataUrl, displayWidth, displayHeight }) => {
             if (disposed || clickRevision !== lastClickRevision) return
             const img = document.createElement('img')
@@ -451,6 +516,19 @@ function bindInteractions(
   const handleMouseLeave = () => {
     map.getCanvas().style.cursor = ''
   }
+  const handleHoverMove = (
+    e: mapboxgl.MapMouseEvent & { features?: mapboxgl.GeoJSONFeature[] },
+  ) => {
+    const id = (e.features?.[0]?.properties?.id as string | undefined) ?? null
+    if (id === hoveredId) return
+    hoveredId = id
+    onMarkerHover?.(id)
+  }
+  const handleHoverLeave = () => {
+    if (hoveredId == null) return
+    hoveredId = null
+    onMarkerHover?.(null)
+  }
 
   /** 클러스터 클릭 → 그 클러스터가 풀리는 줌까지 확대 */
   const handleClusterClick = (e: mapboxgl.MapMouseEvent) => {
@@ -473,6 +551,8 @@ function bindInteractions(
   map.on('click', SPRITE_LAYER_ID, handleClick)
   map.on('mouseenter', SPRITE_LAYER_ID, handleMouseEnter)
   map.on('mouseleave', SPRITE_LAYER_ID, handleMouseLeave)
+  map.on('mousemove', SPRITE_LAYER_ID, handleHoverMove)
+  map.on('mouseleave', SPRITE_LAYER_ID, handleHoverLeave)
 
   const clusterEnabled = cluster != null
   const zoomOnClusterClick = cluster?.zoomOnClick ?? true
@@ -487,6 +567,8 @@ function bindInteractions(
     map.off('click', SPRITE_LAYER_ID, handleClick)
     map.off('mouseenter', SPRITE_LAYER_ID, handleMouseEnter)
     map.off('mouseleave', SPRITE_LAYER_ID, handleMouseLeave)
+    map.off('mousemove', SPRITE_LAYER_ID, handleHoverMove)
+    map.off('mouseleave', SPRITE_LAYER_ID, handleHoverLeave)
     if (clusterEnabled) {
       map.off('mouseenter', CLUSTER_CIRCLE_LAYER_ID, handleMouseEnter)
       map.off('mouseleave', CLUSTER_CIRCLE_LAYER_ID, handleMouseLeave)

@@ -2,7 +2,8 @@
   "id": "filter-chip-group",
   "state": {
     "options": "FilterChipOption[]",
-    "value": "string[]"
+    "value": "string[]",
+    "selectionMode": "'multiple' | 'single'"
   },
   "events": [
     "onChange"
@@ -10,10 +11,12 @@
   "usage": {
     "when": [
       "사용자가 목록을 여러 조건으로 좁힐 때 — 다중 선택 토글 칩(aria-pressed)",
-      "조건이 2~6개이고 한 줄에 드러나도 되는 가벼운 필터"
+      "조건이 2~6개이고 한 줄에 드러나도 되는 가벼운 필터",
+      "항목이 많아 SegmentedControl 에 안 들어가는 단일 선택(구 고르기 등) — selectionMode=\"single\", 주의 표시는 option.note",
+      "구역처럼 상위 이름이 붙는 항목 — option.qualifier 에 상위(시)를 흐리게, label 에 주인공(구). 표의 구역 칩(Tag qualifier)과 같은 문법"
     ],
     "avoid": [
-      "하나만 고르는 조건에는 쓰지 않는다 → SegmentedControl / ToggleButtonGroup",
+      "하나만 고르는 조건이 2~5개면 쓰지 않는다 → SegmentedControl / ToggleButtonGroup",
       "운영 콘솔 목록의 주 필터에는 쓰지 않는다 → 필터 아이콘 버튼 뒤 Popover 패널(AdvancedFilterPanel)",
       "값 분류 표시에는 쓰지 않는다 → Tag",
       "제거 가능한 선택 결과 표시에는 쓰지 않는다 → Tag(removable)"
@@ -51,6 +54,11 @@
       "writes": "value",
       "emits": "onChange",
       "children": [
+        {
+          "id": "qualifier",
+          "intent": "value-display",
+          "binding": "chip.qualifier"
+        },
         {
           "id": "label",
           "intent": "value-display",

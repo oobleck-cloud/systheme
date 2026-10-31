@@ -16,6 +16,12 @@ import { defineConfig, devices } from '@playwright/experimental-ct-react'
  *   pnpm exec playwright install chromium --with-deps
  *   pnpm test:ct
  */
+function ctPortFor(dir: string): number {
+  let h = 0
+  for (const ch of dir) h = (h * 31 + ch.charCodeAt(0)) % 1000
+  return 43100 + h
+}
+
 export default defineConfig({
   testDir: './src',
   testMatch: /.*\.ct\.(ts|tsx)$/,
@@ -36,9 +42,10 @@ export default defineConfig({
      * 레지스트리가 낡아 "Unregistered component" 로 죽고, 손대지도 않은 Drawer·Modal
      * 포커스 트랩이 깨졌다(2026-09-14 CI). 같은 커밋이 로컬에서는 23건 전부 통과한다.
      *
-     * 아무도 안 쓰는 번호로 옮긴다.
+     * 아무도 안 쓰는 번호로 옮긴다. 한 머신에 러너가 여럿이면 같은 번호끼리도 부딪혀(동시에 도는 다른
+     * 실행의 서버에 붙는다) 체크아웃 경로마다 번호를 달리한다 — 경로는 모든 워커가 같으니 번호도 같다.
      */
-    ctPort: 43100,
+    ctPort: ctPortFor(__dirname),
     ctTemplateDir: 'playwright',
     ctViteConfig: {
       resolve: {

@@ -359,3 +359,68 @@ describe('Select 접근 가능한 이름', () => {
     expect(screen.getByRole('combobox', { name: '대행 맡기기' })).toBeInTheDocument()
   })
 })
+
+describe('G. 묶음 — group · hint · keywords', () => {
+  const GROUPED = [
+    { value: 'no', label: '주문번호', group: '주문 › 기본 정보' },
+    { value: 'move', label: '이사 예정일', group: '주문 › 일정' },
+    { value: 'status', label: '상태', group: '주문 › 기본 정보' },
+    {
+      value: 'score',
+      label: '평점',
+      group: '견적 › 계약 파트너',
+      hint: '견적 › 계약 파트너',
+      keywords: ['별점'],
+    },
+  ]
+
+  it('같은 묶음끼리 머리글 아래 모은다 — 묶음은 처음 나온 순서', () => {
+    render(<Select options={GROUPED} searchable />)
+    openSelect()
+    const list = screen.getByRole('listbox')
+    const texts = Array.from(list.children).map((li) => li.textContent)
+    expect(texts).toEqual([
+      '주문 › 기본 정보',
+      '주문번호',
+      '상태',
+      '주문 › 일정',
+      '이사 예정일',
+      '견적 › 계약 파트너',
+      '평점',
+    ])
+    // 머리글은 고를 수 있는 옵션이 아니다.
+    expect(screen.getAllByRole('option')).toHaveLength(4)
+  })
+
+  it('화살표 이동은 머리글을 건너뛴다 — 두 번째 옵션은 같은 묶음의 「상태」', () => {
+    const onChange = vi.fn()
+    render(<Select options={GROUPED} onChange={onChange} />)
+    openSelect()
+    const listbox = screen.getByRole('listbox')
+    fireEvent.keyDown(listbox, { key: 'ArrowDown' })
+    fireEvent.keyDown(listbox, { key: 'Enter' })
+    expect(onChange).toHaveBeenCalledWith('status')
+  })
+
+  it('검색은 별칭도 맞추고, 머리글 대신 hint 로 위치를 보인다', () => {
+    render(<Select options={GROUPED} searchable />)
+    openSelect()
+    fireEvent.change(screen.getByLabelText('옵션 검색'), { target: { value: '별점' } })
+    const options = screen.getAllByRole('option')
+    expect(options).toHaveLength(1)
+    expect(options[0]).toHaveTextContent('평점')
+    expect(options[0]).toHaveTextContent('견적 › 계약 파트너')
+    expect(document.querySelector('[data-slot="group-header"]')).toBeNull()
+  })
+
+  it('group 이 없으면 머리글도 순서 변화도 없다', () => {
+    renderSelect()
+    openSelect()
+    expect(document.querySelector('[data-slot="group-header"]')).toBeNull()
+    expect(screen.getAllByRole('option').map((o) => o.textContent)).toEqual([
+      'Apple',
+      'Banana',
+      'Cherry',
+    ])
+  })
+})

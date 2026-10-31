@@ -56,4 +56,22 @@ describe('markerImageId', () => {
     ])
     expect(ids.size).toBe(4)
   })
+
+  it('시계판은 칸 하나만 달라도 다른 id, 이름표는 굽지 않는다', () => {
+    const dial = { startHour: 8, cellMinutes: 30, cells: ['base', 'strong'] } as const
+    const base = { number: '1', color: '#055cf5', variant: 'station', dial } as const
+    expect(markerImageId({ ...base, label: '김서연' })).toBe(
+      markerImageId({ ...base, label: '박지훈' }),
+    )
+    expect(markerImageId(base)).not.toBe(
+      markerImageId({ ...base, dial: { ...dial, cells: ['soft', 'strong'] } }),
+    )
+    expect(markerImageId(base)).not.toBe(markerImageId({ ...base, dial: undefined }))
+  })
+
+  it('시계판을 두른 마커는 변형과 무관하게 중심이 좌표', () => {
+    const dial = { startHour: 8, cellMinutes: 30, cells: ['base'] } as const
+    expect(isCenterAnchored('dot', dial)).toBe(true)
+    expect(isCenterAnchored('ghost', dial)).toBe(true)
+  })
 })

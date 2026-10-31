@@ -71,11 +71,14 @@
   "usage": {
     "when": [
       "순서가 정해진 단계 중 현재 위치를 보일 때(위저드·온보딩) — default",
-      "콘텐츠 위에 얹는 얇은 위치 표시(학습: 영상 시청 › 문제 풀기 › 이수 완료) — appearance=text"
+      "데스크톱 폼 오른쪽 레일에서 단계와 답한 내용을 함께 보일 때 — orientation=vertical + description 에 답 요약 한 줄(본문 위 가로 Steps 와 같이 두지 않는다)",
+      "콘텐츠 위에 얹는 얇은 위치 표시(학습: 영상 시청 › 문제 풀기 › 이수 완료) — appearance=text",
+      "페이지 머리 제목 옆 한 줄(일괄 등록: 필요 인원 — 가능 일정 — 초안 다듬기) — appearance=compact(원 20px + 옆 라벨)"
     ],
     "avoid": [
       "단계 표시를 손으로 그리지 않는다(글자 ›, 원 + 선)",
-      "실제 행동과 무관하게 currentStep 을 올리지 않는다 — 가짜 상태"
+      "실제 행동과 무관하게 currentStep 을 올리지 않는다 — 가짜 상태",
+      "가로 Steps 와 같은 단계를 요약하는 카드(— · 쓰는 중)를 나란히 두지 않는다 — 세로 Steps 하나로 합친다"
     ],
     "limits": {
       "items": "3~6단계. 7개 이상이면 그룹으로 묶는다",
@@ -86,11 +89,14 @@
       "overflow": "text 는 flex-wrap, default 는 가로 스크롤 없이 세로(orientation=vertical)"
     },
     "placement": [
-      "text 는 콘텐츠 바로 위 왼쪽, 오른쪽에 진척 수치 슬롯"
+      "text 는 콘텐츠 바로 위 왼쪽, 오른쪽에 진척 수치 슬롯",
+      "compact 는 PageHeader titleAddon — 제목과 24px 띄운다"
     ],
     "examples": [
       "components-l1-steps--text-appearance",
-      "screens/lms-lesson"
+      "components-l1-steps--compact-appearance",
+      "screens/lms-lesson",
+      "components-l1-steps--vertical-summary"
     ]
   }
 }

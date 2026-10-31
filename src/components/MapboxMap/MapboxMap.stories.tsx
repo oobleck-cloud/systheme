@@ -495,6 +495,32 @@ export const RouteStopHints: Story = {
   },
 }
 
+export const HoverGrow: Story = {
+  name: 'Hover grow — the node nearest the cursor grows a little',
+  render: () => (
+    <MapboxMap
+      height="100%"
+      markers={ROUTE_HINT_MARKERS}
+      arrows={ROUTE_HINT_ARROWS}
+      loops={ROUTE_HINT_LOOPS}
+      camera={{ zoom: 14, autoFit: true, fitKey: 'hover-grow' }}
+      hoverGrow
+    />
+  ),
+  parameters: {
+    docs: {
+      description: {
+        story: [
+          '`hoverGrow` — 커서가 가까이 간 노드(마커·선 위 빈 자리) 하나를 1.2배로 키웁니다.',
+          '그림 바로 위가 아니어도 테두리에서 12px 안이면 반응하고, 둘을 통틀어 가장 가까운 하나만 커집니다.',
+          '노드가 빽빽한 화면에서 "지금 무엇을 가리키는가"를 누르기 전에 보여 주려는 것입니다.',
+          '버튼을 누른 채 움직이는 동안(지도·빈 자리 끌기)은 키우지 않습니다. 기본은 꺼져 있습니다.',
+        ].join(' '),
+      },
+    },
+  },
+}
+
 export const DynamicMarkersOnClick: Story = {
   name: 'Dynamic markers on click',
   render: function DynamicMarkersOnClickStory() {

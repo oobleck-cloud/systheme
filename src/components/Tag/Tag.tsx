@@ -18,6 +18,8 @@ const tagVariants = cva('inline-flex items-center gap-1 font-medium whitespace-n
       'outline-warning': 'border border-warning-border bg-transparent text-warning-text',
       'outline-error': 'border border-error-border bg-transparent text-error-text',
       'outline-info': 'border border-info-border bg-transparent text-info-text',
+      // 값 칩 — 테두리 없이 회색 면. 표 칸처럼 칩이 줄지어 서는 자리에서 테두리 선이 격자와 겹쳐 시끄럽지 않게.
+      subtle: 'bg-tag-gray-subtle text-fg',
     },
     shape: {
       rounded: 'rounded-md',
@@ -28,6 +30,8 @@ const tagVariants = cva('inline-flex items-center gap-1 font-medium whitespace-n
       sm: 'h-5 px-2 text-xs',
       md: 'h-6 px-2.5 text-xs',
       lg: 'h-7 px-3 text-sm',
+      // 표 칸 안의 값 칩(22px) — 행 M(48px) 한 줄에 칩 하나 높이. 관계 칸의 계층 값 칩이 쓴다.
+      cell: 'h-5.5 px-1.75 text-xs',
     },
   },
   defaultVariants: {
@@ -73,15 +77,32 @@ type TagProps = React.HTMLAttributes<HTMLSpanElement> &
     onRemove?: () => void
     /** 노션식 색 칩. 지정 시 variant 의 배경/텍스트를 덮어쓴다. */
     color?: TagColor
+    /**
+     * 앞말 — 계층 값의 윗단(「서울 구로구」의 「서울」). 주면 앞말은 흐린 보통 굵기, 본말(children)은 굵게 그려
+     * 칩마다 같은 앞말이 반복돼도 눈이 본말(구 이름)에 먼저 간다. 본말이 넘치면 본말만 말줄임한다.
+     */
+    qualifier?: React.ReactNode
   }
 
-function Tag({ className, variant, color, shape, size, onRemove, children, ...props }: TagProps) {
+function Tag({
+  className,
+  variant,
+  color,
+  shape,
+  size,
+  qualifier,
+  onRemove,
+  children,
+  ...props
+}: TagProps) {
   const removeLabel = typeof children === 'string' ? `Remove ${children}` : 'Remove'
+  const qualified = qualifier != null && qualifier !== ''
 
   return (
     <span
       className={cn(
         tagVariants({ variant, shape, size }),
+        qualified && 'gap-0.75',
         color && TAG_COLOR_CLASS[color],
         className,
       )}
@@ -90,7 +111,16 @@ function Tag({ className, variant, color, shape, size, onRemove, children, ...pr
       {color && (
         <span className={cn('size-1.5 shrink-0 rounded-full', TAG_DOT_CLASS[color])} aria-hidden />
       )}
-      {children}
+      {qualified ? (
+        <>
+          <span data-tag-qualifier="" className="shrink-0 font-normal text-fg-muted">
+            {qualifier}
+          </span>
+          <span className="min-w-0 truncate font-semibold">{children}</span>
+        </>
+      ) : (
+        children
+      )}
       {onRemove && (
         <button
           type="button"
@@ -100,6 +130,8 @@ function Tag({ className, variant, color, shape, size, onRemove, children, ...pr
           }}
           className={cn(
             '-mr-0.5 flex items-center rounded-sm transition-opacity hover:opacity-60',
+            // 회색 면 칩의 ✕ 는 앞말과 같은 흐린 색 — 본말보다 튀지 않게.
+            variant === 'subtle' && 'text-fg-muted',
             'focus-visible:ring-1 focus-visible:ring-current focus-visible:outline-none',
             shape === 'pill' && 'rounded-full',
           )}

@@ -30,6 +30,11 @@ export type { MarkerSpriteProps } from './MarkerSprite'
 export { FloatingBounce } from './FloatingBounce'
 export type { FloatingBounceProps } from './FloatingBounce'
 
+/**
+ * 시계판 톤 → 색. 지도 밖에서 같은 시계판을 그릴 때(목록 막대 등) 같은 색 규칙을 쓰게 한다.
+ */
+export { dialToneStyle } from './lib/clockDial'
+
 // ─── Types ───────────────────────────────────────────────────────────────────
 export type {
   LngLat,
@@ -41,6 +46,7 @@ export type {
   MapOverlayAnchor,
   MapArrow,
   MapArrowStop,
+  MapStopClock,
   MapRouteLoop,
   MapRouteLoopStop,
   MapPadding,
@@ -50,5 +56,7 @@ export type {
   MapStopDropEvent,
   MapFeatureClickEvent,
   MapView,
+  MarkerDial,
+  MarkerDialTone,
   MarkerVariant,
 } from './types/mapbox.types'

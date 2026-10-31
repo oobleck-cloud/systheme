@@ -33,6 +33,14 @@ function TimetableAppointmentPreview({
           {appointment.detail}
         </span>
       ) : null}
+      {appointment.note ? (
+        <span
+          data-slot="hover-preview-note"
+          className="border-t border-border-subtle pt-1.5 text-xs leading-snug whitespace-pre-line text-fg-muted"
+        >
+          {appointment.note}
+        </span>
+      ) : null}
     </div>
   )
 }

@@ -3,7 +3,8 @@
   "state": {
     "open": "boolean",
     "activeIndex": "number",
-    "caption": "string"
+    "caption": "string",
+    "count": "number"
   },
   "events": [
     "onOpenChange",
@@ -12,7 +13,7 @@
   ],
   "usage": {
     "when": [
-      "사용자가 첨부 사진·문서 이미지를 화면 가득 확대해 넘겨볼 때 — Close · Previous · Next · Download",
+      "사용자가 첨부 사진·문서 이미지를 화면 가득 확대해 넘겨볼 때 — 닫기 · 이전 · 다음 · 다운로드",
       "여러 장이면 activeIndex 로 넘기고 ←/→ 키로 이동"
     ],
     "avoid": [
@@ -23,15 +24,15 @@
     ],
     "limits": {
       "label": "caption 한 줄 fg-muted 40자. 없으면 빈 줄 유지",
-      "items": "Next 는 상한을 모른다 — 호출부가 activeIndex 를 이미지 수로 잠근다"
+      "items": "count 를 주면 이전·다음을 끝에서 막고 1장이면 숨긴다. 없으면 다음은 상한을 모른다 — 호출부가 activeIndex 를 잠근다"
     },
     "states": {
-      "disabled": "onDownloadRequest 없으면 Download 버튼 disabled",
+      "disabled": "onDownloadRequest 없으면 다운로드 버튼 disabled. count 를 주면 처음·끝에서 이전·다음 disabled",
       "empty": "children 없으면 빈 프레임. 이미지가 없으면 열지 않는다"
     },
     "placement": [
       "fixed inset-0 z-50, 스크림 background/90. 스크림 클릭·Escape 로 닫힌다",
-      "상단 바 왼쪽 Close, 오른쪽 Previous · Next · Download 순"
+      "상단 바 왼쪽 닫기, 오른쪽 이전 · 다음 · 다운로드 순"
     ],
     "examples": [
       "components-l2-imagelightbox--default",

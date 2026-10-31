@@ -149,7 +149,11 @@ export type { BirthDateScrollPickerProps } from './components/BirthDateScrollPic
 export { YearMonthSelector } from './components/YearMonthSelector'
 export type { YearMonthSelectorProps } from './components/YearMonthSelector'
 
-export { formatKoreanPhoneDisplay, stripPhoneDigits } from './utils/koreanPhoneNumber'
+export {
+  formatKoreanPhoneDisplay,
+  formatPhoneNumber,
+  stripPhoneDigits,
+} from './utils/koreanPhoneNumber'
 
 export {
   birthDateDigitsToIso,
@@ -242,6 +246,26 @@ export { TextBox } from './components/TextBox'
 export type { TextBoxProps } from './components/TextBox'
 
 export { DescriptionRow, descriptionRowVariants } from './components/DescriptionRow'
+export {
+  DETAIL_NEUTRAL_BADGE,
+  DetailActions,
+  DetailFacts,
+  DetailInset,
+  DetailList,
+  DetailListItem,
+  DetailPanel,
+  DetailSection,
+  DetailStacked,
+  DetailSummary,
+} from './components/DetailPanel'
+export type {
+  DetailFactsProps,
+  DetailListItemProps,
+  DetailPanelProps,
+  DetailSectionProps,
+} from './components/DetailPanel'
+export { FactList, FactRow } from './components/FactList'
+export type { FactListProps, FactRowProps, FactMark } from './components/FactList'
 export type { DescriptionRowProps } from './components/DescriptionRow'
 export { EditableTagField } from './components/EditableTagField'
 export type { EditableTagFieldOption, EditableTagFieldProps } from './components/EditableTagField'
@@ -253,6 +277,8 @@ export type { BulkSelectionBarProps } from './components/BulkSelectionBar'
 export { MaskedSecretDisplay } from './components/MaskedSecretDisplay'
 export type { MaskedSecretDisplayProps } from './components/MaskedSecretDisplay'
 
+export { ChoiceGroup } from './components/ChoiceGroup'
+export type { ChoiceGroupProps, ChoiceOption } from './components/ChoiceGroup'
 export { FilterChipGroup } from './components/FilterChipGroup'
 export type { FilterChipGroupProps, FilterChipOption } from './components/FilterChipGroup'
 
@@ -547,6 +573,7 @@ export type { TimetableAppointmentPreviewProps } from './components/Timetable'
 export type {
   TimetableAppointment,
   TimetableAppointmentColor,
+  TimetableAppointmentLock,
   TimetableDateMeta,
   TimetableDensity,
   TimetableLabels,
@@ -555,6 +582,7 @@ export type {
   TimetableSlotCellPayload,
   TimetableSlotSelection,
   TimetableSlotTag,
+  TimetableSlotTone,
 } from './components/Timetable'
 
 export {
@@ -647,6 +675,7 @@ export {
   useMapboxSelection,
   MarkerSprite,
   FloatingBounce,
+  dialToneStyle,
 } from './components/MapboxMap'
 export type {
   MapboxMapProps,
@@ -661,6 +690,7 @@ export type {
   MapMarker,
   MapArrow,
   MapArrowStop,
+  MapStopClock,
   MapRouteLoop,
   MapRouteLoopStop,
   MapRegionStyle,
@@ -673,6 +703,8 @@ export type {
   MapOverlayAnchor,
   MapPadding,
   MapView,
+  MarkerDial,
+  MarkerDialTone,
   MarkerVariant,
 } from './components/MapboxMap'
 
@@ -734,10 +766,14 @@ export {
   BookUser,
   ArrowDown,
   ArrowLeftRight,
+  AlarmClock,
   ArrowUp,
+  Bell,
   CalendarClock,
+  Camera,
   CalendarDays,
   Check,
+  CheckCheck,
   ChevronDown,
   ChevronLeft,
   ChevronRight,
@@ -746,16 +782,20 @@ export {
   ClipboardList,
   Copy,
   Dices,
+  Download,
   Crosshair,
   Eye,
   EyeOff,
   FileText,
+  GripVertical,
   Play,
   CirclePlay,
   FlaskConical,
   Handshake,
   Hash,
   Home,
+  Images,
+  Inbox,
   LayoutDashboard,
   Link2,
   List,
@@ -763,6 +803,8 @@ export {
   Mail,
   Map,
   MapPin,
+  Maximize2,
+  Megaphone,
   MessageSquare,
   Monitor,
   Moon,
@@ -772,6 +814,7 @@ export {
   Package,
   PanelLeft,
   PanelRight,
+  Paperclip,
   Pencil,
   Phone,
   Plus,
@@ -779,9 +822,11 @@ export {
   Settings,
   SlidersHorizontal,
   SquareCheck,
+  StickyNote,
   Sun,
   Tags,
   Trash2,
+  TriangleAlert,
   Trophy,
   Type,
   User,

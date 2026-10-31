@@ -118,6 +118,29 @@ export const ItemsApiFixedWidth: Story = {
   },
 }
 
+/** `tabWidth="fill"` — 탭들이 줄 폭을 같은 몫으로 나눈다. 폭이 정해진 패널의 작업 탭(근무 편집)에서 왔다. */
+export const ItemsApiFillWidth: Story = {
+  name: 'Items API — 같은 몫으로 채움 (tabWidth="fill")',
+  render: (args) => {
+    const [id, setId] = useState('assign')
+    return (
+      <div className="w-96">
+        <TabBar
+          {...args}
+          tabs={[
+            { id: 'assign', label: '근무 배정' },
+            { id: 'dayoff', label: '휴무' },
+            { id: 'cancel', label: '근무 취소' },
+          ]}
+          selectedTabId={id}
+          onTabChange={setId}
+          tabWidth="fill"
+        />
+      </div>
+    )
+  },
+}
+
 /** `TabBar`가 `TabList`를 감싸고, 탭은 `children`으로만 전달 */
 export const CompositionTabBarChildren: Story = {
   name: '합성 — TabBar + children (TabTrigger)',

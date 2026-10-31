@@ -49,34 +49,37 @@ export type ContributionGraphColorScale = Record<GraphLevel, string>
 /** Primary hue for levels 1–5; level 0 uses the lightest step of the same hue unless overridden. */
 export type ContributionGraphPrimary = 'green' | 'red' | 'blue' | 'amber'
 
-/** Full level 0–5 scales per primary hue (Tailwind palette steps). */
+/**
+ * Full level 0–5 scales per primary hue — DS 팔레트 단계(`bg-palette-*`, 시안의 palette/green-50·200…600).
+ * amber 는 DS 팔레트에 없어 Tailwind amber 그대로다.
+ */
 export const contributionGraphPrimaryScales: Record<
   ContributionGraphPrimary,
   ContributionGraphColorScale
 > = {
   green: {
-    0: 'bg-green-50',
-    1: 'bg-green-200 text-white',
-    2: 'bg-green-300 text-white',
-    3: 'bg-green-400 text-white',
-    4: 'bg-green-500 text-white',
-    5: 'bg-green-600 text-white',
+    0: 'bg-palette-green-50',
+    1: 'bg-palette-green-200 text-white',
+    2: 'bg-palette-green-300 text-white',
+    3: 'bg-palette-green-400 text-white',
+    4: 'bg-palette-green-500 text-white',
+    5: 'bg-palette-green-600 text-white',
   },
   red: {
-    0: 'bg-red-50',
-    1: 'bg-red-200 text-white',
-    2: 'bg-red-300 text-white',
-    3: 'bg-red-400 text-white',
-    4: 'bg-red-500 text-white',
-    5: 'bg-red-600 text-white',
+    0: 'bg-palette-red-50',
+    1: 'bg-palette-red-200 text-white',
+    2: 'bg-palette-red-300 text-white',
+    3: 'bg-palette-red-400 text-white',
+    4: 'bg-palette-red-500 text-white',
+    5: 'bg-palette-red-600 text-white',
   },
   blue: {
-    0: 'bg-blue-50',
-    1: 'bg-blue-200 text-white',
-    2: 'bg-blue-300 text-white',
-    3: 'bg-blue-400 text-white',
-    4: 'bg-blue-500 text-white',
-    5: 'bg-blue-600 text-white',
+    0: 'bg-palette-blue-50',
+    1: 'bg-palette-blue-200 text-white',
+    2: 'bg-palette-blue-300 text-white',
+    3: 'bg-palette-blue-400 text-white',
+    4: 'bg-palette-blue-500 text-white',
+    5: 'bg-palette-blue-600 text-white',
   },
   amber: {
     0: 'bg-amber-50',
@@ -178,6 +181,11 @@ export type ContributionGraphProps = Omit<React.HTMLAttributes<HTMLDivElement>, 
   cellSize?: number
   /** Overrides {@link graphDensityPresets} for the active density. */
   cellGap?: number
+  /**
+   * 판 폭을 채운다 — 열이 남는 폭을 나눠 갖고(최소 `cellSize`), 칸은 높이 `cellSize` 의 가로 직사각형.
+   * 기본(false)은 정사각 칸을 왼쪽부터 놓아 오른쪽이 빈다.
+   */
+  fill?: boolean
   /** Show numeric value inside non-empty cells. Off by default; use hover tooltip for density. */
   showCellValues?: boolean
   formatValue?: (value: number) => string
@@ -198,6 +206,13 @@ export type ContributionGraphProps = Omit<React.HTMLAttributes<HTMLDivElement>, 
   primary?: ContributionGraphPrimary
   /** Override any level 0–5 (merged onto the scale from {@link primary}). */
   colorScale?: Partial<ContributionGraphColorScale>
+  /**
+   * 행 라벨 열의 최대 폭(px). 넘는 라벨은 말줄임하고 title 에 전체를 둔다.
+   * 생략하면 가장 긴 라벨에 맞춘다(말줄임 없음) — 데이터가 긴 이름을 줄 수 있으면 지정한다.
+   */
+  yLabelMaxWidth?: number
+  /** 행 라벨의 title(툴팁) — 라벨을 줄여 보일 때 전체 이름. 기본은 라벨 그대로. */
+  getYLabelTitle?: (rowLabel: string) => string
 }
 
 export const graphCellSurfaceBase =
@@ -228,8 +243,13 @@ export function valueToLevel(value: number, max: number): GraphLevel {
   return 5
 }
 
-function shouldShowXLabel(index: number, total: number): boolean {
-  if (total <= 14) return true
+/**
+ * 열 머리를 몇 칸마다 적나. 날짜 숫자처럼 두 글자 이하면 칸마다 다 적는다(「1 2 3 … 31」 — 띄엄띄엄
+ * 적으면 몇 일인지 세어야 한다). 긴 라벨(주·월 이름)은 칸보다 넓어 겹치니 처음·끝·5칸마다.
+ */
+function shouldShowXLabel(index: number, labels: readonly string[]): boolean {
+  const total = labels.length
+  if (total <= 14 || labels.every((l) => l.length <= 2)) return true
   if (index === 0 || index === total - 1) return true
   return (index + 1) % 5 === 0
 }
@@ -252,6 +272,9 @@ function ContributionGraph({
   stickyTone = 'page',
   primary = 'green',
   colorScale: colorScaleProp,
+  yLabelMaxWidth,
+  getYLabelTitle,
+  fill = false,
   className,
   ...props
 }: ContributionGraphProps) {
@@ -284,9 +307,10 @@ function ContributionGraph({
   const gridStyle = useMemo(
     () => ({
       gap: `${cellGap}px`,
-      gridTemplateColumns: `max-content repeat(${xLabels.length}, ${cellSize}px)`,
+      // fit-content: 짧은 라벨은 그 폭만, 긴 라벨은 최대 폭에서 말줄임.
+      gridTemplateColumns: `${yLabelMaxWidth === undefined ? 'max-content' : `fit-content(${String(yLabelMaxWidth)}px)`} repeat(${xLabels.length}, ${fill ? `minmax(${String(cellSize)}px, 1fr)` : `${String(cellSize)}px`})`,
     }),
-    [cellSize, cellGap, xLabels.length],
+    [cellSize, cellGap, xLabels.length, yLabelMaxWidth, fill],
   )
 
   const showValuesInCell = showCellValues && cellSize >= 16
@@ -321,7 +345,7 @@ function ContributionGraph({
   return (
     <div
       data-slot="contribution-graph-root"
-      className={cn('inline-flex max-w-full flex-col', className)}
+      className={cn(fill ? 'flex w-full flex-col' : 'inline-flex max-w-full flex-col', className)}
       style={layoutStyle}
       {...props}
     >
@@ -330,7 +354,7 @@ function ContributionGraph({
           role="grid"
           tabIndex={0}
           aria-label="Contribution graph"
-          className="inline-grid leading-none"
+          className={cn(fill ? 'grid w-full' : 'inline-grid', 'leading-none')}
           style={gridStyle}
           onKeyDown={handleGridKeyDown}
         >
@@ -349,10 +373,13 @@ function ContributionGraph({
               data-slot="contribution-graph-x-label"
               className={cn(
                 graphXLabelVariants({ density }),
-                'flex size-[var(--ds-graph-cell-size)] items-center justify-center',
+                'flex items-center justify-center',
+                fill ? 'h-[var(--ds-graph-cell-size)] w-full' : 'size-[var(--ds-graph-cell-size)]',
+                // 칸이 좁으면(18px 미만) 두 자리 숫자가 칸을 넘지 않게 작은 글자로.
+                cellSize < 18 && 'text-[length:var(--ds-font-size-2xs,0.625rem)]',
               )}
             >
-              {shouldShowXLabel(index, xLabels.length) ? label : null}
+              {shouldShowXLabel(index, xLabels) ? label : null}
             </div>
           ))}
 
@@ -361,10 +388,10 @@ function ContributionGraph({
               <div
                 role="rowheader"
                 data-slot="contribution-graph-y-label"
-                className={graphYLabelVariants({ density, stickyTone })}
-                title={rowLabel}
+                className={cn(graphYLabelVariants({ density, stickyTone }), 'min-w-0')}
+                title={getYLabelTitle?.(rowLabel) ?? rowLabel}
               >
-                {rowLabel}
+                <span className="min-w-0 truncate">{rowLabel}</span>
               </div>
               {xLabels.map((colLabel) => {
                 const value = valueByKey.get(`${rowLabel}__${colLabel}`) ?? 0
@@ -373,9 +400,14 @@ function ContributionGraph({
                   <div
                     key={`${rowLabel}-${colLabel}`}
                     role="gridcell"
-                    className="size-[var(--ds-graph-cell-size)]"
+                    className={
+                      fill
+                        ? 'h-[var(--ds-graph-cell-size)] w-full'
+                        : 'size-[var(--ds-graph-cell-size)]'
+                    }
                   >
                     <GraphCellButton
+                      fill={fill}
                       cell={cell}
                       level={valueToLevel(value, maxValue)}
                       displayValue={showValuesInCell && value > 0 ? formatValue(value) : ''}
@@ -461,6 +493,8 @@ function ContributionGraph({
 }
 
 type GraphCellButtonProps = {
+  /** 판 폭 채우기 — 칸 너비를 셀 칸에 맡긴다 */
+  fill: boolean
   cell: GraphCell
   level: GraphLevel
   displayValue: string
@@ -471,6 +505,7 @@ type GraphCellButtonProps = {
 }
 
 function GraphCellButton({
+  fill,
   cell,
   level,
   displayValue,
@@ -542,7 +577,7 @@ function GraphCellButton({
     interactive ? 'cursor-pointer' : 'cursor-default',
   )
   const triggerStyle = {
-    width: 'var(--ds-graph-cell-size)',
+    width: fill ? '100%' : 'var(--ds-graph-cell-size)',
     height: 'var(--ds-graph-cell-size)',
   } as React.CSSProperties
 

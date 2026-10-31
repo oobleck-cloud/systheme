@@ -1,6 +1,7 @@
 :root {
   /*
-   * Tossface first: @font-face uses unicode-range, so Latin skips to the next family.
+   * Tossface first: @font-face uses unicode-range, so Latin and digits skip to the next family
+   * (digits are stripped from the vendored ranges in tossface.css).
    * If Tossface comes after ui-sans-serif, macOS often still paints Apple Color Emoji.
    */
   --ds-font-sans:

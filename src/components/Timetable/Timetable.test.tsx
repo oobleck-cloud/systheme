@@ -165,4 +165,21 @@ describe('C. 슬롯 선택은 포커스를 따라간다', () => {
 
     expect(onSelectedSlotChange).not.toHaveBeenCalled()
   })
+
+  it('getSlotTone 은 고를 수 있는 칸에만 결을 싣고, 막힌 칸에는 싣지 않는다', () => {
+    const { container } = renderTimetable({
+      resources: TWO_RESOURCES,
+      defaultViewportStart: 8 * 60,
+      isSlotDisabled: ({ slotMinute }) => slotMinute === 510,
+      getSlotTone: ({ slotMinute }) => (slotMinute === 480 ? 'attention' : 'tentative'),
+    })
+
+    const cell = (minute: number) =>
+      container.querySelector(
+        `[data-slot="timetable-time-slot-cell"][data-resource-id="${TWO_RESOURCES[0]!.id}"][data-slot-minute="${minute}"]`,
+      )
+    expect(cell(480)?.getAttribute('data-tone')).toBe('attention')
+    expect(cell(540)?.getAttribute('data-tone')).toBe('tentative')
+    expect(cell(510)?.getAttribute('data-tone')).toBeNull()
+  })
 })

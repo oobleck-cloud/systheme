@@ -45,6 +45,11 @@ type Story = StoryObj<typeof ContributionGraph>
 
 export const Default: Story = {}
 
+/** 판 폭을 채운다 — 열이 남는 폭을 나눠 가진다. */
+export const Fill: Story = {
+  args: { fill: true },
+}
+
 export const Compact: Story = {
   args: {
     density: 'compact',
@@ -55,7 +60,7 @@ export const Compact: Story = {
 export const GreenWithRedEmpty: Story = {
   args: {
     primary: 'green',
-    colorScale: { 0: 'bg-red-100' },
+    colorScale: { 0: 'bg-palette-red-100' },
   },
 }
 
@@ -69,7 +74,7 @@ export const RedPrimary: Story = {
 export const FullCustomScale: Story = {
   args: {
     colorScale: {
-      0: 'bg-red-50',
+      0: 'bg-palette-red-50',
       1: 'bg-amber-200 text-white',
       2: 'bg-amber-300 text-white',
       3: 'bg-amber-400 text-white',
@@ -166,5 +171,17 @@ export const DenseMonthCompact: Story = {
 export const WithCellClick: Story = {
   args: {
     onCellClick: () => undefined,
+  },
+}
+
+const LONG_LABELS = ['구로구', '남양주 다산동 일대 아주 긴 구역 이름', '인천 서구', '대구 서구']
+
+/** 긴 행 라벨 — `yLabelMaxWidth` 를 넘으면 말줄임, title 에 전체 이름(`getYLabelTitle`). */
+export const LongRowLabels: Story = {
+  args: {
+    yLabels: LONG_LABELS,
+    data: LONG_LABELS.flatMap((y, r) => DAYS.map((x) => ({ x, y, value: (Number(x) + r) % 5 }))),
+    yLabelMaxWidth: 120,
+    getYLabelTitle: (label: string) => `전체 이름: ${label}`,
   },
 }

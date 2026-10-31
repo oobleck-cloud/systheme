@@ -38,6 +38,19 @@ export const AllSelected: Story = {
   },
 }
 
+/** 구역처럼 상위 이름이 붙는 칩 — 시는 흐리게(qualifier), 구가 주인공. */
+export const WithQualifier: Story = {
+  args: {
+    'aria-label': '구역',
+    options: [
+      { id: 'dy', qualifier: '고양', label: '덕양구' },
+      { id: 'isd', qualifier: '고양', label: '일산동구' },
+      { id: 'iss', qualifier: '고양', label: '일산서구' },
+    ],
+    defaultValue: ['dy'],
+  },
+}
+
 export const ToggleEmitsChange: Story = {
   play: async ({ canvasElement, args }) => {
     const chips = within(canvasElement).getAllByRole('button')

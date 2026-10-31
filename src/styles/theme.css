@@ -125,6 +125,40 @@
   --color-brand-800: var(--ds-color-brand-800);
   --color-brand-900: var(--ds-color-brand-900);
 
+  /* ── 단계 색(palette) → bg-palette-{hue}-{step} ──────────────────────
+     히트맵처럼 같은 색의 단계로 양을 말하는 곳 전용(ContributionGraph). Tailwind 기본 green-* 등은
+     DS 팔레트가 아니라 더 밝은 민트라 시안(palette/green-*)과 어긋났다. 상태 뜻이 있는 자리는 상태 토큰을 쓴다. */
+  --color-palette-green-50: var(--ds-color-green-50);
+  --color-palette-green-100: var(--ds-color-green-100);
+  --color-palette-green-200: var(--ds-color-green-200);
+  --color-palette-green-300: var(--ds-color-green-300);
+  --color-palette-green-400: var(--ds-color-green-400);
+  --color-palette-green-500: var(--ds-color-green-500);
+  --color-palette-green-600: var(--ds-color-green-600);
+  --color-palette-green-700: var(--ds-color-green-700);
+  --color-palette-green-800: var(--ds-color-green-800);
+  --color-palette-green-900: var(--ds-color-green-900);
+  --color-palette-red-50: var(--ds-color-red-50);
+  --color-palette-red-100: var(--ds-color-red-100);
+  --color-palette-red-200: var(--ds-color-red-200);
+  --color-palette-red-300: var(--ds-color-red-300);
+  --color-palette-red-400: var(--ds-color-red-400);
+  --color-palette-red-500: var(--ds-color-red-500);
+  --color-palette-red-600: var(--ds-color-red-600);
+  --color-palette-red-700: var(--ds-color-red-700);
+  --color-palette-red-800: var(--ds-color-red-800);
+  --color-palette-red-900: var(--ds-color-red-900);
+  --color-palette-blue-50: var(--ds-color-blue-50);
+  --color-palette-blue-100: var(--ds-color-blue-100);
+  --color-palette-blue-200: var(--ds-color-blue-200);
+  --color-palette-blue-300: var(--ds-color-blue-300);
+  --color-palette-blue-400: var(--ds-color-blue-400);
+  --color-palette-blue-500: var(--ds-color-blue-500);
+  --color-palette-blue-600: var(--ds-color-blue-600);
+  --color-palette-blue-700: var(--ds-color-blue-700);
+  --color-palette-blue-800: var(--ds-color-blue-800);
+  --color-palette-blue-900: var(--ds-color-blue-900);
+
   /* ── Tag palette (노션식 칩) → bg-tag-{c}-subtle / text-tag-{c}-text ── */
   --color-tag-gray-subtle: var(--ds-color-tag-gray-subtle);
   --color-tag-gray-text: var(--ds-color-tag-gray-text);

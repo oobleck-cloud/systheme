@@ -81,13 +81,17 @@ function Table({
             data-slot="scroll-region"
             className="min-w-0 overflow-hidden bg-transparent [&_[data-slot=surface-body]]:p-0"
           >
-            <div data-slot="surface" className="min-w-0 overflow-x-auto">
+            {/* relative: 행 안의 절대 위치 요소(체크박스의 숨은 input 등)가 이 스크롤 상자에 갇히게 — 아니면 바깥 스크롤을 늘린다. */}
+            <div data-slot="surface" className="relative min-w-0 overflow-x-auto">
               {children}
             </div>
           </Surface>
         ) : (
           <div data-slot="scroll-region" className="min-w-0 rounded-none border-0">
-            <div data-slot="surface" className={cn('min-w-0', !stickyHeader && 'overflow-x-auto')}>
+            <div
+              data-slot="surface"
+              className={cn('relative min-w-0', !stickyHeader && 'overflow-x-auto')}
+            >
               {children}
             </div>
           </div>

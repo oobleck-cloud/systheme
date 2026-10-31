@@ -136,6 +136,7 @@ function RichListRow({
           <div
             data-slot="rich-list-title"
             className={cn('min-w-0 truncate font-semibold text-fg', titleSize[density])}
+            title={item.title}
           >
             {item.title}
           </div>
@@ -153,6 +154,7 @@ function RichListRow({
           <div
             data-slot="rich-list-subtitle"
             className={cn('mt-1 truncate text-fg-muted', metaTextSize[density])}
+            title={item.subtitle}
           >
             {item.subtitle}
           </div>

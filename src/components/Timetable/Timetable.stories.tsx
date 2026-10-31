@@ -492,3 +492,46 @@ export const Comfortable: Story = {
   args: { density: 'comfortable', visibleSlotCount: 10 },
   render: Default.render,
 }
+
+/**
+ * 방문 확정 잠금 — 고객에게 알린 방문은 자물쇠 + 실선, 아직 18:30 전인 방문은 점선.
+ * 구역 색은 그대로 두고 테두리로만 가른다(주황은 주의 칸 몫).
+ */
+const LOCK_APPOINTMENTS: TimetableAppointment[] = [
+  {
+    id: 'a1',
+    resourceId: 'p1',
+    startMinute: 10 * 60 + 30,
+    endMinute: 11 * 60,
+    label: '#2117959 (서구)',
+    lock: 'confirmed',
+    note: '확정 · 10/30 (금) 18:30 고객 안내함\n고객 조율 없이 옮길 수 없습니다',
+  },
+  {
+    id: 'a2',
+    resourceId: 'p2',
+    startMinute: 10 * 60 + 30,
+    endMinute: 11 * 60,
+    label: '#2119298 (일산동구)',
+    lock: 'pending',
+    note: '확정 전 — 18:30 전까지 자유롭게 옮길 수 있음',
+  },
+]
+
+export const VisitConfirmLock: Story = {
+  args: { density: 'compact', visibleSlotCount: 8, defaultViewportStart: 10 * 60 },
+  render: function TimetableLockDemo(args) {
+    const [cursor, setCursor] = useState<Date>(() => new Date())
+    return (
+      <div className="max-w-3xl p-4">
+        <Timetable
+          {...args}
+          resources={resources.slice(0, 2)}
+          appointments={LOCK_APPOINTMENTS}
+          cursorDate={cursor}
+          onCursorDateChange={setCursor}
+        />
+      </div>
+    )
+  },
+}

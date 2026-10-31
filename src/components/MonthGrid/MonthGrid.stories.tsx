@@ -221,6 +221,25 @@ export const DensityComfortable: Story = {
   ),
 }
 
+/** 앞뒤 달 날짜를 흐리게 채우고 공휴일 이름을 숫자 옆에 — 근무 달력처럼 칸이 넓은 선 격자용. */
+export const OutsideDaysAndHolidayLabels: Story = {
+  name: 'showOutsideDays + showHolidayLabels',
+  render: () => (
+    <div className="w-[52rem]">
+      <MonthGrid
+        month={DEMO_MONTH}
+        weekStartsOn={1}
+        selectionMode="none"
+        rowSizing="content"
+        showOutsideDays
+        showHolidayLabels
+        getDayMeta={getDayMeta}
+        renderCellContent={() => <div className="h-10" />}
+      />
+    </div>
+  ),
+}
+
 export const WarningDays: Story = {
   name: 'Day kind — warning',
   render: () => {

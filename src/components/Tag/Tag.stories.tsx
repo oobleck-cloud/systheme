@@ -28,10 +28,12 @@ const meta: Meta<typeof Tag> = {
         'outline-warning',
         'outline-error',
         'outline-info',
+        'subtle',
       ],
     },
     shape: { control: 'select', options: ['rounded', 'pill', 'square'] },
-    size: { control: 'select', options: ['sm', 'md', 'lg'] },
+    size: { control: 'select', options: ['sm', 'md', 'lg', 'cell'] },
+    qualifier: { control: 'text' },
     children: { control: 'text' },
   },
   args: {
@@ -131,6 +133,49 @@ export const Sizes: Story = {
       </Tag>
     </div>
   ),
+}
+
+/**
+ * 계층 값 칩 — 표 칸(관계 칸)의 구역처럼 윗단(시)이 칩마다 반복되는 값. 윗단은 흐리게, 본말은 굵게,
+ * 테두리 없는 회색 면(subtle) · 22px(cell) · 4px 모서리(square). 「시 전체」는 본말이 「전체」다.
+ */
+export const Qualified: Story = {
+  render: () => (
+    <div className="flex flex-col gap-3">
+      <div className="flex flex-wrap items-center gap-1">
+        <Tag variant="subtle" size="cell" shape="square" qualifier="서울">
+          구로구
+        </Tag>
+        <Tag variant="subtle" size="cell" shape="square" qualifier="고양">
+          전체
+        </Tag>
+        <Tag variant="subtle" size="cell" shape="square">
+          강남구
+        </Tag>
+      </div>
+      <div className="flex flex-wrap items-center gap-1">
+        <Tag variant="subtle" size="cell" shape="square" qualifier="서울" onRemove={fn()}>
+          영등포구
+        </Tag>
+        <Tag variant="subtle" size="cell" shape="square" qualifier="부천" onRemove={fn()}>
+          원미구
+        </Tag>
+      </div>
+      <div className="w-32">
+        <Tag variant="subtle" size="cell" shape="square" qualifier="경기" className="max-w-full">
+          아주아주긴구역이름구
+        </Tag>
+      </div>
+    </div>
+  ),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+    const qualifier = canvas.getAllByText('서울')[0]!
+    await expect(qualifier).toHaveAttribute('data-tag-qualifier')
+    await expect(qualifier.className).toContain('text-fg-muted')
+    await expect(canvas.getByText('구로구').className).toContain('font-semibold')
+    await expect(canvas.getByRole('button', { name: 'Remove 영등포구' })).toBeInTheDocument()
+  },
 }
 
 export const Removable: Story = {

@@ -105,6 +105,19 @@ export const TextAppearance: Story = {
     ],
   },
 }
+/** 한 줄 — 페이지 머리 제목 옆. 원 20px 오른쪽에 라벨, 지금 단계만 진한 원. 일괄 등록 머리에서 왔다. */
+export const CompactAppearance: Story = {
+  args: {
+    appearance: 'compact',
+    currentStep: 2,
+    steps: [
+      { id: 'need', label: '필요 인원' },
+      { id: 'avail', label: '가능 일정' },
+      { id: 'draft', label: '초안 다듬기' },
+    ],
+  },
+}
+
 /** 표시 전용 — onStepChange 가 없으면 완료 단계도 클릭되지 않는다(모든 indicator 가 disabled). */
 export const Disabled: Story = {
   args: { currentStep: 1, onStepChange: undefined },
@@ -142,6 +155,46 @@ export const ManySteps: Story = {
   args: { steps: manySteps, currentStep: 3, orientation: 'vertical' },
   render: (args) => (
     <div className="w-80">
+      <Steps {...args} />
+    </div>
+  ),
+}
+
+/**
+ * 세로 + 답 요약 — 데스크톱 폼 오른쪽 레일. 끝난 단계 아래에 답한 내용을 한 줄로 쌓는다
+ * (질의 시퀀스의 L2 누적). 본문 위 가로 Steps 와 같이 두지 않는다.
+ */
+export const VerticalSummary: Story = {
+  args: {
+    orientation: 'vertical',
+    currentStep: 2,
+    steps: [
+      { id: 'basic', label: '기본 정보', description: '박지호 · 010-2481-6681' },
+      { id: 'region', label: '활동 지역', description: '강남구 역삼1동 외 2곳' },
+      { id: 'time', label: '활동 시간', description: '요일과 시간대를 골라 주세요' },
+      { id: 'docs', label: '서류' },
+    ],
+  },
+  render: (args) => (
+    <div className="w-72">
+      <Steps {...args} />
+    </div>
+  ),
+}
+
+/** 가로 — 원 아래 가운데에 라벨, 연결선은 원과 원 사이에만 */
+export const HorizontalFour: Story = {
+  args: {
+    currentStep: 2,
+    steps: [
+      { id: 'basic', label: '기본 정보' },
+      { id: 'region', label: '활동 지역' },
+      { id: 'time', label: '활동 시간' },
+      { id: 'docs', label: '서류' },
+    ],
+  },
+  render: (args) => (
+    <div className="w-[40rem]">
       <Steps {...args} />
     </div>
   ),

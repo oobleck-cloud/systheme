@@ -1,7 +1,8 @@
 {
   "id": "tag",
   "state": {
-    "color": "'gray' | 'red' | 'orange' | 'green' | 'teal' | 'blue' | 'purple'"
+    "color": "'gray' | 'red' | 'orange' | 'green' | 'teal' | 'blue' | 'purple'",
+    "qualifier": "ReactNode — 계층 값의 윗단(흐리게). 있으면 label 은 굵게"
   },
   "events": [
     "onRemove"
@@ -14,6 +15,11 @@
         "id": "dot",
         "intent": "ornament",
         "binding": "color"
+      },
+      {
+        "id": "qualifier",
+        "intent": "ornament",
+        "binding": "qualifier"
       },
       {
         "id": "label",
@@ -37,7 +43,8 @@
   "usage": {
     "when": [
       "값·카테고리를 분류 색으로 구분할 때(태그 팔레트)",
-      "제거 가능한 선택값(EditableTagField·MultiSelect 칩)"
+      "제거 가능한 선택값(EditableTagField·MultiSelect 칩)",
+      "계층 값(시 → 구)을 칩으로 — 윗단은 qualifier(흐리게), 본말은 children(굵게). 표 칸 값 칩은 variant subtle · size cell · shape square"
     ],
     "avoid": [
       "상태(실패·완료)를 말하지 않는다 → Badge. 빨간 태그 ≠ 실패",

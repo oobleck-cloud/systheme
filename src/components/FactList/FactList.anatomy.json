@@ -1,0 +1,92 @@
+{
+  "id": "fact-list",
+  "state": {
+    "title": "ReactNode",
+    "aside": "ReactNode",
+    "label": "ReactNode",
+    "value": "ReactNode",
+    "sub": "ReactNode",
+    "figure": "ReactNode",
+    "mark": "'ok' | 'warn' | 'none'",
+    "tone": "'warning'",
+    "separated": "boolean"
+  },
+  "anatomy": {
+    "id": "root",
+    "intent": "value-display",
+    "binding": "title",
+    "children": [
+      {
+        "id": "header",
+        "intent": "value-display",
+        "binding": "title"
+      },
+      {
+        "id": "aside",
+        "intent": "ornament",
+        "binding": "aside",
+        "slot": true
+      },
+      {
+        "id": "row",
+        "intent": "field-rhythm",
+        "binding": "value",
+        "slot": true,
+        "children": [
+          {
+            "id": "mark",
+            "intent": "ornament",
+            "binding": "mark"
+          },
+          {
+            "id": "label",
+            "intent": "value-display",
+            "binding": "label"
+          },
+          {
+            "id": "value",
+            "intent": "value-display",
+            "binding": "value"
+          },
+          {
+            "id": "sub",
+            "intent": "value-display",
+            "binding": "sub"
+          },
+          {
+            "id": "figure",
+            "intent": "value-display",
+            "binding": "figure"
+          }
+        ]
+      }
+    ]
+  },
+  "usage": {
+    "when": [
+      "표 행을 펼친 자리의 짧은 사실 패널 — 이사 정보, 받은 견적, 이 주문과 맞는 점, 이 파트너 견적",
+      "두 패널을 나란히 두고 같은 높이의 행으로 맞춰 읽게 할 때"
+    ],
+    "avoid": [
+      "상세 화면의 긴 속성 목록에 쓰지 않는다 → DescriptionRow · InfoSection",
+      "행이 8개를 넘거나 열 비교가 필요하면 쓰지 않는다 → Table",
+      "카드로 감싸지 않는다 — 펼친 행 자체가 면이다(카드 안 카드 금지)"
+    ],
+    "limits": {
+      "label": "라벨 6자 이내 명사. 같은 라벨이 이어지면 둘째 줄부터 비운다",
+      "perRegion": 2
+    },
+    "states": {
+      "empty": "값 칸에 흐린 글로 「아직 없음」·「없음」 — 행을 숨기지 않는다",
+      "overflow": "값은 한 줄 말줄임(행 높이 고정). 숫자는 tabular-nums"
+    },
+    "placement": [
+      "펼친 행 안 2열 그리드(gap-x-10). 왼쪽 = 사실(이사·맞는 점), 오른쪽 = 숫자(견적·가격)",
+      "묶음이 바뀌는 행에 separated(위 가는 선) — 받은 견적 → 시세"
+    ],
+    "examples": [
+      "components-l1-factlist--quotes",
+      "components-l1-factlist--fit"
+    ]
+  }
+}

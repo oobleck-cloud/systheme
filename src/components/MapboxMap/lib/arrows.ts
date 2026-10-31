@@ -1,9 +1,11 @@
 import mapboxgl from 'mapbox-gl'
 
 import { circlePath, pixelPath, pointOnCircle, pointsAlong, type PixelPoint } from './arrowGeometry'
-import { MARKER_SPRITE_LAYER_ID } from './markerLayers'
+import { clockAngle } from './clockDial'
+import { HOVER_GROW_SCALE, MARKER_SPRITE_LAYER_ID } from './markerLayers'
+import { drawStopClockImage, stopClockImageId } from './stopClockIcon'
 
-import type { MapArrow, MapMarker, MapRouteLoop } from '../types/mapbox.types'
+import type { MapArrow, MapArrowStop, MapMarker, MapRouteLoop } from '../types/mapbox.types'
 
 const SOURCE_ID = 'arrows-source'
 const LINE_LAYER_ID = 'arrows-line'
@@ -11,6 +13,9 @@ const LABEL_LAYER_ID = 'arrows-label'
 const STOP_SOURCE_ID = 'arrow-stops-source'
 const STOP_LAYER_ID = 'arrow-stops'
 const STOP_HIT_LAYER_ID = 'arrow-stops-hit'
+/** 시계 쐐기를 단 빈 자리 표시 — 원 대신 스프라이트로 그린다 */
+const STOP_CLOCK_LAYER_ID = 'arrow-stops-clock'
+const LOOP_STOP_CLOCK_LAYER_ID = 'route-loops-stop-clock'
 const LOOP_SOURCE_ID = 'route-loops-source'
 const LOOP_LINE_LAYER_ID = 'route-loops-line'
 const LOOP_CENTER_LAYER_ID = 'route-loops-center'
@@ -36,7 +41,9 @@ const LOOP_MIN_ZOOM = 11
  */
 const LABEL_SPACING = 220
 /** 중간 표시 원의 반지름 (px) */
-const STOP_RADIUS = 5.5
+export const STOP_RADIUS = 5.5
+/** 중간 표시 원의 테두리 두께 (px) */
+const STOP_STROKE = 2.5
 /**
  * 중간 표시를 손으로 집기 위한 히트 원의 반지름 (px).
  *
@@ -66,6 +73,13 @@ type MapFilterSpec = Parameters<mapboxgl.Map['setFilter']>[1]
 const LABEL_FILTER: NonNullable<MapFilterSpec> = ['!=', ['get', 'label'], '']
 
 /**
+ * 빈 자리 표시는 시계가 있으면 스프라이트(쐐기), 없으면 원으로 그린다 — 같은 소스를 두 레이어가
+ * 나눠 갖는다. 둘 다 그리면 원이 쐐기 위에 한 겹 더 얹힌다.
+ */
+const PLAIN_STOP_FILTER: NonNullable<MapFilterSpec> = ['==', ['get', 'clockImage'], '']
+const CLOCK_STOP_FILTER: NonNullable<MapFilterSpec> = ['!=', ['get', 'clockImage'], '']
+
+/**
  * 한 구간(화살표 하나)이 그려지는 레이어들.
  *
  * 드래그가 시작되면 이 셋에서 그 구간만 걷어낸다. 선만 감추고 이름·중간 표시를 남기면
@@ -74,7 +88,8 @@ const LABEL_FILTER: NonNullable<MapFilterSpec> = ['!=', ['get', 'label'], '']
 const LEG_LAYERS: { id: string; base: MapFilterSpec }[] = [
   { id: LINE_LAYER_ID, base: undefined },
   { id: LABEL_LAYER_ID, base: LABEL_FILTER },
-  { id: STOP_LAYER_ID, base: undefined },
+  { id: STOP_LAYER_ID, base: PLAIN_STOP_FILTER },
+  { id: STOP_CLOCK_LAYER_ID, base: CLOCK_STOP_FILTER },
 ]
 
 /**
@@ -120,6 +135,50 @@ export const STOP_HANDLE_LAYER_IDS: string[] = [STOP_HIT_LAYER_ID, LOOP_STOP_HIT
  * 질의 쪽에서 허용 오차로 메운다.
  */
 export { LINE_LAYER_ID as ARROW_LINE_LAYER_ID }
+
+/** 레이어 하나에 바꿔 끼울 레이아웃·페인트 값 */
+export interface LayerGrowStyle {
+  layerId: string
+  layout?: Record<string, unknown>
+  paint?: Record<string, unknown>
+}
+
+/** 원 레이어(빈 자리·루프 위 빈 자리)의 반지름·테두리. `hovered` 가 참인 표시만 키운다 */
+function grownCircle(hovered: unknown[] | null): { radius: unknown; stroke: unknown } {
+  if (!hovered) return { radius: STOP_RADIUS, stroke: STOP_STROKE }
+  return {
+    radius: ['case', hovered, STOP_RADIUS * HOVER_GROW_SCALE, STOP_RADIUS],
+    stroke: ['case', hovered, STOP_STROKE * HOVER_GROW_SCALE, STOP_STROKE],
+  }
+}
+
+/** 루프 레이어는 중심 점과 빈 자리를 한 레이어에서 그린다 — 중심 점은 키우지 않는다 */
+function loopCenterPaint(stopId: string | null): Record<string, unknown> {
+  const isCenter = ['==', ['get', 'kind'], 'center']
+  const { radius, stroke } = grownCircle(stopId == null ? null : ['==', ['get', 'id'], stopId])
+  return {
+    'circle-radius': ['case', isCenter, LOOP_CENTER_RADIUS, radius],
+    'circle-stroke-width': ['case', isCenter, 0, stroke],
+  }
+}
+
+/**
+ * 중간 표시 하나를 키우는 값(`hoverGrow`). `null` 이면 원래 값이다 — 레이어를 만들 때도 쓴다.
+ *
+ * 원은 반지름·테두리를, 시계 쐐기는 `icon-size` 를 바꾼다. 쐐기의 `icon-size` 는 레이아웃이라
+ * feature-state 를 못 받으므로, 마커와 같이 가리킨 id 를 표현식에 박아 바꿔 끼운다.
+ */
+export function stopGrowStyles(stopId: string | null): LayerGrowStyle[] {
+  const hovered = stopId == null ? null : ['==', ['get', 'id'], stopId]
+  const { radius, stroke } = grownCircle(hovered)
+  const clockSize = hovered ? ['case', hovered, HOVER_GROW_SCALE, 1] : 1
+  return [
+    { layerId: STOP_LAYER_ID, paint: { 'circle-radius': radius, 'circle-stroke-width': stroke } },
+    { layerId: LOOP_CENTER_LAYER_ID, paint: loopCenterPaint(stopId) },
+    { layerId: STOP_CLOCK_LAYER_ID, layout: { 'icon-size': clockSize } },
+    { layerId: LOOP_STOP_CLOCK_LAYER_ID, layout: { 'icon-size': clockSize } },
+  ]
+}
 
 /**
  * 구간 하나를 그림에서 뺀다(`null` 이면 되돌린다).
@@ -319,6 +378,7 @@ export function buildArrowCollections(
           color: stop.color ?? color,
           legId,
           tooltip: stop.tooltip ?? '',
+          ...stopClockProps(stop, stop.color ?? color),
           ...endpoints,
         },
         geometry: { type: 'Point', coordinates },
@@ -373,6 +433,7 @@ function loopFeatures(map: ArrowCamera, loop: MapRouteLoop): GeoJSON.Feature[] {
         id: stop.id,
         color: stop.color ?? color,
         tooltip: stop.tooltip ?? '',
+        ...stopClockProps(stop, stop.color ?? color),
       },
       geometry: {
         type: 'Point',
@@ -382,6 +443,44 @@ function loopFeatures(map: ArrowCamera, loop: MapRouteLoop): GeoJSON.Feature[] {
   }
 
   return features
+}
+
+/**
+ * 빈 자리 표시의 시계 속성 — 어느 그림을 몇 도 돌려 얹을지.
+ *
+ * 그림은 12시에서 시작하는 쐐기 하나라서 칸의 시작 각도만큼 돌리면 된다. 시계가 없으면 그림
+ * 이름을 비워 두고, 원 레이어가 그 표시를 맡는다.
+ */
+export function stopClockProps(
+  stop: Pick<MapArrowStop, 'clock'>,
+  color: string,
+): { clockImage: string; clockAngle: number } {
+  if (!stop.clock) return { clockImage: '', clockAngle: 0 }
+  return {
+    clockImage: stopClockImageId(color, stop.clock.minutes),
+    clockAngle: clockAngle(stop.clock.startHour),
+  }
+}
+
+/** 쐐기 그림을 지도에 올린다 — (색 × 길이)마다 한 장. 이미 있으면 건너뛴다 */
+function ensureStopClockImages(map: mapboxgl.Map, plans: ArrowPlan[], loops: MapRouteLoop[]): void {
+  const wanted = new Map<string, { color: string; minutes: number }>()
+  const collect = (stop: MapArrowStop, fallback: string) => {
+    if (!stop.clock) return
+    const color = stop.color ?? fallback
+    wanted.set(stopClockImageId(color, stop.clock.minutes), { color, minutes: stop.clock.minutes })
+  }
+  for (const plan of plans) {
+    for (const stop of plan.arrow.stops ?? []) collect(stop, plan.arrow.color || DEFAULT_COLOR)
+  }
+  for (const loop of loops) {
+    for (const stop of loop.stops ?? []) collect(stop, loop.color || DEFAULT_COLOR)
+  }
+  for (const [id, { color, minutes }] of wanted) {
+    if (map.hasImage(id)) continue
+    const image = drawStopClockImage(color, minutes)
+    if (image) map.addImage(id, image, { pixelRatio: 2 })
+  }
 }
 
 export function buildLoopCollection(
@@ -457,6 +556,30 @@ function attachMoveRerender(map: mapboxgl.Map): () => void {
   }
 }
 
+/**
+ * 시계 쐐기 스프라이트 레이어. 그림은 12시에서 시작하므로 칸의 각도만큼 돌린다.
+ * 화면 기준으로 돌린다 — 지도를 돌려도 시계의 12시는 화면 위다.
+ */
+export function stopClockLayer(
+  id: string,
+  source: string,
+  filter: NonNullable<MapFilterSpec>,
+): MapLayerSpec {
+  return {
+    id,
+    type: 'symbol',
+    source,
+    filter,
+    layout: {
+      'icon-image': ['get', 'clockImage'],
+      'icon-rotate': ['get', 'clockAngle'],
+      'icon-rotation-alignment': 'viewport',
+      'icon-allow-overlap': true,
+      'icon-ignore-placement': true,
+    },
+  }
+}
+
 function ensureLayers(map: mapboxgl.Map): void {
   if (!map.getLayer(LINE_LAYER_ID)) {
     map.addLayer({
@@ -478,14 +601,18 @@ function ensureLayers(map: mapboxgl.Map): void {
       id: STOP_LAYER_ID,
       type: 'circle',
       source: STOP_SOURCE_ID,
+      filter: PLAIN_STOP_FILTER,
       paint: {
         'circle-radius': STOP_RADIUS,
         'circle-color': '#ffffff',
         'circle-stroke-color': ['get', 'color'],
-        'circle-stroke-width': 2.5,
+        'circle-stroke-width': STOP_STROKE,
       },
     })
   }
+
+  if (!map.getLayer(STOP_CLOCK_LAYER_ID))
+    map.addLayer(stopClockLayer(STOP_CLOCK_LAYER_ID, STOP_SOURCE_ID, CLOCK_STOP_FILTER))
 
   if (!map.getLayer(LABEL_LAYER_ID)) {
     map.addLayer({
@@ -532,19 +659,28 @@ function ensureLayers(map: mapboxgl.Map): void {
       type: 'circle',
       source: LOOP_SOURCE_ID,
       // 중심 점과 원 위 빈 자리 표시를 한 레이어에서 크기·채움만 갈라 그린다.
-      filter: ['in', ['get', 'kind'], ['literal', ['center', 'stop']]],
+      // 시계를 단 빈 자리는 쐐기 레이어가 맡는다.
+      filter: [
+        'any',
+        ['==', ['get', 'kind'], 'center'],
+        ['all', ['==', ['get', 'kind'], 'stop'], PLAIN_STOP_FILTER],
+      ],
       paint: {
-        'circle-radius': [
-          'case',
-          ['==', ['get', 'kind'], 'center'],
-          LOOP_CENTER_RADIUS,
-          STOP_RADIUS,
-        ],
         'circle-color': ['case', ['==', ['get', 'kind'], 'center'], ['get', 'color'], '#ffffff'],
         'circle-stroke-color': ['get', 'color'],
-        'circle-stroke-width': ['case', ['==', ['get', 'kind'], 'center'], 0, 2.5],
+        ...loopCenterPaint(null),
       },
     })
+  }
+
+  if (!map.getLayer(LOOP_STOP_CLOCK_LAYER_ID)) {
+    map.addLayer(
+      stopClockLayer(LOOP_STOP_CLOCK_LAYER_ID, LOOP_SOURCE_ID, [
+        'all',
+        ['==', ['get', 'kind'], 'stop'],
+        CLOCK_STOP_FILTER,
+      ]),
+    )
   }
 
   for (const layer of STOP_HANDLE_LAYERS) {
@@ -557,7 +693,9 @@ function ensureLayers(map: mapboxgl.Map): void {
       LINE_LAYER_ID,
       LOOP_LINE_LAYER_ID,
       STOP_LAYER_ID,
+      STOP_CLOCK_LAYER_ID,
       LOOP_CENTER_LAYER_ID,
+      LOOP_STOP_CLOCK_LAYER_ID,
       LABEL_LAYER_ID,
       // 히트 원도 마커 아래로 내린다. 안 보이는 레이어라 그림에는 영향이 없지만, 마커와
       // 겹친 자리에서는 마커 쪽이 먼저 잡히는 편이 자연스럽다.
@@ -608,6 +746,7 @@ export async function addArrowLayers(
   previous?.detachMove?.()
   runtimes.set(map, { plans, loops, detachMove: null })
 
+  ensureStopClockImages(map, plans, loops)
   render(map, true)
   ensureLayers(map)
 
@@ -628,7 +767,9 @@ export function removeArrowLayers(map: mapboxgl.Map | null | undefined): void {
       LABEL_LAYER_ID,
       LOOP_STOP_HIT_LAYER_ID,
       STOP_HIT_LAYER_ID,
+      LOOP_STOP_CLOCK_LAYER_ID,
       LOOP_CENTER_LAYER_ID,
+      STOP_CLOCK_LAYER_ID,
       STOP_LAYER_ID,
       LOOP_LINE_LAYER_ID,
       LINE_LAYER_ID,

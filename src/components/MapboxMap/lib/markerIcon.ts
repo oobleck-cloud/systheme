@@ -6,6 +6,7 @@
  *   (SVG data URL 내 @font-face는 img 컨텍스트에서 브라우저가 무시함)
  */
 
+import { dialKey, dialSegments, dialToneStyle, type MarkerDial } from './clockDial'
 import { PRETENDARD_BOLD_BASE64, PRETENDARD_REGULAR_BASE64 } from './markerIconFont'
 
 // 이름표 있음 모드 (배정됨)
@@ -47,9 +48,13 @@ const STATION_R = 15
  */
 export type MarkerVariant = 'filled' | 'hollow' | 'ghost' | 'dot' | 'station'
 
-/** 이 변형은 좌표가 스프라이트의 중심인가 — 레이어 앵커 결정용 */
-export function isCenterAnchored(variant: MarkerVariant | undefined): boolean {
-  return variant === 'station'
+/**
+ * 이 마커는 좌표가 스프라이트의 중심인가 — 레이어 앵커 결정용.
+ *
+ * 시계판을 두른 마커는 변형과 무관하게 원이다. 꼬리가 없으니 중심이 좌표다.
+ */
+export function isCenterAnchored(variant: MarkerVariant | undefined, dial?: MarkerDial): boolean {
+  return variant === 'station' || dial != null
 }
 
 export interface MarkerIconOptions {
@@ -60,6 +65,11 @@ export interface MarkerIconOptions {
   variant?: MarkerVariant
   /** 선택 상태 — 외곽 링을 덧그린다. `variant`와 조합 가능 */
   active?: boolean
+  /**
+   * 둘레에 두를 시계판. 있으면 변형과 무관하게 꼬리 없는 원(시계판 마커)으로 그리고,
+   * 변형은 가운데 원의 테두리(점선·흐림)로만 남는다. 이름표는 굽지 않는다.
+   */
+  dial?: MarkerDial
 }
 
 interface Palette {
@@ -261,6 +271,111 @@ function drawMarkerStation(
   ctx.fillText(badgeText, cx, cy)
 }
 
+// ── 시계판 마커 ──────────────────────────────────────────────────────────────
+
+/** 시계판 마커 캔버스 한 변 — 선택 링(바깥 +5px)까지 들어가는 크기 */
+const W_DIAL = 56
+/** 시계판 바깥 반지름 — 지름 44px 가 지도에서 칸을 읽을 수 있는 하한이다 */
+const DIAL_OUTER_R = 22
+/** 시계판 안쪽 반지름. 고리 두께 8.5px */
+const DIAL_INNER_R = 13.5
+/** 가운데 순번 원 반지름 (테두리 중심선 기준) */
+const DIAL_FACE_R = 11.5
+/** 30분 칸 사이 틈 (°). 바깥 둘레에서 약 1.2px — 칸 수를 셀 수 있을 만큼만 */
+const DIAL_GAP_DEG = 3
+
+/** 시계판 가운데 글자 크기 — 원이 작아 역 원(20/14)보다 한 단 작다 */
+function dialBadgeFontSize(text: string): number {
+  const length = text.length
+  if (length <= 2) return 14
+  if (length === 3) return 11
+  return 9
+}
+
+/**
+ * 시계판 마커. 꼬리 없이 캔버스 정중앙에 그리고 앵커도 중심이다.
+ *
+ * 순서: 흰 받침(그림자) → 칸 24개 → 가운데 흰 원 + 색 테두리 → 글자. 칸 사이 틈은 받침의 흰색이
+ * 비쳐 보이는 것이라, 지도 위 어디에 놓여도 같은 간격으로 읽힌다.
+ *
+ * 변형은 가운데 원의 테두리로만 남는다.
+ * - `ghost`(저장 전 새 자리) — 가운데 점선 + 바깥 점선 테두리
+ * - `dot`(미배정) — 가운데 점선
+ * - `hollow`(대체될 원래 자리) — 전체를 흐리게
+ */
+function drawMarkerDial(
+  ctx: CanvasRenderingContext2D,
+  options: MarkerIconOptions & { dial: MarkerDial },
+  scale: number,
+  active: boolean,
+): void {
+  const variant = options.variant ?? 'filled'
+  const color = options.color
+  const c = (W_DIAL / 2) * scale
+  const outer = DIAL_OUTER_R * scale
+
+  ctx.save()
+  if (variant === 'hollow') ctx.globalAlpha = 0.45
+
+  if (active) drawActiveRing(ctx, c, c, outer, color, scale)
+
+  // 받침 — 지도 위로 살짝 떠 보이게 그림자를 준다.
+  ctx.save()
+  ctx.shadowColor = 'rgba(0, 0, 0, 0.22)'
+  ctx.shadowBlur = 3 * scale
+  ctx.shadowOffsetY = 1 * scale
+  ctx.beginPath()
+  ctx.arc(c, c, outer + 1 * scale, 0, Math.PI * 2)
+  ctx.fillStyle = '#ffffff'
+  ctx.fill()
+  ctx.restore()
+
+  const segments = dialSegments(options.dial, {
+    cx: c,
+    cy: c,
+    innerR: DIAL_INNER_R * scale,
+    outerR: outer,
+    gapDeg: DIAL_GAP_DEG,
+  })
+  const baseAlpha = ctx.globalAlpha
+  for (const segment of segments) {
+    if (!segment.path) continue
+    const { fill, alpha } = dialToneStyle(segment.tone, color)
+    ctx.globalAlpha = baseAlpha * alpha
+    ctx.fillStyle = fill
+    ctx.fill(new Path2D(segment.path))
+  }
+  ctx.globalAlpha = baseAlpha
+
+  if (variant === 'ghost') {
+    ctx.beginPath()
+    ctx.arc(c, c, outer + 2.5 * scale, 0, Math.PI * 2)
+    ctx.setLineDash([3 * scale, 2.5 * scale])
+    ctx.strokeStyle = color
+    ctx.lineWidth = 1.5 * scale
+    ctx.stroke()
+    ctx.setLineDash([])
+  }
+
+  ctx.beginPath()
+  ctx.arc(c, c, DIAL_FACE_R * scale, 0, Math.PI * 2)
+  ctx.fillStyle = '#ffffff'
+  ctx.fill()
+  if (variant === 'ghost' || variant === 'dot') ctx.setLineDash([3 * scale, 2 * scale])
+  ctx.strokeStyle = color
+  ctx.lineWidth = 2.5 * scale
+  ctx.stroke()
+  ctx.setLineDash([])
+
+  const badgeText = options.number || '-'
+  ctx.font = `700 ${dialBadgeFontSize(badgeText) * scale}px ${FONT_FAMILY}, sans-serif`
+  ctx.fillStyle = variant === 'ghost' || variant === 'hollow' ? color : '#1a1a1a'
+  ctx.textAlign = 'center'
+  ctx.textBaseline = 'middle'
+  ctx.fillText(badgeText, c, c + 0.5 * scale)
+  ctx.restore()
+}
+
 /**
  * 이름표 있는 마커를 Canvas에 그림
  */
@@ -413,11 +528,12 @@ function drawMarkerToDataUrl(
   scale: number,
 ): { dataUrl: string; width: number; height: number } {
   const variant = options.variant ?? 'filled'
+  const dial = options.dial
   const isStation = variant === 'station'
-  // 역 원은 이름표를 스프라이트에 굽지 않는다 — 이름은 선 위에 반복 표기한다.
-  const withLabel = variant !== 'dot' && !isStation && hasLabel(options.label)
-  const w = (withLabel ? W_WITH_LABEL : isStation ? W_STATION : W_NO_LABEL) * scale
-  const h = (withLabel ? H_WITH_LABEL : isStation ? H_STATION : H_NO_LABEL) * scale
+  // 역 원·시계판은 이름표를 스프라이트에 굽지 않는다 — 이름은 선 위에 반복 표기한다.
+  const withLabel = dial == null && variant !== 'dot' && !isStation && hasLabel(options.label)
+  const w = (dial ? W_DIAL : withLabel ? W_WITH_LABEL : isStation ? W_STATION : W_NO_LABEL) * scale
+  const h = (dial ? W_DIAL : withLabel ? H_WITH_LABEL : isStation ? H_STATION : H_NO_LABEL) * scale
 
   const canvas = typeof document !== 'undefined' ? document.createElement('canvas') : null
   if (!canvas) {
@@ -431,7 +547,9 @@ function drawMarkerToDataUrl(
   const pal = palette(variant, options.color)
   const active = options.active ?? false
 
-  if (variant === 'dot') {
+  if (dial) {
+    drawMarkerDial(ctx, { ...options, dial }, scale, active)
+  } else if (variant === 'dot') {
     drawMarkerDot(ctx, options.color, scale, active)
   } else if (isStation) {
     drawMarkerStation(ctx, options.number, options.color, scale, pal, active)
@@ -467,7 +585,7 @@ function iconCacheKey(options: MarkerIconOptions, scale: number): string {
   const variant = options.variant ?? 'filled'
   // 이름표를 굽지 않는 변형은 label 이 그림에 영향을 주지 않는다 — 키에 넣으면 같은 그림을
   // 플래너 수만큼 중복해서 굽게 된다.
-  const drawsLabel = variant !== 'dot' && variant !== 'station'
+  const drawsLabel = options.dial == null && variant !== 'dot' && variant !== 'station'
   return [
     scale,
     variant,
@@ -475,7 +593,27 @@ function iconCacheKey(options: MarkerIconOptions, scale: number): string {
     options.color,
     options.number,
     drawsLabel ? (options.label ?? '') : '',
+    dialKey(options.dial),
   ].join('|')
+}
+
+/**
+ * 마커 그림이 화면에서 차지하는 원 — 커서가 얼마나 가까운지 잴 때 쓴다(1배 px).
+ *
+ * `lift` 는 좌표(앵커)에서 원의 중심까지 위로 떨어진 거리다. 중심 앵커인 시계판·역 원은 0,
+ * 꼬리 핀은 머리(이름표 핀은 머리와 이름표 상자를 합친 몸통)의 중심까지다. 스프라이트 캔버스
+ * 크기로 재지 않는 것은 캔버스에 선택 링 자리까지 여유가 들어 있어서다 — 그만큼 멀리서 반응한다.
+ */
+export function markerFootprint(options: Pick<MarkerIconOptions, 'variant' | 'dial' | 'label'>): {
+  radius: number
+  lift: number
+} {
+  const variant = options.variant ?? 'filled'
+  if (options.dial) return { radius: DIAL_OUTER_R, lift: 0 }
+  if (variant === 'station') return { radius: STATION_R, lift: 0 }
+  if (variant === 'dot') return { radius: DOT_R, lift: DOT_R + 1 }
+  if (hasLabel(options.label)) return { radius: BODY_W / 2, lift: 38 }
+  return { radius: 16, lift: H_NO_LABEL - 42 }
 }
 
 /**

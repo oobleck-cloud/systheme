@@ -13,6 +13,15 @@ export type TimetableSlotSelection = {
   slotMinute: number
 }
 
+/**
+ * 고를 수 있는 빈 칸의 결 — `isSlotDisabled` 로 막지 않은 칸에만 적용한다.
+ *
+ * - `default`: 그대로 고르면 되는 칸
+ * - `attention`: 고를 수 있지만 예외 처리다 — 고르는 사람이 알고 골라야 한다(옅은 경고 톤)
+ * - `tentative`: 아직 없는 칸이다 — 고르면 앱이 먼저 만들고 나서 쓴다(점선 테두리)
+ */
+export type TimetableSlotTone = 'default' | 'attention' | 'tentative'
+
 /** 날짜 메타 — anatomy `dates` (저장·활성 여부) */
 export type TimetableDateMeta = {
   id: string
@@ -46,7 +55,16 @@ export type TimetableAppointment = {
   copyValue?: string
   /** 호버 미리보기에 노출할 부가 정보(상세 주소 등). 없으면 미표시 */
   detail?: string
+  /**
+   * 고객에게 알렸는지 — `confirmed` 는 자물쇠 + 실선 테두리, `pending` 은 점선 테두리(아직 자유롭게 옮김).
+   * 미지정이면 지금 모양 그대로다. 구역 색은 바꾸지 않는다(주황은 주의에만).
+   */
+  lock?: TimetableAppointmentLock
+  /** 호버 미리보기 맨 아래 한 줄 — 확정 안내(「확정 · 10/30 18:30 고객 안내함」) 등 */
+  note?: string
 }
+
+export type TimetableAppointmentLock = 'confirmed' | 'pending'
 
 export type TimetableSlotTag = {
   id: string

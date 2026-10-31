@@ -2,7 +2,10 @@
 
 import { useCallback, useState } from 'react'
 
+import type { TimetableAppointmentLock } from './timetable-types'
+
 import { Tooltip } from '@/components/Tooltip'
+import { Lock, iconClassName } from '@/icons'
 import { cn } from '@/utils/cn'
 
 type TimetableAppointmentBlockProps = Omit<
@@ -22,6 +25,8 @@ type TimetableAppointmentBlockProps = Omit<
   bgColor?: string
   /** 커스텀 글자색(CSS color) — 파스텔 배경 위 대비용. 미지정 시 흰색 */
   fgColor?: string
+  /** `confirmed` = 자물쇠 + 실선 테두리, `pending` = 점선 테두리. 미지정이면 테두리 없음 */
+  lock?: TimetableAppointmentLock
 }
 
 async function copyLabelToClipboard(label: string): Promise<boolean> {
@@ -58,6 +63,7 @@ function TimetableAppointmentBlock({
   type = 'button',
   bgColor,
   fgColor,
+  lock,
   ...props
 }: TimetableAppointmentBlockProps) {
   const [copied, setCopied] = useState(false)
@@ -89,14 +95,24 @@ function TimetableAppointmentBlock({
         'focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none focus-visible:ring-inset',
         selected && 'ring-1 ring-current ring-inset',
         copied && 'brightness-95',
+        // 테두리는 글자색을 따른다 — 구역 파스텔 위에서도 같은 대비로 읽힌다
+        lock === 'confirmed' && 'gap-0.5 border border-solid border-current',
+        lock === 'pending' && 'border border-dashed border-current/60',
       )}
       // eslint-disable-next-line design-system/no-inline-style -- 동적 구역별 색상 (파스텔 배경/글씨)
       style={{ ...(bgColor && { backgroundColor: bgColor }), ...(fgColor && { color: fgColor }) }}
       aria-pressed={selected}
-      aria-label={copied ? `${label}, 복사됨` : label}
+      aria-label={(copied ? `${label}, 복사됨` : label) + (lock === 'confirmed' ? ', 확정' : '')}
+      data-lock={lock}
       {...props}
     >
-      <span data-slot="title" className="w-full truncate text-center">
+      {lock === 'confirmed' ? (
+        <Lock data-slot="lock-icon" aria-hidden className={iconClassName('xs')} />
+      ) : null}
+      <span
+        data-slot="title"
+        className={cn('truncate text-center', lock === 'confirmed' ? 'min-w-0' : 'w-full')}
+      >
         {label}
       </span>
       <span data-slot="copy-feedback" className="sr-only" aria-live="polite">

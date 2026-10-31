@@ -31,6 +31,7 @@
  */
 import React, { useEffect, useState } from 'react'
 
+import { dialKey } from './lib/clockDial'
 import { createMarkerIconDataUrl, createMarkerIconDataUrlSync } from './lib/markerIcon'
 
 import type { MapMarker } from './types/mapbox.types'
@@ -39,7 +40,7 @@ const DEFAULT_COLOR = '#055cf5'
 
 export interface MarkerSpriteProps {
   /** 렌더할 마커 데이터. `badge` 우선, 없으면 `fallbackBadge` 또는 공백. */
-  marker: Pick<MapMarker, 'badge' | 'label' | 'color' | 'variant' | 'active'>
+  marker: Pick<MapMarker, 'badge' | 'label' | 'color' | 'variant' | 'active' | 'dial'>
   /** `marker.badge` 가 없을 때 표시할 문자열. 기본 '-'. */
   fallbackBadge?: string
   /** 아이콘 스케일(해상도 배수). 기본 2 (Retina). */
@@ -78,10 +79,16 @@ export function MarkerSprite({
   const label = marker.label
   const variant = marker.variant
   const active = marker.active
+  const dial = marker.dial
+  // 시계판은 배열이라 렌더마다 새 참조가 온다 — 그림이 같으면 다시 굽지 않도록 키로 비교한다.
+  const dialSignature = dialKey(dial)
 
   // 첫 렌더부터 이미지를 보이게 한다. canvas 그리기 + 캐시는 매우 빠르다 (sub-ms).
   const [icon, setIcon] = useState<IconState>(() => {
-    const res = createMarkerIconDataUrlSync({ number: badge, label, color, variant, active }, scale)
+    const res = createMarkerIconDataUrlSync(
+      { number: badge, label, color, variant, active, ...(dial ? { dial } : {}) },
+      scale,
+    )
     return {
       dataUrl: res.dataUrl,
       displayWidth: res.displayWidth,
@@ -93,7 +100,7 @@ export function MarkerSprite({
   // 동일 값이면 setIcon이 얕은 비교로 no-op (동일 객체 참조 유지).
   useEffect(() => {
     const sync = createMarkerIconDataUrlSync(
-      { number: badge, label, color, variant, active },
+      { number: badge, label, color, variant, active, ...(dial ? { dial } : {}) },
       scale,
     )
     setIcon((prev) =>
@@ -108,7 +115,10 @@ export function MarkerSprite({
 
     // 폰트 로드 전 동기 렌더된 경우를 대비해, 정식 경로로 한 번 재동기화.
     let cancelled = false
-    createMarkerIconDataUrl({ number: badge, label, color, variant, active }, scale).then((res) => {
+    createMarkerIconDataUrl(
+      { number: badge, label, color, variant, active, ...(dial ? { dial } : {}) },
+      scale,
+    ).then((res) => {
       if (cancelled) return
       setIcon((prev) =>
         prev.dataUrl === res.dataUrl
@@ -123,7 +133,9 @@ export function MarkerSprite({
     return () => {
       cancelled = true
     }
-  }, [badge, label, color, scale, variant, active])
+    // dial 은 dialSignature 로 비교한다(위 주석).
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [badge, label, color, scale, variant, active, dialSignature])
 
   return (
     <img
