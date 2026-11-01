@@ -8,6 +8,7 @@ import { spring } from '@/foundations/motionTokens'
 import { useDismissOnEscape, useFocusTrap } from '@/primitives/anchorPopover'
 import { OverlayScrim } from '@/primitives/overlayScrim'
 import { Panel } from '@/primitives/panel'
+import { usePortalRoot } from '@/primitives/portalRoot'
 import { cn } from '@/utils/cn'
 
 export type BottomSheetProps = {
@@ -44,6 +45,7 @@ function BottomSheet({
   className,
   titleId: titleIdProp,
 }: BottomSheetProps) {
+  const portalRoot = usePortalRoot()
   const autoTitleId = useId()
   const titleId = titleIdProp ?? autoTitleId
   const panelRef = useRef<HTMLDivElement>(null)
@@ -147,7 +149,7 @@ function BottomSheet({
         </div>
       )}
     </AnimatePresence>,
-    container ?? document.body,
+    container ?? portalRoot,
   )
 }
 

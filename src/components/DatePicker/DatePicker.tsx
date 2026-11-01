@@ -14,6 +14,7 @@ import {
 } from '@/primitives/anchorPanelPosition'
 import { useDismissOnEscape, useFocusTrap } from '@/primitives/anchorPopover'
 import { MotionPanel } from '@/primitives/panelMotion'
+import { usePortalRoot } from '@/primitives/portalRoot'
 import { cn } from '@/utils/cn'
 
 function formatDate(d: Date): string {
@@ -50,6 +51,7 @@ function DatePicker({
   density = 'default',
   ...props
 }: DatePickerProps) {
+  const portalRoot = usePortalRoot()
   const isControlled = valueProp !== undefined
   const [internalValue, setInternalValue] = useState<Date | null>(defaultValue)
   const value = useMemo(
@@ -165,7 +167,7 @@ function DatePicker({
             </MotionPanel>
           )}
         </AnimatePresence>,
-        document.body,
+        portalRoot,
       )}
     </div>
   )

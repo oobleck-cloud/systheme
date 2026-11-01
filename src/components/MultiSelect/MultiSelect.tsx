@@ -9,6 +9,7 @@ import { Tag } from '@/components/Tag'
 import { DropdownPopover } from '@/primitives/dropdownPopover'
 import { useInteractionContext } from '@/primitives/interaction'
 import { Panel } from '@/primitives/panel'
+import { usePortalRoot } from '@/primitives/portalRoot'
 import { useAnchoredPanel } from '@/primitives/useAnchoredPanel'
 import { cn } from '@/utils/cn'
 import {
@@ -53,6 +54,7 @@ function MultiSelect({
   'aria-labelledby': ariaLabelledBy,
   ...props
 }: MultiSelectProps) {
+  const portalRoot = usePortalRoot()
   const den = density ?? 'default'
   const [isOpen, setIsOpen] = useState(false)
   const [search, setSearch] = useState('')
@@ -368,7 +370,7 @@ function MultiSelect({
               </ul>
             </Panel>
           ) : null,
-          document.body,
+          portalRoot,
         )}
     </DropdownPopover>
   )

@@ -5,6 +5,7 @@ import { createPortal } from 'react-dom'
 
 import { Button } from '@/components/Button/Button'
 import { Stack } from '@/components/layout/Stack'
+import { usePortalRoot } from '@/primitives/portalRoot'
 import { cn } from '@/utils/cn'
 
 export type BulkSelectionBarProps = React.HTMLAttributes<HTMLDivElement> & {
@@ -37,6 +38,7 @@ const BulkSelectionBar = forwardRef<HTMLDivElement, BulkSelectionBarProps>(
     },
     ref,
   ) => {
+    const portalRoot = usePortalRoot()
     const [mounted, setMounted] = useState(false)
     useEffect(() => setMounted(true), [])
     if (floating) {
@@ -100,7 +102,7 @@ const BulkSelectionBar = forwardRef<HTMLDivElement, BulkSelectionBarProps>(
                 </div>
               </div>
             </div>,
-            document.body,
+            portalRoot,
           )
         : null
     }

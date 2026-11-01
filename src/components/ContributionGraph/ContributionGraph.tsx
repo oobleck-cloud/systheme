@@ -6,6 +6,7 @@ import { createPortal } from 'react-dom'
 
 import { useDismissOnEscape, usePointerDownOutside } from '@/primitives/anchorPopover'
 import { Panel } from '@/primitives/panel'
+import { usePortalRoot } from '@/primitives/portalRoot'
 import { cn } from '@/utils/cn'
 
 const TOOLTIP_ANCHOR_GAP_PX = 6
@@ -514,6 +515,7 @@ function GraphCellButton({
   colorScale,
   onCellClick,
 }: GraphCellButtonProps) {
+  const portalRoot = usePortalRoot()
   const rootRef = useRef<HTMLDivElement>(null)
   const tipRef = useRef<HTMLDivElement>(null)
   const [open, setOpen] = useState(false)
@@ -663,7 +665,7 @@ function GraphCellButton({
                 {tooltipContent}
               </div>
             </Panel>,
-            document.body,
+            portalRoot,
           )
         : null}
     </div>

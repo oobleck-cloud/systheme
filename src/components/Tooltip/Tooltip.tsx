@@ -7,6 +7,7 @@ import { createPortal } from 'react-dom'
 import { duration, ease } from '@/foundations/motionTokens'
 import { useDismissOnEscape } from '@/primitives/anchorPopover'
 import { MotionPanel } from '@/primitives/panelMotion'
+import { usePortalRoot } from '@/primitives/portalRoot'
 import { useAnchoredPanel } from '@/primitives/useAnchoredPanel'
 import { cn } from '@/utils/cn'
 
@@ -44,6 +45,7 @@ function Tooltip({
   triggerClassName,
   contentClassName,
 }: TooltipProps) {
+  const portalRoot = usePortalRoot()
   const rootRef = useRef<HTMLDivElement>(null)
   const panelRef = useRef<HTMLDivElement>(null)
   const delayRef = useRef<ReturnType<typeof setTimeout> | null>(null)
@@ -140,7 +142,7 @@ function Tooltip({
               </MotionPanel>
             )}
           </AnimatePresence>,
-          document.body,
+          portalRoot,
         )}
     </div>
   )

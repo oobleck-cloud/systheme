@@ -17,6 +17,7 @@ import { MotionPanel } from './panelMotion'
 import type { PanelProps } from './panel'
 
 import { spring } from '@/foundations/motionTokens'
+import { usePortalRoot } from '@/primitives/portalRoot'
 import { cn } from '@/utils/cn'
 
 function getOverflowScrollAncestors(start: HTMLElement | null): HTMLElement[] {
@@ -125,6 +126,7 @@ function AnchorContextSurface({
   panelAriaLabel,
   ...props
 }: AnchorContextSurfaceProps) {
+  const portalRoot = usePortalRoot()
   const [uncontrolledOpen, setUncontrolledOpen] = useState(defaultOpen)
   const isControlled = openProp !== undefined
   const open = isControlled ? openProp! : uncontrolledOpen
@@ -328,7 +330,7 @@ function AnchorContextSurface({
       <div ref={surfaceWrapRef} data-part="anchor-context-surface-surface" className={surfaceWrap}>
         {surface}
       </div>
-      {portaled ? mounted && createPortal(panelNode, document.body) : panelNode}
+      {portaled ? mounted && createPortal(panelNode, portalRoot) : panelNode}
     </DropdownPopover>
   )
 }

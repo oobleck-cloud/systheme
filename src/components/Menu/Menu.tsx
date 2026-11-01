@@ -9,6 +9,7 @@ import { spring } from '@/foundations/motionTokens'
 import { useDismissOnEscape } from '@/primitives/anchorPopover'
 import { useInteractionContext } from '@/primitives/interaction'
 import { MotionPanel } from '@/primitives/panelMotion'
+import { usePortalRoot } from '@/primitives/portalRoot'
 import { useAnchoredPanel } from '@/primitives/useAnchoredPanel'
 import { cn } from '@/utils/cn'
 import { dropdownListShellVariants, dropdownOptionDensityVariants } from '@/utils/dropdownDensity'
@@ -185,6 +186,7 @@ function Menu({
   density = 'default',
   className,
 }: MenuProps) {
+  const portalRoot = usePortalRoot()
   const [uncontrolledOpen, setUncontrolledOpen] = useState(defaultOpen)
   const isControlled = openProp !== undefined
   const open = isControlled ? openProp! : uncontrolledOpen
@@ -361,7 +363,7 @@ function Menu({
               </MotionPanel>
             )}
           </AnimatePresence>,
-          document.body,
+          portalRoot,
         )}
     </div>
   )

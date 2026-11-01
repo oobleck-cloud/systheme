@@ -10,6 +10,7 @@ import { spring } from '@/foundations/motionTokens'
 import { DropdownPopover } from '@/primitives/dropdownPopover'
 import { useInteractionContext } from '@/primitives/interaction'
 import { MotionPanel } from '@/primitives/panelMotion'
+import { usePortalRoot } from '@/primitives/portalRoot'
 import { useAnchoredPanel } from '@/primitives/useAnchoredPanel'
 import { cn } from '@/utils/cn'
 import {
@@ -87,6 +88,7 @@ function Select({
   'aria-labelledby': ariaLabelledBy,
   ...props
 }: SelectProps) {
+  const portalRoot = usePortalRoot()
   const den = density ?? 'default'
   const [isOpen, setIsOpen] = useState(false)
   const [search, setSearch] = useState('')
@@ -370,7 +372,7 @@ function Select({
               </MotionPanel>
             )}
           </AnimatePresence>,
-          document.body,
+          portalRoot,
         )}
     </DropdownPopover>
   )

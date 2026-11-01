@@ -7,6 +7,7 @@ import { createPortal } from 'react-dom'
 import { spring } from '@/foundations/motionTokens'
 import { useDismissOnEscape, useFocusTrap } from '@/primitives/anchorPopover'
 import { MotionPanel } from '@/primitives/panelMotion'
+import { usePortalRoot } from '@/primitives/portalRoot'
 import { anchoredPanelHasOpenNested, useAnchoredPanel } from '@/primitives/useAnchoredPanel'
 import { cn } from '@/utils/cn'
 
@@ -68,6 +69,7 @@ function Popover({
   triggerClassName,
   contentClassName,
 }: PopoverProps) {
+  const portalRoot = usePortalRoot()
   const rootRef = useRef<HTMLDivElement>(null)
   const panelRef = useRef<HTMLDivElement>(null)
   const panelId = useId()
@@ -172,7 +174,7 @@ function Popover({
               </MotionPanel>
             )}
           </AnimatePresence>,
-          document.body,
+          portalRoot,
         )}
     </div>
   )

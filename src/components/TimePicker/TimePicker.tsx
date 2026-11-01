@@ -11,6 +11,7 @@ import {
 } from '@/primitives/anchorPanelPosition'
 import { useDismissOnEscape, useFocusTrap } from '@/primitives/anchorPopover'
 import { Panel } from '@/primitives/panel'
+import { usePortalRoot } from '@/primitives/portalRoot'
 import { cn } from '@/utils/cn'
 
 const timePickerColumnHeaderVariants = cva(
@@ -99,6 +100,7 @@ function TimePicker({
   density,
   ...props
 }: TimePickerProps) {
+  const portalRoot = usePortalRoot()
   const isControlled = valueProp !== undefined
   const [internalValue, setInternalValue] = useState<string | undefined>(defaultValue)
   const value = useMemo(
@@ -345,7 +347,7 @@ function TimePicker({
           </svg>
         </span>
       </button>
-      {panelNode ? createPortal(panelNode, document.body) : null}
+      {panelNode ? createPortal(panelNode, portalRoot) : null}
     </div>
   )
 }

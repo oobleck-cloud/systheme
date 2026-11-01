@@ -13,6 +13,7 @@ import {
 import { inputVariants } from '@/components/Input'
 import { anchorPopoverRootClassName, useFocusTrap } from '@/primitives/anchorPopover'
 import { Panel } from '@/primitives/panel'
+import { usePortalRoot } from '@/primitives/portalRoot'
 import { useAnchoredPanel } from '@/primitives/useAnchoredPanel'
 import { cn } from '@/utils/cn'
 
@@ -58,6 +59,7 @@ function EmojiPicker({
   searchable = true,
   ...props
 }: EmojiPickerProps) {
+  const portalRoot = usePortalRoot()
   const isControlled = valueProp !== undefined
   const [internalValue, setInternalValue] = useState<string | undefined>(defaultValue)
   const value = isControlled ? valueProp : internalValue
@@ -330,7 +332,7 @@ function EmojiPicker({
               )}
             </Panel>
           ) : null,
-          document.body,
+          portalRoot,
         )}
     </div>
   )

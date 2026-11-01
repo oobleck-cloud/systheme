@@ -14,6 +14,7 @@ import { AnchorContextSurface } from '@/primitives/anchorContextSurface'
 import { useFocusTrap } from '@/primitives/anchorPopover'
 import { OverlayScrim } from '@/primitives/overlayScrim'
 import { Panel } from '@/primitives/panel'
+import { usePortalRoot } from '@/primitives/portalRoot'
 import { cn } from '@/utils/cn'
 import {
   buildYearRange,
@@ -118,6 +119,7 @@ function YearMonthSelector({
   'aria-label': ariaLabel = '조회 연월',
   ...props
 }: YearMonthSelectorProps) {
+  const portalRoot = usePortalRoot()
   const den = density ?? 'default'
   const isSheet = useMediaQuery(MOBILE_SHEET_MEDIA)
   const [isOpen, setIsOpen] = useState(false)
@@ -247,7 +249,7 @@ function YearMonthSelector({
               </div>
             </Panel>
           </div>,
-          document.body,
+          portalRoot,
         )
       : null
 

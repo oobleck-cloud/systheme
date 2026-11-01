@@ -627,6 +627,7 @@ export { OverlayScrim } from './primitives/overlayScrim'
 export type { OverlayScrimProps } from './primitives/overlayScrim'
 
 export { OverlayContainerProvider, useOverlayContainer } from './primitives/overlayContainer'
+export { PortalRootProvider, usePortalRoot } from './primitives/portalRoot'
 
 /** @deprecated BoxScrollHintOverlay 사용 */
 export { PanelScrollHintOverlay, usePanelScrollRegionHint } from './primitives/box'

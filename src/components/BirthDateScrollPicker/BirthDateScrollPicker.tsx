@@ -17,6 +17,7 @@ import {
 } from '@/primitives/anchorPopover'
 import { OverlayScrim } from '@/primitives/overlayScrim'
 import { Panel } from '@/primitives/panel'
+import { usePortalRoot } from '@/primitives/portalRoot'
 import {
   buildYearRange,
   clampBirthParts,
@@ -150,6 +151,7 @@ function BirthDateScrollPicker({
   'aria-label': ariaLabel = '생년월일',
   ...props
 }: BirthDateScrollPickerProps) {
+  const portalRoot = usePortalRoot()
   const den = density ?? 'default'
   const isSheet = useMediaQuery(MOBILE_SHEET_MEDIA)
   const [isOpen, setIsOpen] = useState(false)
@@ -278,7 +280,7 @@ function BirthDateScrollPicker({
               </div>
             </Panel>
           </div>,
-          document.body,
+          portalRoot,
         )
       : null
 

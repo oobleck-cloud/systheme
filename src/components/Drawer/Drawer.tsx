@@ -9,6 +9,7 @@ import { spring } from '@/foundations/motionTokens'
 import { useDismissOnEscape, useFocusTrap } from '@/primitives/anchorPopover'
 import { OverlayScrim } from '@/primitives/overlayScrim'
 import { drawerPanelVariants, Panel } from '@/primitives/panel'
+import { usePortalRoot } from '@/primitives/portalRoot'
 import { Surface } from '@/primitives/surface'
 import { cn } from '@/utils/cn'
 
@@ -84,6 +85,7 @@ function Drawer({
   titleId: titleIdProp,
   side = 'right',
 }: DrawerProps) {
+  const portalRoot = usePortalRoot()
   const autoTitleId = useId()
   const titleId = titleIdProp ?? autoTitleId
   const panelRef = useRef<HTMLDivElement>(null)
@@ -210,7 +212,7 @@ function Drawer({
         </div>
       )}
     </AnimatePresence>,
-    document.body,
+    portalRoot,
   )
 }
 

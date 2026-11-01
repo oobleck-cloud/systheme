@@ -7,6 +7,7 @@ import { DropdownPopover } from './dropdownPopover'
 import { Panel } from './panel'
 import { useAnchoredPanel } from './useAnchoredPanel'
 
+import { usePortalRoot } from '@/primitives/portalRoot'
 import { cn } from '@/utils/cn'
 
 export type DropdownProps = Omit<React.HTMLAttributes<HTMLDivElement>, 'children'> & {
@@ -55,6 +56,7 @@ function Dropdown({
   disabled = false,
   ...props
 }: DropdownProps) {
+  const portalRoot = usePortalRoot()
   const [uncontrolledOpen, setUncontrolledOpen] = useState(defaultOpen)
   const isControlled = openProp !== undefined
   const open = isControlled ? openProp! : uncontrolledOpen
@@ -122,7 +124,7 @@ function Dropdown({
               {children}
             </Panel>
           ) : null,
-          document.body,
+          portalRoot,
         )}
     </DropdownPopover>
   )

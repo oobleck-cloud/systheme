@@ -10,6 +10,7 @@ import { useDismissOnEscape, useFocusTrap } from '@/primitives/anchorPopover'
 import { useOverlayContainer } from '@/primitives/overlayContainer'
 import { OverlayScrim } from '@/primitives/overlayScrim'
 import { Panel } from '@/primitives/panel'
+import { usePortalRoot } from '@/primitives/portalRoot'
 import { Surface } from '@/primitives/surface'
 import { cn } from '@/utils/cn'
 
@@ -54,6 +55,7 @@ function Modal({
   className,
   titleId: titleIdProp,
 }: ModalProps) {
+  const portalRoot = usePortalRoot()
   const autoTitleId = useId()
   const titleId = titleIdProp ?? autoTitleId
   const panelRef = useRef<HTMLDivElement>(null)
@@ -209,7 +211,7 @@ function Modal({
         </div>
       )}
     </AnimatePresence>,
-    overlayContainer ?? document.body,
+    overlayContainer ?? portalRoot,
   )
 }
 

@@ -24,6 +24,7 @@ import {
   type AnchorPanelPosition,
 } from '@/primitives/anchorPanelPosition'
 import { Panel } from '@/primitives/panel'
+import { usePortalRoot } from '@/primitives/portalRoot'
 import { cn } from '@/utils/cn'
 import { isMousePointer } from '@/utils/pointer'
 
@@ -473,6 +474,7 @@ function SidebarCollapsedFlyoutCascadePanel({
   onNavigate,
   onCloseAll,
 }: SidebarCollapsedFlyoutCascadePanelProps) {
+  const portalRoot = usePortalRoot()
   const nestedPanelId = useId()
   const panelRef = useRef<HTMLDivElement>(null)
   const [position, setPosition] = useState<AnchorPanelPosition>(() =>
@@ -606,7 +608,7 @@ function SidebarCollapsedFlyoutCascadePanel({
   )
 
   if (!mounted) return null
-  return createPortal(panelNode, document.body)
+  return createPortal(panelNode, portalRoot)
 }
 
 type SidebarCollapsedFlyoutProps = {

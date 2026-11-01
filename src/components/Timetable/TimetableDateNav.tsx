@@ -13,6 +13,7 @@ import {
   useFocusTrap,
 } from '@/primitives/anchorPopover'
 import { Panel } from '@/primitives/panel'
+import { usePortalRoot } from '@/primitives/portalRoot'
 import { useAnchoredPanel } from '@/primitives/useAnchoredPanel'
 import { cn } from '@/utils/cn'
 
@@ -90,6 +91,7 @@ function TimetableDateNav({
   disabled = false,
   className,
 }: TimetableDateNavProps) {
+  const portalRoot = usePortalRoot()
   const stepDate = (direction: -1 | 1) =>
     onStepDate ? onStepDate(direction) : onDateChange(stepCursorDate(cursorDate, direction))
 
@@ -179,7 +181,7 @@ function TimetableDateNav({
                 />
               </Panel>
             ) : null,
-            document.body,
+            portalRoot,
           )}
       </div>
 
