@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useRef } from 'react'
 
+import { hitsLabel, LABEL_LAYER_ID } from '../lib/labelLayers'
 import { pickMostSpecificRegionFeature } from '../lib/region-hit'
 
 import type {
@@ -125,11 +126,14 @@ export function useRegions<P = Record<string, unknown>>({
         ;(source as mapboxgl.GeoJSONSource).setData(decorated)
       } else {
         map.addSource(SOURCE_ID, { type: 'geojson', data: decorated })
-        const beforeId = map.getLayer('markers-sprite')
-          ? 'markers-sprite'
-          : map.getLayer('arrows-line')
-            ? 'arrows-line'
-            : undefined
+        // 라벨이 있으면 그 밑으로 — 면이 칩을 덮지 않게
+        const beforeId = map.getLayer(LABEL_LAYER_ID)
+          ? LABEL_LAYER_ID
+          : map.getLayer('markers-sprite')
+            ? 'markers-sprite'
+            : map.getLayer('arrows-line')
+              ? 'arrows-line'
+              : undefined
         map.addLayer(
           {
             id: FILL_LAYER_ID,
@@ -174,6 +178,8 @@ export function useRegions<P = Record<string, unknown>>({
         })
         if (markerHits.length > 0) return
       }
+      // 라벨을 누른 것은 라벨 클릭이다 — 구역 클릭으로 한 번 더 해석하지 않는다
+      if (hitsLabel(map, e.point)) return
 
       if (!map.getLayer(FILL_LAYER_ID)) {
         onRegionClickRef.current?.(null)

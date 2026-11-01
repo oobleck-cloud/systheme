@@ -194,6 +194,50 @@ export interface MapOverlay {
   anchor?: MapOverlayAnchor
 }
 
+/**
+ * 라벨 한 조각 — 같은 줄 안에서 글자 크기·무게·색을 바꿔 잇는 단위.
+ *
+ * 색은 CSS 색이거나 `var(--token)` 이다. 토큰은 지도 컨테이너에서 계산된 값으로 풀어 굽는다.
+ */
+export interface MapLabelRun {
+  text: string
+  /** 글자 크기(px) */
+  size: number
+  /** 기본값 400 */
+  weight?: 400 | 500 | 600 | 700
+  color: string
+}
+
+/**
+ * 좌표에 세우는 캔버스 라벨(칩·작은 카드).
+ *
+ * `MapOverlay` 와 달리 지도 캔버스 안에 그려진다 — 그래서 **마커·동선·중간 표시보다 아래**,
+ * 구역 면보다 위에 깔린다. DOM 오버레이는 캔버스 위에 떠서 이 순서를 지킬 수 없다
+ * (2026-11-01 상담지도: 구역칩이 상담 핀·동선 핀을 덮었다).
+ *
+ * 대신 조형은 줄·조각·배경·테두리로 굽는 것에 묶이고 버튼(포커스·키보드)은 아니다.
+ * 같은 일을 하는 비지도 경로는 소비자가 함께 둬야 한다.
+ */
+export interface MapLabel {
+  /** 고유 id. 클릭 콜백으로 되돌려받는다 */
+  id: string
+  position: LngLat
+  /** 줄 묶음. 줄마다 조각을 가로로 잇고, 줄은 가운데 정렬로 쌓는다 */
+  lines: MapLabelRun[][]
+  background: string
+  /** 배경 불투명도(0~1). 기본값 1 */
+  backgroundOpacity?: number
+  borderColor: string
+  /** `'pill'` 은 알약, `'card'` 는 8px 둥근 모서리. 기본값 `'pill'` */
+  shape?: 'pill' | 'card'
+  /** 기본값 false */
+  shadow?: boolean
+  /** 안쪽 여백(px). 기본값 [8, 2] */
+  padding?: [number, number]
+  /** 커서를 올렸을 때 띄울 한 줄(접근성 이름 대신이기도 하다) */
+  title?: string
+}
+
 // ── 화살표 ───────────────────────────────────────────────────────────────────
 
 /**

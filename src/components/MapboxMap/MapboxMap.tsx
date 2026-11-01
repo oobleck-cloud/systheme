@@ -62,6 +62,7 @@ function injectPopupStyles() {
 import { FloatingBounce } from './FloatingBounce'
 import { useArrows } from './hooks/useArrows'
 import { useHoverGrow } from './hooks/useHoverGrow'
+import { useLabels } from './hooks/useLabels'
 import { useMapboxMap } from './hooks/useMapboxMap'
 import { useMarkers } from './hooks/useMarkers'
 import { useOverlays } from './hooks/useOverlays'
@@ -78,6 +79,7 @@ import type {
   MapCamera,
   MapClusterOptions,
   MapFeatureClickEvent,
+  MapLabel,
   MapMarker,
   MapOverlay,
   MapRegionStyler,
@@ -127,6 +129,14 @@ export interface MapboxMapProps<TMarker = unknown, TRegion = Record<string, unkn
    * 버튼)을 얹는 슬롯이다. 구역 단위처럼 수십 개 규모에만 쓴다.
    */
   overlays?: MapOverlay[]
+
+  /**
+   * 좌표에 세우는 캔버스 라벨(칩·작은 카드). 구역 면 위, 마커·동선·중간 표시 **아래**에
+   * 그려진다 — 핀을 가리면 안 되는 표시는 `overlays` 대신 여기에 둔다.
+   */
+  labels?: MapLabel[]
+  /** 라벨을 눌렀을 때. 위에 마커·중간 표시가 있으면 그쪽이 이기고 이 콜백은 불리지 않는다 */
+  onLabelClick?: (label: MapLabel) => void
 
   /**
    * 카메라 이동이 끝날 때 현재 보이는 범위를 알려준다.
@@ -241,6 +251,8 @@ export const MapboxMap: FC<MapboxMapProps> = ({
   regions = [],
   cluster,
   overlays = [],
+  labels = [],
+  onLabelClick,
   onCameraMove,
   activeMarkerId,
   onActiveMarkerChange,
@@ -411,6 +423,8 @@ export const MapboxMap: FC<MapboxMapProps> = ({
   useStopDrag({ map, isLoaded, onStopDrop, onStopDragStart, onStopDragCancel })
 
   useHoverGrow({ map, isLoaded, enabled: hoverGrow })
+
+  useLabels({ map, labels, isLoaded, onLabelClick })
 
   const overlaySlots = useOverlays({ map, overlays, isLoaded })
 

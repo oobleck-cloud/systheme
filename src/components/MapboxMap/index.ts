@@ -44,6 +44,8 @@ export type {
   MapMarker,
   MapOverlay,
   MapOverlayAnchor,
+  MapLabel,
+  MapLabelRun,
   MapArrow,
   MapArrowStop,
   MapStopClock,

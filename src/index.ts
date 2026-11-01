@@ -702,6 +702,8 @@ export type {
   MapClusterOptions,
   MapOverlay,
   MapOverlayAnchor,
+  MapLabel,
+  MapLabelRun,
   MapPadding,
   MapView,
   MarkerDial,

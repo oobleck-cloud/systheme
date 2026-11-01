@@ -6,6 +6,7 @@
     "arrows": "MapArrow[]",
     "regions": "GeoJSON.FeatureCollection[]",
     "overlays": "MapOverlay[]",
+    "labels": "MapLabel[]",
     "activeMarkerId": "string | null",
     "animateActiveMarker": "boolean",
     "hoverGrow": "boolean",
@@ -18,6 +19,7 @@
     "onMarkerHover",
     "onActiveMarkerChange",
     "onRegionClick",
+    "onLabelClick",
     "onStopDragStart",
     "onStopDrop",
     "onStopDragCancel"
@@ -127,12 +129,13 @@
     "when": [
       "markers·arrows·loops·regions 데이터를 주입해 인터랙티브 지도를 그릴 때(상담 지도·플래너 동선)",
       "선택 마커(activeMarkerId)·카메라(center/zoom/autoFit/fitKey)를 화면이 제어해야 할 때",
-      "마커가 많아 cluster 가 필요할 때. 좌표에 고정되는 DOM 카드는 overlays",
+      "마커가 많아 cluster 가 필요할 때. 좌표에 고정되는 DOM 카드는 overlays, 핀·동선 아래에 깔려야 하는 칩·작은 카드는 labels",
       "DS 가 소유하는 것은 컨테이너·카메라·마커 스프라이트·상태(activeMarkerId·isLoaded·theme)·라벨이다. 타일과 팝업 내용은 불투명 슬롯 — 팝업 안 링크·버튼은 소비자가 popup: ReactNode 로 조립한다"
     ],
     "avoid": [
       "Mapbox 가 아닌 SDK 를 붙이지 않는다 → MapEmbedSlot / RouteMap",
       "출발→도착 한 구간만이면 쓰지 않는다 → RouteMap",
+      "핀·동선을 가리면 안 되는 표시를 overlays 로 얹지 않는다 — DOM 은 캔버스 위에 뜬다 → labels",
       "overlays 를 마커 대용으로 수백 개 얹지 않는다 → markers + cluster (overlays 는 수십 개 규모)",
       "onStopDrop 드래그만으로 배정 경로를 만들지 않는다 — 키보드 대체가 없으므로 목록·메뉴 경로를 함께 둔다",
       "MapProvider(accessToken) 밖에서 렌더하지 않는다"
